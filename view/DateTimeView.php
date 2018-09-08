@@ -12,7 +12,7 @@ class DateTimeView {
 		$time = new DateTime();
 		$timezone = $time->getTimezone()->getName();
 		date_default_timezone_set($timezone);
-		// $currentTime = getdate(); // more info in SO-post.
+		// $currentTime = getdate(); // more info in SO-post
 
 		$serverTime = date('H:i:s - d/m/Y');
 
