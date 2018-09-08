@@ -4,24 +4,24 @@ class DateTimeView {
 
 	public function show() {
 
-		$timeString = $this->getTimeString();
+		$timeString = $this->getDateTimeString();
 
 		return '<p>' . $timeString . '</p>';
 	}
 
-	/**
-	 * My method of retrieving servertime has been inspired by Shef's answer here:
-	 * https://stackoverflow.com/questions/6621572/how-to-get-date-and-time-from-server
-	 */
-	private function getTimeString() {
+	private function getDateTimeString() {
 
 		$this->setDefaultTimezone();
 
-		// $currentTime = getdate(); // more info in SO-post.
+		$time = date('H:i:s');
 
-		$serverTime = date('H:i:s - d/m/Y');
+		$dateArray = getdate();
+		$weekday = $dateArray['weekday'];
+		$mday = $dateArray['mday'];
+		$month = $dateArray['month'];
+		$year = $dateArray['year'];
 
-		return "TODO: make server time more than this: $serverTime";
+		return "Server time is $time on $weekday the {$mday}th of $month $year";
 	}
 
 	private function setDefaultTimezone() {
