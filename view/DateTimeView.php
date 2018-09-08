@@ -21,7 +21,7 @@ class DateTimeView {
 		$month = $dateArray['month'];
 		$year = $dateArray['year'];
 
-		return "Server time is $time on $weekday the {$mday}th of $month $year";
+		return "$weekday, the {$mday}th of $month $year, The time is $time";
 	}
 
 	private function setDefaultTimezone() {
