@@ -1,14 +1,14 @@
 <?php
 
-class LoginView {
-	private static $login = 'LoginView::Login';
-	private static $logout = 'LoginView::Logout';
-	private static $name = 'LoginView::UserName';
-	private static $password = 'LoginView::Password';
-	private static $cookieName = 'LoginView::CookieName';
-	private static $cookiePassword = 'LoginView::CookiePassword';
-	private static $keep = 'LoginView::KeepMeLoggedIn';
-	private static $messageId = 'LoginView::Message';
+class ContentView {
+	private static $login = 'ContentView::Login';
+	private static $logout = 'ContentView::Logout';
+	private static $name = 'ContentView::UserName';
+	private static $password = 'ContentView::Password';
+	private static $cookieName = 'ContentView::CookieName';
+	private static $cookiePassword = 'ContentView::CookiePassword';
+	private static $keep = 'ContentView::KeepMeLoggedIn';
+	private static $messageId = 'ContentView::Message';
 
 	
 
