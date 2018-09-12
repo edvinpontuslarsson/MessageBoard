@@ -9,7 +9,6 @@ class MainController {
 
     public function initialize() {
         $databaseModel = new DatabaseModel();
-        $databaseModel->initialize();
 
         //CREATE OBJECTS OF THE VIEWS
         $v = new ContentView();
