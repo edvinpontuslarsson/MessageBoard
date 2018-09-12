@@ -15,8 +15,8 @@ class DatabaseModel {
         $this->mysqlPassword = getenv('password');
         $this->databaseName = getenv('db');
 
-        $connection = $this->getConnection();
-
+        $connection = $this->getConnection(false);
+        
         if (!$this->isDbExisting($connection)) {
             $this->createDb($connection);
             $this->createTable($connection);
@@ -25,25 +25,45 @@ class DatabaseModel {
         $connection->close();
     }
 
-    public function getConnection() {
-        $connection = new mysqli(
-            $this->hostname,
-            $this->mysqlUsername, 
-            $this->mysqlPassword,
-            $this->databaseName
-        );
+    public function getConnection($knowDbExists = true) {
+        $connection;
+        
+        if ($knowDbExists) {
+            $connection = new mysqli(
+                $this->hostname,
+                $this->mysqlUsername, 
+                $this->mysqlPassword,
+                $this->databaseName
+            );
+
+        } else {
+            $connection = new mysqli(
+                $this->hostname,
+                $this->mysqlUsername, 
+                $this->mysqlPassword
+            );
+        }
 
         if ($connection->connect_error) {
-            die('Connection error:' . $connection->connect_error);
+            die('Connection error: ' . $connection->connect_error);
         }
 
         return $connection;
     }
 
+    // see Thomas Williams answer here:
+    // https://stackoverflow.com/questions/838978/how-to-check-if-mysql-database-exists
     private function isDbExisting($connection) {
-        $sqlFindDb = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '$this->databaseName'";
-        $result = $connection->query($sqlFindDb);
-        echo $result;
+        $sqlSearchDbQuery = "SHOW DATABASES LIKE $this->databaseName";
+        $dbExists = $connection->query($sqlSearchDbQuery);
+
+        if ($dbExists) {
+            return true;
+        } else {
+            return false;
+        }
+
+        // return $dbExists;
     }
 
     /**
@@ -51,11 +71,11 @@ class DatabaseModel {
      * https://www.w3schools.com/php/php_mysql_create.asp
      */
     private function createDb($connection) {
-        $sqlCreateDb = "CREATE DATABASE $this->databaseName";
-        $isCreated = $connection->query($sqlCreateDb);
+        $sqlCreateDbQuery = "CREATE DATABASE $this->databaseName";
+        $isCreated = $connection->query($sqlCreateDbQuery);
 
         if (!$isCreated) {
-            die('Database creation error:' . $connection->error);
+            die('Database creation error :' . $connection->error);
         }
     }
 
