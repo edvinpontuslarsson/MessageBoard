@@ -1,6 +1,6 @@
 <?php
 
-require_once('model/DbConnection.php');
+require_once('model/DatabaseModel.php');
 require_once('view/ContentView.php');
 require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
@@ -8,8 +8,8 @@ require_once('view/LayoutView.php');
 class MainController {
 
     public function initialize() {
-        $dbConnection = new DbConnection();
-        $dbConnection->connect();
+        $databaseModel = new DatabaseModel();
+        $databaseModel->initialize();
 
         //CREATE OBJECTS OF THE VIEWS
         $v = new ContentView();
