@@ -4,7 +4,10 @@ require_once('environment.php');
 
 class DbConnection {
     
-    // https://www.w3schools.com/php/php_mysql_connect.asp
+    /**
+     * This function is inspired by this guide:
+     * https://www.w3schools.com/php/php_mysql_connect.asp
+     */
     public function connect() {
         $server = getenv('server');
         $mysqlUsername = getenv('username');
