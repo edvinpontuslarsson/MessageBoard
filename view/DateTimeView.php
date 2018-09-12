@@ -2,10 +2,26 @@
 
 // require_once('../model/DateTime.php');
 
+class DateTime {
+	public function getHello() {
+		$hello = $this->createHello();
+		return $hello;
+	}
+
+	private function createHello() {
+		return 'Hello';
+	}
+}
+
 class DateTimeView {
 
 	public function show() {
-		$timeString = $this->getDateTimeString();
+		// $timeString = $this->getDateTimeString();
+
+		$greeting = new DateTime();
+
+		$timeString = $greeting->getHello();
+
 		return '<p>' . $timeString . '</p>';
 	}
 
