@@ -1,6 +1,6 @@
 <?php
 
-class DateTime {
+class DateTimeModel {
 	
     public function getDateTimeString() {
 
