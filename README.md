@@ -2,11 +2,11 @@
 
 To run this application, you need an environment.php file in the root folder with the following code (but replace the `<examples>`):
 
-`<?php`
+<?php
 
 
-`putenv('host=<your host, e.g. localhost>');`
-`putenv('username=<your database username>');`
-`putenv('password=<your database password>');`
-`putenv('db=<your database name>');`
+putenv('host=`<your host, e.g. localhost>`');
+putenv('username=`<your database username>`');
+putenv('password=`<your database password>`');
+putenv('db=`<your database name>`');
 
