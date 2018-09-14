@@ -16,11 +16,11 @@ class DatabaseModel {
         $this->databaseName = getenv('db');
 
         $connection = $this->getConnection(false);
-        
+        /*
         if (!$this->isDbExisting($connection)) {
-            $this->createDb($connection);
+            $this->createDbAndTableIfNotExists($connection);
             $this->createTable($connection);
-        }
+        }*/
 
         $connection->close();
     }
@@ -54,24 +54,18 @@ class DatabaseModel {
     // see Thomas Williams answer here:
     // https://stackoverflow.com/questions/838978/how-to-check-if-mysql-database-exists
     private function isDbExisting($connection) {
-        $sqlSearchDbQuery = "SHOW DATABASES LIKE $this->databaseName";
-        $dbExists = $connection->query($sqlSearchDbQuery);
+        
+        
 
-        if ($dbExists) {
-            return true;
-        } else {
-            return false;
-        }
-
-        // return $dbExists;
+        return $dbExists;
     }
 
     /**
      * Function inspired by this guide:
      * https://www.w3schools.com/php/php_mysql_create.asp
      */
-    private function createDb($connection) {
-        $sqlCreateDbQuery = "CREATE DATABASE $this->databaseName";
+    private function createDbAndTableIfNotExists($connection) {
+        $sqlCreateDbQuery = "CREATE DATABASE IF NOT EXISTS $this->databaseName";
         $isCreated = $connection->query($sqlCreateDbQuery);
 
         if (!$isCreated) {

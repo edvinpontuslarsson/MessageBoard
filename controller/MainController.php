@@ -8,7 +8,8 @@ require_once('view/LayoutView.php');
 class MainController {
 
     public function initialize() {
-        $databaseModel = new DatabaseModel();
+        // don't have DB on public server yet
+        // $databaseModel = new DatabaseModel();
 
         //CREATE OBJECTS OF THE VIEWS
         $v = new ContentView();
