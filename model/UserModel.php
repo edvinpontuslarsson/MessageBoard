@@ -1,21 +1,30 @@
 <?php
 
+require_once('model/DatabaseModel.php');
+
 class UserModel {
 
     private $userName;
-    private $rawPassword;
+    private $hashedPassword;
     private $userId;
 
-    public function __construct($userName, $rawPassword) {
+    public function storeNewUser($userName, $rawPassword) {
         $this->userName = $userName;
-        $this->rawPassword = $rawPassword;
+        $this->hashedPassword = password_hash(
+            $rawPassword, PASSWORD_DEFAULT
+        );
     }
 
-    public function storeNewUser() {
+    public function authenticateUser($userName, $rawPassword) {
+        // $isUserExisting = DatabaseModel->fetchThingy($userName);
+        $isPasswordCorrect = password_verify(
+            $rawPassword, $this->hashedPassword
+        );
 
+        if (!$isUserExisting || !$isPasswordCorrect) {
+            echo 'Incorrect login info';
+        }
     }
-
-    public function authenticateUser() {}
 
     
 }
