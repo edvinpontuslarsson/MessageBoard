@@ -15,17 +15,10 @@ class DatabaseModel {
         $this->mysqlPassword = getenv('password');
         $this->databaseName = getenv('db');
 
-        $connection = $this->getConnection(false);
-        /*
-        if (!$this->isDbExisting($connection)) {
-            $this->createDbAndTableIfNotExists($connection);
-            $this->createTable($connection);
-        }*/
-
-        $connection->close();
+        $this->createDbIfNotExists();
     }
 
-    public function getConnection($knowDbExists = true) {
+    private function getConnection($knowDbExists = true) {
         $connection;
         
         if ($knowDbExists) {
@@ -51,29 +44,48 @@ class DatabaseModel {
         return $connection;
     }
 
-    // see Thomas Williams answer here:
+    // perhaps see Thomas Williams answer here:
     // https://stackoverflow.com/questions/838978/how-to-check-if-mysql-database-exists
-    private function isDbExisting($connection) {
-        
-        
+    private function isDbExisting() {}
 
-        return $dbExists;
-    }
+    private function createDbIfNotExists() {
+        $connection = $this->getConnection(false);
 
-    /**
-     * Function inspired by this guide:
-     * https://www.w3schools.com/php/php_mysql_create.asp
-     */
-    private function createDbAndTableIfNotExists($connection) {
         $sqlCreateDbQuery = "CREATE DATABASE IF NOT EXISTS $this->databaseName";
         $isCreated = $connection->query($sqlCreateDbQuery);
 
         if (!$isCreated) {
             die('Database creation error :' . $connection->error);
         }
+
+        $connection->close();
     }
 
-    private function createTable($connection) {
+    public function createDbTableIfNotExists($tableName, $sqlColumns) {
+        $connection = $this->getConnection();
 
+        $sqlCreateTableQuery = "CREATE TABLE IF NOT EXISTS $tableName (
+            $sqlColumns
+        )";
+        $isCreated = $connection->query($sqlCreateTableQuery);
+
+        if (!$isCreated) {
+            die('Table creation error :' . $connection->error);
+        }
+
+        $connection->close();
     }
+
+    public function insertDataIntoExistingDbTable($sqlInsertQuery) {
+        $connection = $this->getConnection();
+        $isCreated = $connection->query($sqlInsertQuery);
+
+        if (!$isCreated) {
+            die('Table creation error :' . $connection->error);
+        }
+
+        $connection->close();
+    }
+
+    private function seeIfCreatedSuccesfully() {}
 }
