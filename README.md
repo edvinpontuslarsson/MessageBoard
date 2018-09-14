@@ -1,2 +1,12 @@
 # Login_1DV610
-Interface repository for 1DV610 assignment 2 and 4
+
+To run this application, you need an environment.php file in the root folder with the following code (but replace the `<examples>`):
+
+`<?php`
+
+
+`putenv('host=<your host, e.g. localhost>');`
+`putenv('username=<your database username>');`
+`putenv('password=<your database password>');`
+`putenv('db=<your database name>');`
+
