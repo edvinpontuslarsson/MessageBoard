@@ -1,7 +1,7 @@
 <?php
 
 require_once('model/DatabaseModel.php');
-require_once('view/ContentView.php');
+require_once('view/LoginView.php');
 require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
 
@@ -12,7 +12,7 @@ class MainController {
         // $databaseModel = new DatabaseModel();
 
         //CREATE OBJECTS OF THE VIEWS
-        $v = new ContentView();
+        $v = new LoginView();
         $dtv = new DateTimeView();
         $lv = new LayoutView();
 
