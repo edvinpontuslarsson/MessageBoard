@@ -52,11 +52,11 @@ class DatabaseModel {
         $connection = $this->getConnection(false);
 
         $sqlCreateDbQuery = "CREATE DATABASE IF NOT EXISTS $this->databaseName";
-        $isCreated = $connection->query($sqlCreateDbQuery);
+        $isSuccesful = $connection->query($sqlCreateDbQuery);
 
-        if (!$isCreated) {
-            die('Database creation error :' . $connection->error);
-        }
+        $this->killIfSqlError(
+            $isSuccesful, "Database creation error : $connection->error"
+        );
 
         $connection->close();
     }
@@ -67,25 +67,29 @@ class DatabaseModel {
         $sqlCreateTableQuery = "CREATE TABLE IF NOT EXISTS $tableName (
             $sqlColumns
         )";
-        $isCreated = $connection->query($sqlCreateTableQuery);
+        $isSuccesful = $connection->query($sqlCreateTableQuery);
 
-        if (!$isCreated) {
-            die('Table creation error :' . $connection->error);
-        }
+        $this->killIfSqlError(
+            $isSuccesful, "Table creation error : $connection->error"
+        );
 
         $connection->close();
     }
 
     public function insertDataIntoExistingDbTable($sqlInsertQuery) {
         $connection = $this->getConnection();
-        $isCreated = $connection->query($sqlInsertQuery);
+        $isSuccesful = $connection->query($sqlInsertQuery);
 
-        if (!$isCreated) {
-            die('Table creation error :' . $connection->error);
-        }
+        $this->killIfSqlError(
+            $isSuccesful, "Data insertion error : $connection->error"
+        );
 
         $connection->close();
     }
 
-    private function seeIfCreatedSuccesfully() {}
+    private function killIfSqlError(bool $isSuccesful, string $errorMessage) {
+        if (!$isSuccesful) {
+            die("$errorMessage");
+        }
+    }
 }
