@@ -25,7 +25,11 @@ class UserModel {
 
         $this->databaseModel->createDbTableIfNotExists(
             "Users",
-            ""
+            $this->getUsersSqlColumnsString()
+        );
+
+        $this->databaseModel->insertDataIntoExistingDbTable(
+
         );
     }
 
@@ -42,5 +46,20 @@ class UserModel {
         if (!$isUserExisting || !$isPasswordCorrect) {
             echo 'Incorrect login info';
         }
+    }
+
+    private function getUsersSqlColumnsString() : string {
+        return "id INT(7) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        username VARCHAR(25) NOT NULL,
+        password VARCHAR(128) NOT NULL,
+        reg_date TIMESTAMP
+        ";
+    }
+
+    private function getSqlInsertQueryFromUserCred(
+        string $username, string $hashedPassword
+    ) : string { 
+        return "INSERT INTO Users (username, password)
+        VALUES ('$username', '$hashedPassword')";
     }
 }

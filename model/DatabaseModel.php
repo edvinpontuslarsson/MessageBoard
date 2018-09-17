@@ -61,7 +61,9 @@ class DatabaseModel {
         $connection->close();
     }
 
-    public function createDbTableIfNotExists($tableName, $sqlColumns) {
+    public function createDbTableIfNotExists(
+        string $tableName, string $sqlColumns
+    ) {
         $connection = $this->getConnection();
 
         $sqlCreateTableQuery = "CREATE TABLE IF NOT EXISTS $tableName (
