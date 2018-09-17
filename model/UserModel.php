@@ -5,23 +5,18 @@ require_once('model/DatabaseModel.php');
 class UserModel {
 
     private $databaseModel;
-    // private $userName;
-    // private $hashedPassword;
-    // private $userID;
+    private $userName;
+    private $hashedPassword;
 
     public function __construct() {
         $this->databaseModel = new DatabaseModel();
     }
 
     public function storeNewUser(string $userName, string $rawPassword) {
-        /*
         $this->userName = $userName;
         $this->hashedPassword = password_hash(
             $rawPassword, PASSWORD_DEFAULT
         );
-        */
-
-        $hashedPassword = password_hash($rawPassword, PASSWORD_DEFAULT);
 
         $this->databaseModel->createDbTableIfNotExists(
             "Users",
@@ -29,7 +24,7 @@ class UserModel {
         );
 
         $this->databaseModel->insertDataIntoExistingDbTable(
-
+            $this->getSqlInsertQuery()
         );
     }
 
@@ -56,10 +51,8 @@ class UserModel {
         ";
     }
 
-    private function getSqlInsertQueryFromUserCred(
-        string $username, string $hashedPassword
-    ) : string { 
+    private function getSqlInsertQuery() : string { 
         return "INSERT INTO Users (username, password)
-        VALUES ('$username', '$hashedPassword')";
+        VALUES ('$this->userName', '$this->hashedPassword')";
     }
 }
