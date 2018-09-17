@@ -13,7 +13,7 @@ class UserModel {
         $this->databaseModel = new DatabaseModel();
     }
 
-    public function storeNewUser($userName, $rawPassword) {
+    public function storeNewUser(string $userName, string $rawPassword) {
         /*
         $this->userName = $userName;
         $this->hashedPassword = password_hash(
@@ -33,7 +33,7 @@ class UserModel {
         );
     }
 
-    public function authenticateUser($userName, $rawPassword) {
+    public function authenticateUser(string $userName, string $rawPassword) {
         // $isUserExisting = DatabaseModel->fetchThingy($userName);
         /*
         $this->hashedPassword = DatabaseModel->fetchThingy(
