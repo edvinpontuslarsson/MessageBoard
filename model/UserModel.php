@@ -43,9 +43,4 @@ class UserModel {
             echo 'Incorrect login info';
         }
     }
-
-    private function getRandomString() : string {
-        $stringLength = random_int(20, 40);
-        return random_bytes($stringLength);
-    }
 }
