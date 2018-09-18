@@ -1,6 +1,6 @@
 <?php
 
-require_once('model/RegisterUser.php');
+require_once('model/UserModel.php');
 require_once('view/LoginView.php');
 require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
@@ -8,8 +8,8 @@ require_once('view/LayoutView.php');
 class MainController {
 
     public function initialize() {
-        $registerUser = new RegisterUser();
-        $registerUser->storeNewUser(
+        $userModel = new UserModel();
+        $userModel->storeNewUser(
             "Test återigen", "testlösen"
         );
 

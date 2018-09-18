@@ -1,8 +1,9 @@
 <?php
 
 require_once('model/DatabaseModel.php');
+require_once('model/UserValidation.php');
 
-class RegisterUser {
+class UserModel {
 
     private $databaseModel;
     private $userName;
@@ -12,7 +13,9 @@ class RegisterUser {
         $this->databaseModel = new DatabaseModel();
     }
 
-    public function storeNewUser(string $userName, string $rawPassword) {
+    public function storeNewUser(
+        string $userName, string $rawPassword
+    ) {
         $this->userName = $userName;
         $this->hashedPassword = password_hash(
             $rawPassword, PASSWORD_DEFAULT
@@ -25,6 +28,14 @@ class RegisterUser {
         );
 
         $this->writeToDatabase();
+    }
+
+    public function verifyUser(
+        string $userName, string $rawPassword
+    ) {
+        if (!$isUserExisting || !$isPasswordCorrect) {
+            echo 'Incorrect login info';
+        }
     }
 
     // TODO: Remove from final version
