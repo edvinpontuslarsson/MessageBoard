@@ -30,7 +30,7 @@ class DatabaseModel {
                 $this->databaseName
             );
 
-        } else {
+        } else { // TODO: Remove from final version, will assume it exists
             $connection = new mysqli(
                 $this->hostname,
                 $this->mysqlUsername, 
@@ -77,16 +77,7 @@ class DatabaseModel {
         $connection->close();
     }
 
-    public function insertDataIntoExistingDbTable(
-        $connection, string $sqlInsertQuery
-    ) {
-        $isSuccesful = $connection->query($sqlInsertQuery);
-
-        $this->killIfSqlError(
-            $isSuccesful, "Data insertion error : $connection->error"
-        );
-    }
-
+    // TODO: Remove from final version
     private function killIfSqlError(bool $isSuccesful, string $errorMessage) {
         if (!$isSuccesful) {
             die("$errorMessage");

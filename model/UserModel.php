@@ -24,13 +24,7 @@ class UserModel {
             $this->getUsersSqlColumnsString()
         );
 
-        $connection = $this->databaseModel->getOpenConnection();
-
-        $this->databaseModel->insertDataIntoExistingDbTable(
-            $connection, $this->getSqlInsertQuery()
-        );
-
-        $connection->close();
+        $this->writeToDatabase();
     }
 
     public function authenticateUser(string $userName, string $rawPassword) {
@@ -57,8 +51,28 @@ class UserModel {
         ";
     }
 
-    private function getSqlInsertQuery() : string { 
-        return "INSERT INTO Users (username, password)
-        VALUES ('$this->userName', '$this->hashedPassword')";
+    private function writeToDatabase() {
+        $connection = $this->databaseModel->getOpenConnection();
+
+        $statement = $connection->prepare(
+            $this->getPreparedSqlStatement()
+        );
+
+        $twoStrings = "ss";
+        $statement->bind_param(
+            $twoStrings, $userName, $hashedPassword
+        );
+
+        $userName = $this->userName;
+        $hashedPassword = $this->hashedPassword;
+        $statement->execute();
+
+        $statement->close();
+        $connection->close();
+    }
+
+    private function getPreparedSqlStatement() : string {
+        return "INSERT INTO Users (username, password) 
+        VALUES (?, ?)";
     }
 }
