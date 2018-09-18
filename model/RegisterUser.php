@@ -2,7 +2,7 @@
 
 require_once('model/DatabaseModel.php');
 
-class UserModel {
+class RegisterUser {
 
     private $databaseModel;
     private $userName;
@@ -27,21 +27,6 @@ class UserModel {
         $this->writeToDatabase();
     }
 
-    public function authenticateUser(string $userName, string $rawPassword) {
-        // $isUserExisting = DatabaseModel->fetchThingy($userName);
-        /*
-        $this->hashedPassword = DatabaseModel->fetchThingy(
-            password of $userName
-        );*/
-        $isPasswordCorrect = password_verify(
-            $rawPassword, $this->hashedPassword
-        );
-
-        if (!$isUserExisting || !$isPasswordCorrect) {
-            echo 'Incorrect login info';
-        }
-    }
-
     // TODO: Remove from final version
     private function getUsersSqlColumnsString() : string {
         return "id INT(7) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -55,7 +40,7 @@ class UserModel {
         $connection = $this->databaseModel->getOpenConnection();
 
         $statement = $connection->prepare(
-            $this->getPreparedSqlStatement()
+            $this->getPreparedSqlInsertStatement()
         );
 
         $twoStrings = "ss";
@@ -71,7 +56,7 @@ class UserModel {
         $connection->close();
     }
 
-    private function getPreparedSqlStatement() : string {
+    private function getPreparedSqlInsertStatement() : string {
         return "INSERT INTO Users (username, password) 
         VALUES (?, ?)";
     }
