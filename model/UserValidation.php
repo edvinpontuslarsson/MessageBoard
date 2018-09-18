@@ -16,16 +16,36 @@ class UserValidation {
 
     }
 
+    /**
+     * Function inspired by this guide: https://phpdelusions.net/mysqli/check_values
+     */
     public function doesUsernameExist(
         string $rawUserName
-    ) : bool {
+    ) {
         $connection = $this->databaseModel->getOpenConnection();
 
         $userName = mysqli_real_escape_string(
             $connection, $rawUserName
         );
 
+        $statement = $connection->prepare(
+            $this->getPreparedSqlSelectStatement()
+        );
+
+        $string = "s";
+        $statement->bind_param(
+            $string, $userName
+        );
+        $statement->execute();
+
+        $userExists;
+
+        $statement->bind_result($userExists);
+        $statement->fetch();
+
         $connection->close();
+
+        return $userExists;
     }
 
     public function isPasswordLongEnough(
@@ -45,5 +65,9 @@ class UserValidation {
         return password_verify(
             $rawPassword, $hashedPassword
         );
+    }
+
+    private function getPreparedSqlSelectStatement() : string {
+        return "SELECT count(1) FROM Users WHERE username = ?";
     }
 }

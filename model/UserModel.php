@@ -6,28 +6,41 @@ require_once('model/UserValidation.php');
 class UserModel {
 
     private $databaseModel;
+    private $userValidation;
     private $rawUserName;
     private $hashedPassword;
 
     public function __construct() {
         $this->databaseModel = new DatabaseModel();
+        $this->userValidation = new UserValidation();
     }
 
     public function storeNewUser(
         string $rawUserName, string $rawPassword
     ) {
-        $this->rawUserName = $rawUserName;
-        $this->hashedPassword = password_hash(
-            $rawPassword, PASSWORD_DEFAULT
-        );
+        $doesUsernameExist = $this->userValidation->doesUsernameExist($rawPassword);
+        
+        $type = gettype($doesUsernameExist);
 
-        // TODO: Remove from final version
-        $this->databaseModel->createDbTableIfNotExists(
-            "Users",
-            $this->getUsersSqlColumnsString()
-        );
+        echo "hello {$doesUsernameExist}";
+        
+        if ($doesUsernameExist > 0) {
+            echo "Username is already taken
+            , please choose a different one";
+        } else {
+            $this->rawUserName = $rawUserName;
+            $this->hashedPassword = password_hash(
+                $rawPassword, PASSWORD_DEFAULT
+            );
 
-        $this->writeToDatabase();
+            // TODO: Remove from final version
+            $this->databaseModel->createDbTableIfNotExists(
+                "Users",
+                $this->getUsersSqlColumnsString()
+            );
+
+            $this->writeToDatabase();
+        }
     }
 
     public function verifyUser(
