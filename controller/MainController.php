@@ -10,7 +10,7 @@ class MainController {
     public function initialize() {
         $userModel = new UserModel();
         $userModel->storeNewUser(
-            "Funkar Funkarsson", "testlösen"
+            "Test Testsson", "testlösen"
         );
 
         //CREATE OBJECTS OF THE VIEWS

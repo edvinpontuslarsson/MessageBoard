@@ -19,7 +19,7 @@ class DatabaseModel {
         $this->createDbIfNotExists();
     }
 
-    private function getConnection($knowDbExists = true) {
+    public function getOpenConnection($knowDbExists = true) {
         $connection;
         
         if ($knowDbExists) {
@@ -47,7 +47,7 @@ class DatabaseModel {
 
     // TODO: Remove from final version
     private function createDbIfNotExists() {
-        $connection = $this->getConnection(false);
+        $connection = $this->getOpenConnection(false);
 
         $sqlCreateDbQuery = "CREATE DATABASE IF NOT EXISTS $this->databaseName";
         $isSuccesful = $connection->query($sqlCreateDbQuery);
@@ -63,7 +63,7 @@ class DatabaseModel {
     public function createDbTableIfNotExists(
         string $tableName, string $sqlColumns
     ) {
-        $connection = $this->getConnection();
+        $connection = $this->getOpenConnection();
 
         $sqlCreateTableQuery = "CREATE TABLE IF NOT EXISTS $tableName (
             $sqlColumns
@@ -77,15 +77,14 @@ class DatabaseModel {
         $connection->close();
     }
 
-    public function insertDataIntoExistingDbTable($sqlInsertQuery) {
-        $connection = $this->getConnection();
+    public function insertDataIntoExistingDbTable(
+        $connection, string $sqlInsertQuery
+    ) {
         $isSuccesful = $connection->query($sqlInsertQuery);
 
         $this->killIfSqlError(
             $isSuccesful, "Data insertion error : $connection->error"
         );
-
-        $connection->close();
     }
 
     private function killIfSqlError(bool $isSuccesful, string $errorMessage) {
