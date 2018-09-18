@@ -15,6 +15,7 @@ class DatabaseModel {
         $this->mysqlPassword = getenv('password');
         $this->databaseName = getenv('db');
 
+        // TODO: Remove from final version
         $this->createDbIfNotExists();
     }
 
@@ -44,10 +45,7 @@ class DatabaseModel {
         return $connection;
     }
 
-    // perhaps see Thomas Williams answer here:
-    // https://stackoverflow.com/questions/838978/how-to-check-if-mysql-database-exists
-    private function isDbExisting() {}
-
+    // TODO: Remove from final version
     private function createDbIfNotExists() {
         $connection = $this->getConnection(false);
 
@@ -61,6 +59,7 @@ class DatabaseModel {
         $connection->close();
     }
 
+    // TODO: Remove from final version
     public function createDbTableIfNotExists(
         string $tableName, string $sqlColumns
     ) {

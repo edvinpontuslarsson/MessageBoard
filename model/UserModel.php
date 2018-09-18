@@ -12,12 +12,16 @@ class UserModel {
         $this->databaseModel = new DatabaseModel();
     }
 
+    // to prevent > 1 user with same username
+    // https://stackoverflow.com/questions/9814191/mysql-row-locking-via-php
+
     public function storeNewUser(string $userName, string $rawPassword) {
         $this->userName = $userName;
         $this->hashedPassword = password_hash(
             $rawPassword, PASSWORD_DEFAULT
         );
 
+        // TODO: Remove from final version
         $this->databaseModel->createDbTableIfNotExists(
             "Users",
             $this->getUsersSqlColumnsString()
@@ -43,6 +47,7 @@ class UserModel {
         }
     }
 
+    // TODO: Remove from final version
     private function getUsersSqlColumnsString() : string {
         return "id INT(7) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         username VARCHAR(25) NOT NULL,
