@@ -6,7 +6,7 @@ require_once('model/UserValidation.php');
 class UserModel {
 
     private $databaseModel;
-    private $userName;
+    private $rawUserName;
     private $hashedPassword;
 
     public function __construct() {
@@ -14,9 +14,9 @@ class UserModel {
     }
 
     public function storeNewUser(
-        string $userName, string $rawPassword
+        string $rawUserName, string $rawPassword
     ) {
-        $this->userName = $userName;
+        $this->rawUserName = $rawUserName;
         $this->hashedPassword = password_hash(
             $rawPassword, PASSWORD_DEFAULT
         );
@@ -31,7 +31,7 @@ class UserModel {
     }
 
     public function verifyUser(
-        string $userName, string $rawPassword
+        string $rawUserName, string $rawPassword
     ) {
         if (!$isUserExisting || !$isPasswordCorrect) {
             echo 'Incorrect login info';
@@ -59,7 +59,9 @@ class UserModel {
             $twoStrings, $userName, $hashedPassword
         );
 
-        $userName = $this->userName;
+        $userName = mysqli_real_escape_string(
+            $connection, $this->rawUserName
+        );
         $hashedPassword = $this->hashedPassword;
         $statement->execute();
 

@@ -10,16 +10,22 @@ class UserValidation {
         $this->databaseModel = new DatabaseModel();
     }
 
-    public function hasUsernameOKFormat(
-        string $userName
+    public function hasUsernameOKLength(
+        string $rawUserName
     ) : bool {
 
     }
 
     public function doesUsernameExist(
-        string $userName
+        string $rawUserName
     ) : bool {
+        $connection = $this->databaseModel->getOpenConnection();
 
+        $userName = mysqli_real_escape_string(
+            $connection, $rawUserName
+        );
+
+        $connection->close();
     }
 
     public function isPasswordLongEnough(
