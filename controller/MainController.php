@@ -9,16 +9,29 @@ class MainController {
 
     public function initialize() {
         $userModel = new UserModel();
+        
+        /*
         $userModel->storeNewUser(
-            "rehhysy", "testlösen"
+            "God morgon!", "testlösen"
         );
+        */
+
+        echo($this->requestType());
 
         //CREATE OBJECTS OF THE VIEWS
-        $v = new LoginView();
+        $loginView = new LoginView();
         $dtv = new DateTimeView();
-        $lv = new LayoutView();
+        $layoutView = new LayoutView();
 
 
-        $lv->render(false, $v, $dtv);
+        $layoutView->render(false, $loginView, $dtv);
+    }
+
+    private function requestType() {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            return "POST";
+        } elseif ($_SERVER["REQUEST_METHOD"] === "GET") {
+            return "GET";
+        }
     }
 }

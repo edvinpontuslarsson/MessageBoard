@@ -29,23 +29,11 @@ class UserValidation {
             $connection, $rawUserName
         );
 
-        echo $userName;
-        /*
-        $statement = $connection->prepare(
-            $this->getPreparedSqlSelectStatement()
-        );*/
-
         $statement = mysqli_prepare(
             $connection, $this->getPreparedSqlSelectStatement()
         );
 
         $string = "s";
-        /*
-        $statement->bind_param(
-            $string, $userName
-        );
-        $statement->execute();*/
-
         mysqli_stmt_bind_param(
             $statement, $string, $userName
         );
@@ -53,8 +41,6 @@ class UserValidation {
 
         $discovery = mysqli_stmt_get_result($statement);
         $numRows = mysqli_num_rows($discovery);
-
-        echo " {$numRows} ";
 
         $statement->close();
         $connection->close();
@@ -71,11 +57,6 @@ class UserValidation {
     public function isPasswordCorrect(
         string $rawPassword
     )  : bool {
-        /*
-        $hashedPassword = DatabaseModel->fetchThingy(
-            password of $userName
-        );*/
-
         return password_verify(
             $rawPassword, $hashedPassword
         );

@@ -4,11 +4,12 @@
 class LayoutView {
   
   public function render($isLoggedIn, LoginView $v, DateTimeView $dtv) {
-    echo '<!DOCTYPE html>
-      <html>
+    echo '
+      <!DOCTYPE html>
+      <html lang="en">
         <head>
           <meta charset="utf-8">
-          <title>Login Example</title>
+          <title>My Login Example</title>
         </head>
         <body>
           <h1>Assignment 2</h1>
@@ -22,7 +23,7 @@ class LayoutView {
          </body>
       </html>
     ';
-  }
+  } // <link rel="icon" href="favicon.ico" type="image/x-icon">
   
   private function renderIsLoggedIn($isLoggedIn) {
     if ($isLoggedIn) {
