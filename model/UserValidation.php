@@ -17,35 +17,49 @@ class UserValidation {
     }
 
     /**
-     * Function inspired by this guide: https://phpdelusions.net/mysqli/check_values
+     * Function inspired by code on this page:
+     * https://stackoverflow.com/questions/28803342/php-prepared-statements-mysql-check-if-user-exists
      */
     public function doesUsernameExist(
         string $rawUserName
-    ) {
+    ) : bool {
         $connection = $this->databaseModel->getOpenConnection();
 
         $userName = mysqli_real_escape_string(
             $connection, $rawUserName
         );
 
+        echo $userName;
+        /*
         $statement = $connection->prepare(
             $this->getPreparedSqlSelectStatement()
+        );*/
+
+        $statement = mysqli_prepare(
+            $connection, $this->getPreparedSqlSelectStatement()
         );
 
         $string = "s";
+        /*
         $statement->bind_param(
             $string, $userName
         );
-        $statement->execute();
+        $statement->execute();*/
 
-        $userExists;
+        mysqli_stmt_bind_param(
+            $statement, $string, $userName
+        );
+        mysqli_stmt_execute($statement);
 
-        $statement->bind_result($userExists);
-        $statement->fetch();
+        $discovery = mysqli_stmt_get_result($statement);
+        $numRows = mysqli_num_rows($discovery);
 
+        echo " {$numRows} ";
+
+        $statement->close();
         $connection->close();
 
-        return $userExists;
+        return $numRows > 0;
     }
 
     public function isPasswordLongEnough(
@@ -68,6 +82,6 @@ class UserValidation {
     }
 
     private function getPreparedSqlSelectStatement() : string {
-        return "SELECT count(1) FROM Users WHERE username = ?";
+        return "SELECT id FROM Users WHERE username = ?";
     }
 }

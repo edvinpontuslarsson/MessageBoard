@@ -18,11 +18,9 @@ class UserModel {
     public function storeNewUser(
         string $rawUserName, string $rawPassword
     ) {
-        $doesUsernameExist = $this->userValidation->doesUsernameExist($rawPassword);
-        
-        $type = gettype($doesUsernameExist);
-
-        echo "hello {$doesUsernameExist}";
+        $doesUsernameExist = 
+            $this->userValidation->
+            doesUsernameExist($rawUserName);
         
         if ($doesUsernameExist > 0) {
             echo "Username is already taken

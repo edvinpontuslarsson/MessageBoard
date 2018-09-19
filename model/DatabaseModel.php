@@ -23,7 +23,16 @@ class DatabaseModel {
         $connection;
         
         if ($knowDbExists) {
+            /*
             $connection = new mysqli(
+                $this->hostname,
+                $this->mysqlUsername, 
+                $this->mysqlPassword,
+                $this->databaseName
+            );
+            */
+
+            $connection = mysqli_connect(
                 $this->hostname,
                 $this->mysqlUsername, 
                 $this->mysqlPassword,
