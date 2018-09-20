@@ -10,12 +10,17 @@ class LoginView {
 	private static $keep = 'LoginView::KeepMeLoggedIn';
 	private static $messageId = 'LoginView::Message';
 
+	private $wantsToRegister = false;
+
+	public function wantsToRegister() {
+		$this->wantsToRegister = true;
+	}
+	
 	public function getRequestType() : string {
 		return $_SERVER["REQUEST_METHOD"];
 	}
 
-	// TODO: return bool instead, calc here
-	public function isRegisterQueryString() {
+	public function isRegisterQueryString() : bool {
 		return isset($_GET["register"]);
 	}
 
@@ -58,7 +63,8 @@ class LoginView {
 	* @return  void, BUT writes to standard output!
 	*/
 	private function generateLoginFormHTML($message) {
-		return '
+		if (!$this->wantsToRegister) {
+			return '
 			<form method="post" > 
 				<fieldset>
 					<legend>Login - enter Username and password</legend>
@@ -76,7 +82,32 @@ class LoginView {
 					<input type="submit" name="' . self::$login . '" value="login" />
 				</fieldset>
 			</form>
-		';
+			';
+		} else {
+			return "
+			<!-- TODO: Put above Not logged in-h2 -->
+			<a href='?'>Back to login</a>
+			
+			<h2>Register new user</h2>
+			<form action='?register' method='post' enctype='multipart/form-data'>
+				<fieldset>
+				<legend>Register a new user - Write username and password</legend>
+					<p id='RegisterView::Message'></p>
+					<label for='RegisterView::UserName' >Username :</label>
+					<input type='text' size='20' name='RegisterView::UserName' id='RegisterView::UserName' value='' />
+					<br/>
+					<label for='RegisterView::Password' >Password  :</label>
+					<input type='password' size='20' name='RegisterView::Password' id='RegisterView::Password' value='' />
+					<br/>
+					<label for='RegisterView::PasswordRepeat' >Repeat password  :</label>
+					<input type='password' size='20' name='RegisterView::PasswordRepeat' id='RegisterView::PasswordRepeat' value='' />
+					<br/>
+					<input id='submit' type='submit' name='DoRegistration'  value='Register' />
+					<br/>
+				</fieldset>
+			</form>
+			";
+		}		
 	}
 	
 	//CREATE GET-FUNCTIONS TO FETCH REQUEST VARIABLES

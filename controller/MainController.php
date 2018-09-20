@@ -25,12 +25,12 @@ class MainController {
         $reqType = $this->loginView->getRequestType();
         echo("<p> $reqType </p>");  
         
-        $isQueryString = 
+        $isRegisterQueryString = 
             $this->loginView->isRegisterQueryString();
         
-        if ($isQueryString) {
-            echo("<p> User wants to register </p>");
-        } // User wants to register*/
+        if ($isRegisterQueryString) {
+            $this->loginView->wantsToRegister();
+        } 
 
         $this->layoutView->render(false, $this->loginView, $this->dtv);
     }
