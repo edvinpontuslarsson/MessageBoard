@@ -7,31 +7,28 @@ require_once('view/LayoutView.php');
 
 class MainController {
 
-    public function initialize() {
-        $userModel = new UserModel();
-        
-        /*
-        $userModel->storeNewUser(
-            "God morgon!", "testlösen"
-        );
-        */
+    private $userModel;
+    private $loginView;
+    private $dtv;
+    private $layoutView;
 
-        echo($this->requestType());
+    public function __construct() {
+        $this->userModel = new UserModel();
 
         //CREATE OBJECTS OF THE VIEWS
-        $loginView = new LoginView();
-        $dtv = new DateTimeView();
-        $layoutView = new LayoutView();
-
-
-        $layoutView->render(false, $loginView, $dtv);
+        $this->loginView = new LoginView();
+        $this->dtv = new DateTimeView();
+        $this->layoutView = new LayoutView();
     }
 
-    private function requestType() {
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            return "POST";
-        } elseif ($_SERVER["REQUEST_METHOD"] === "GET") {
-            return "GET";
-        }
+    public function initialize() {
+        $this->userModel->storeNewUser(
+            "test", "testlösen"
+        );
+        
+        $reqType = $this->loginView->getRequestType();
+        echo("<p> $reqType </p>");        
+
+        $this->layoutView->render(false, $this->loginView, $this->dtv);
     }
 }

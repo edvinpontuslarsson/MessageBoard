@@ -17,7 +17,7 @@ class UserModel {
 
     public function storeNewUser(
         string $rawUserName, string $rawPassword
-    ) {
+    ) {/*
         $doesUsernameExist = 
             $this->userValidation->
             doesUsernameExist($rawUserName);
@@ -25,7 +25,7 @@ class UserModel {
         if ($doesUsernameExist > 0) {
             echo "Username is already taken
             , please choose a different one";
-        } else {
+        } else {*/
             $this->rawUserName = $rawUserName;
             $this->hashedPassword = password_hash(
                 $rawPassword, PASSWORD_DEFAULT
@@ -38,7 +38,7 @@ class UserModel {
             );
 
             $this->writeToDatabase();
-        }
+        //}
     }
 
     public function verifyUser(

@@ -5,6 +5,11 @@
 
 /*
 
+"Din kontroller börjar med att fråga lämpliga vyer om vad användaren vill... 
+sedan gör den förändringar av tillståndet beroende på det med hjälp utav modellklasser.
+
+efter detta kan kontrollern beroende på modellens tillstånd be rätt vyer att skapa HTML"
+
 /var/www/html/1dv610/CourseMaterial/1dv610/lectures/examples
 
 link to register: /index.php?register
