@@ -3,7 +3,7 @@
 
 class LayoutView {
   
-  public function render($isLoggedIn, LoginView $v, DateTimeView $dtv) {
+  public function render($isLoggedIn, LoginView $loginView, DateTimeView $dtv) {
     echo '
       <!DOCTYPE html>
       <html lang="en">
@@ -12,18 +12,22 @@ class LayoutView {
           <title>My Login Example</title>
         </head>
         <body>
+
+          <!-- TODO: Make this conditional -->
+          <a href="?register">Register a new user</a>
+
           <h1>Assignment 2</h1>
           ' . $this->renderIsLoggedIn($isLoggedIn) . '
           
           <div class="container">
-              ' . $v->response() . '
+              ' . $loginView->response() . '
               
               ' . $dtv->show() . '
           </div>
          </body>
       </html>
     ';
-  } // <link rel="icon" href="favicon.ico" type="image/x-icon">
+  }
   
   private function renderIsLoggedIn($isLoggedIn) {
     if ($isLoggedIn) {

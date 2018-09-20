@@ -21,13 +21,16 @@ class MainController {
         $this->layoutView = new LayoutView();
     }
 
-    public function initialize() {
-        $this->userModel->storeNewUser(
-            "test", "testlösen"
-        );
-        
+    public function initialize() {        
         $reqType = $this->loginView->getRequestType();
-        echo("<p> $reqType </p>");        
+        echo("<p> $reqType </p>");  
+        
+        $isQueryString = 
+            $this->loginView->isRegisterQueryString();
+        
+        if ($isQueryString) {
+            echo("<p> User wants to register </p>");
+        } // User wants to register*/
 
         $this->layoutView->render(false, $this->loginView, $this->dtv);
     }

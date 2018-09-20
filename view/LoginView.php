@@ -10,8 +10,13 @@ class LoginView {
 	private static $keep = 'LoginView::KeepMeLoggedIn';
 	private static $messageId = 'LoginView::Message';
 
-	public function getRequestType() {
+	public function getRequestType() : string {
 		return $_SERVER["REQUEST_METHOD"];
+	}
+
+	// TODO: return bool instead, calc here
+	public function isRegisterQueryString() {
+		return isset($_GET["register"]);
 	}
 
 	/**
