@@ -15,8 +15,7 @@ class DateTimeModel {
 
 		$time = date('H:i:s');
 
-		return "$weekday, the {$monthDay}$monthSuffix of $month $year, 
-			The time is $time";
+		return "$weekday, the {$monthDay}$monthSuffix of $month $year, The time is $time";
 	}
 
 	private function setDefaultTimezone() {
