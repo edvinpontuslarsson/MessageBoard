@@ -8,20 +8,18 @@ class DateTimeModel {
 
 		$dateArray = getdate();
 		$weekday = $dateArray['weekday'];
-		$mday = $dateArray['mday'];
+		$monthDay = $dateArray['mday'];
+		$monthSuffix = date("S");
 		$month = $dateArray['month'];
 		$year = $dateArray['year'];
 
 		$time = date('H:i:s');
 
-		return "$weekday, the {$mday}th of $month $year, The time is $time";
+		return "$weekday, the {$monthDay}$monthSuffix of $month $year, 
+			The time is $time";
 	}
 
 	private function setDefaultTimezone() {
-		// $time = new DateTime();
-		// $timezone = $time->getTimezone()->getName();
-		// date_default_timezone_set($timezone);
-
 		date_default_timezone_set("Europe/Stockholm");
 	}
 }
