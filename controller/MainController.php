@@ -43,12 +43,14 @@ class MainController {
             $rawPassword = $_POST["RegisterView::Password"];
             $rawPasswordRepeat = $_POST["RegisterView::PasswordRepeat"];
 
+            /*
             echo "
             <p>
                 $submit $rawUserName $rawPassword $rawPasswordRepeat
             </p>";
+            */
 
-            // check validity of
+            // first just echo, OK if fulfills demands, else not
         }
     }
 }
