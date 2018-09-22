@@ -16,12 +16,23 @@ class UserModel {
     }
 
     public function storeNewUser(
-        string $rawUserName, string $rawPassword
+        string $rawUserName, 
+        string $rawPassword,
+        string $rawPasswordRepeat
     ) {
-        $doesUsernameExist = 
-            $this->userValidation->
+        // TODO: Remove from final version
+        $this->databaseModel->createDbTableIfNotExists(
+            "Users",
+            $this->getUsersSqlColumnsString()
+        );
+        // in UserValidation, have func checks OK
+
+        // for now, return true if OK, else false here
+        
+        $doesUsernameExist = $this->userValidation->
             doesUsernameExist($rawUserName);
         
+        // Maybe I should do like this with all messages
         if ($doesUsernameExist > 0) {
             echo "Username is already taken
             , please choose a different one";
@@ -29,12 +40,6 @@ class UserModel {
             $this->rawUserName = $rawUserName;
             $this->hashedPassword = password_hash(
                 $rawPassword, PASSWORD_DEFAULT
-            );
-
-            // TODO: Remove from final version
-            $this->databaseModel->createDbTableIfNotExists(
-                "Users",
-                $this->getUsersSqlColumnsString()
             );
 
             $this->writeToDatabase();

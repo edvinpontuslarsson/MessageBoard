@@ -10,6 +10,15 @@ class UserValidation {
         $this->databaseModel = new DatabaseModel();
     }
 
+    // Maybe not have this function here...
+    public function validateRegistration(
+        string $rawUserName, 
+        string $rawPassword,
+        string $rawPasswordRepeat
+    ) : string {
+        
+    }
+
     public function hasUsernameOKLength(
         string $rawUserName
     ) : bool {
