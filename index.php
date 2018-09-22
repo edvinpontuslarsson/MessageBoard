@@ -36,5 +36,7 @@ require_once('controller/MainController.php');
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
 $mainController = new MainController();
 $mainController->initialize();

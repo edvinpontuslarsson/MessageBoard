@@ -18,8 +18,10 @@ class DateTimeModel {
 	}
 
 	private function setDefaultTimezone() {
-		$time = new DateTime();
-		$timezone = $time->getTimezone()->getName();
-		date_default_timezone_set($timezone);
+		// $time = new DateTime();
+		// $timezone = $time->getTimezone()->getName();
+		// date_default_timezone_set($timezone);
+
+		date_default_timezone_set("Europe/Stockholm");
 	}
 }
