@@ -1,6 +1,13 @@
 # Login_1DV610
 
-To run this application, you need an environment.php file in the root folder with the following code (but replace the `<examples>`):
+To run this application, you need to have a MySQL-database prepared with a database name as well as a table called "Users" with these columns:
+
+`id INT(7) UNSIGNED AUTO_INCREMENT PRIMARY KEY, `
+`username VARCHAR(25) NOT NULL,`
+`password VARCHAR(128) NOT NULL,`
+`reg_date TIMESTAMP`
+
+You also need an environment.php file in the root folder with the following code (but replace the `<examples>`):
 
 `<?php`
 

@@ -29,7 +29,7 @@ When logged in:
    </body>
 
 */
-/*
+
 require_once('controller/MainController.php');
 
 //MAKE SURE ERRORS ARE SHOWN... MIGHT WANT TO TURN THIS OFF ON A PUBLIC SERVER
@@ -40,6 +40,3 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 $mainController = new MainController();
 $mainController->initialize();
-*/
-
-echo "Live long and prosper";

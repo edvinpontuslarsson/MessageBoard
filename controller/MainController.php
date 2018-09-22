@@ -22,14 +22,19 @@ class MainController {
     }
 
     public function initialize() {        
-        $reqType = $this->loginView->getRequestType();
-        echo("<p> $reqType </p>");  
+        $reqType = $this->loginView->getRequestType(); 
         
-        $isRegisterQueryString = 
-            $this->loginView->isRegisterQueryString();        
-        if ($isRegisterQueryString) {
-            $this->loginView->wantsToRegister();
-        } 
+        // TODO: put content in if in GetController
+        if ($reqType === "GET") {
+            $isRegisterQueryString = 
+            $this->loginView->isRegisterQueryString();
+
+            if ($isRegisterQueryString) {
+                $this->loginView->wantsToRegister(true);
+            }
+
+            $this->layoutView->render(false, $this->loginView, $this->dtv);
+        }
 
         $this->layoutView->render(false, $this->loginView, $this->dtv);
     }

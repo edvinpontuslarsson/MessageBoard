@@ -12,8 +12,8 @@ class LoginView {
 
 	private $wantsToRegister = false;
 
-	public function wantsToRegister() {
-		$this->wantsToRegister = true;
+	public function wantsToRegister($wantsToRegister) {
+		$this->wantsToRegister = $wantsToRegister;
 	}
 	
 	public function getRequestType() : string {
