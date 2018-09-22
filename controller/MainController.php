@@ -36,6 +36,19 @@ class MainController {
             $this->layoutView->render(false, $this->loginView, $this->dtv);
         }
 
-        $this->layoutView->render(false, $this->loginView, $this->dtv);
+        // TODO: put content in if in PostController
+        if ($reqType === "POST") {
+            $submit = $_POST["DoRegistration"];
+            $rawUserName = $_POST["RegisterView::UserName"];
+            $rawPassword = $_POST["RegisterView::Password"];
+            $rawPasswordRepeat = $_POST["RegisterView::PasswordRepeat"];
+
+            echo "
+            <p>
+                $submit $rawUserName $rawPassword $rawPasswordRepeat
+            </p>";
+
+            // check validity of
+        }
     }
 }
