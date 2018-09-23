@@ -1,6 +1,6 @@
 <?php
 
-require_once('model/UserModel.php');
+require_once('model/UserStorage.php');
 require_once('view/LoginView.php');
 require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
@@ -11,11 +11,11 @@ class MainController {
     private $dtv;
     private $layoutView;
 
-    private $userModel;
+    private $userStorage;
     private $userValidation;
 
     public function __construct() {
-        $this->userModel = new UserModel();
+        $this->userStorage = new UserStorage();
         $this->userValidation = new UserValidation();
 
         //CREATE OBJECTS OF THE VIEWS
@@ -80,11 +80,11 @@ class MainController {
 
             echo "$errorMessage";
         } else {
-            $this->userModel->storeNewUser(
+            $this->userStorage->storeNewUser(
                 $rawUserName, $rawPassword, $rawPasswordRepeat
             );
 
-            $username = $this->userModel->getCleanUsername();
+            $username = $this->userStorage->getCleanUsername();
             echo "Welcome aboard $username";
         }
     }

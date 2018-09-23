@@ -3,7 +3,7 @@
 require_once('model/DatabaseModel.php');
 require_once('model/UserValidation.php');
 
-class UserModel {
+class UserStorage {
 
     private $databaseModel;
     private $userName;
