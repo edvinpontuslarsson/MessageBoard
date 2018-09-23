@@ -51,6 +51,9 @@ class UserValidation {
         } 
         elseif ($rawPassword !== $rawPasswordRepeat) {
             $this->errorMessage = "Passwords do not match.";
+        }
+        elseif ($this->hasInvalidCharacters($rawUserName)) {
+            $this->errorMessage = "Username contains invalid characters.";
         } 
         elseif (!empty($this->getFromDatabase(
             $connection, "Users", "username", $this->cleanUsername
@@ -82,6 +85,17 @@ class UserValidation {
         $connection->close();
         
         return $isLoginValid;
+    }
+
+    // TODO: Make this better
+    private function hasInvalidCharacters(string $rawUserName) : bool {
+        $characters = str_split($rawUserName);
+        foreach ($characters as $char) {
+            if ($char === "<" || $char === ">") {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
