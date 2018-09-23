@@ -6,13 +6,24 @@ class UserValidation {
 
     private $databaseModel;
     private $errorMessage;
+    private $cleanUsername;
 
     public function __construct() {
         $this->databaseModel = new DatabaseModel();
+
+        // TODO: Remove from final version
+        $this->databaseModel->createDbTableIfNotExists(
+            "Users",
+            $this->getUsersSqlColumnsString()
+        );
     }
 
-    public function getErrorMessage() :string {
+    public function getErrorMessage() : string {
         return $this->errorMessage;
+    }
+
+    public function getCleanUsername() : string {
+        return $this->cleanUsername;
     }
 
     public function isRegistrationValid(
@@ -20,10 +31,10 @@ class UserValidation {
         string $rawPassword,
         string $rawPasswordRepeat
     ) : bool {
-        // TODO: Remove from final version
-        $this->databaseModel->createDbTableIfNotExists(
-            "Users",
-            $this->getUsersSqlColumnsString()
+        $connection = $this->databaseModel->getOpenConnection();
+
+        $this->cleanUsername = mysqli_real_escape_string(
+            $connection, $rawUserName
         );
 
         if (strlen($rawUserName) === 0) {
@@ -41,47 +52,71 @@ class UserValidation {
         elseif ($rawPassword !== $rawPasswordRepeat) {
             $this->errorMessage = "Passwords do not match.";
         } 
-        elseif ($this->doesUsernameExist($rawUserName)) {
+        elseif (!empty($this->getFromDatabase(
+            $connection, "Users", "username", $this->cleanUsername
+        ))) {
             $this->errorMessage = "User exists, pick another username.";
         }
 
+        $connection->close();
         return empty($this->errorMessage);
+    }
+
+    public function isLoginValid(
+        string $rawUserName, string $rawPassword
+    ) : bool {
+        $connection = $this->databaseModel->getOpenConnection();
+
+        $this->cleanUsername = mysqli_real_escape_string(
+            $connection, $rawUserName
+        );
+        
+        $dbRow = $this->getFromDatabase(
+            $connection, "Users", "username", $this->cleanUsername
+        );
+
+        $isLoginValid = !empty($dbRow) && $this->isPasswordCorrect(
+            $rawPassword, $dbRow["password"]
+        );
+
+        $connection->close();
+        
+        return $isLoginValid;
     }
 
     /**
      * Function inspired by code on this page:
      * https://stackoverflow.com/questions/28803342/php-prepared-statements-mysql-check-if-user-exists
-     */
-    private function doesUsernameExist(
-        string $rawUserName
-    ) : bool {
-        $connection = $this->databaseModel->getOpenConnection();
-
-        $userName = mysqli_real_escape_string(
-            $connection, $rawUserName
-        );
-
+     */  
+    private function getFromDatabase(
+        $connection, string $sqlTable, 
+        string $sqlColumn, string $toSearchFor
+    ) : array {
         $statement = mysqli_prepare(
-            $connection, $this->getPreparedSqlSelectStatement()
+            $connection, 
+            $this->getPreparedSqlSelectStatement($sqlTable, $sqlColumn)
         );
 
         $string = "s";
         mysqli_stmt_bind_param(
-            $statement, $string, $userName
+            $statement, $string, $toSearchFor
         );
         mysqli_stmt_execute($statement);
 
-        $discovery = mysqli_stmt_get_result($statement);
-        $numRows = mysqli_num_rows($discovery);
+        $result = mysqli_stmt_get_result($statement);
+        $row = mysqli_fetch_assoc($result);
 
         $statement->close();
-        $connection->close();
 
-        return $numRows > 0;
+        if (!empty($row)) {
+            return $row;
+        } else {
+            return [];
+        }
     }
 
     private function isPasswordCorrect(
-        string $rawPassword
+        string $rawPassword, string $hashedPassword
     )  : bool {
         return password_verify(
             $rawPassword, $hashedPassword
@@ -97,7 +132,7 @@ class UserValidation {
         ";
     }
 
-    private function getPreparedSqlSelectStatement() : string {
-        return "SELECT id FROM Users WHERE username = ?";
+    private function getPreparedSqlSelectStatement($sqlTable, $sqlColumn) : string {
+        return "SELECT * FROM $sqlTable WHERE $sqlColumn = ?";
     }
 }

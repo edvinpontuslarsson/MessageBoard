@@ -25,26 +25,50 @@ class MainController {
     }
 
     public function initialize() {        
-        $reqType = $this->loginView->getRequestType(); 
+        $isRegisterQueryString = 
+            $this->loginView->isRegisterQueryString();
+        if ($isRegisterQueryString) {
+            $this->loginView->wantsToRegister(true);
+        }
+
+        $reqType = $this->loginView->getRequestType();
         
         // TODO: put content in if in GetController
         if ($reqType === "GET") {
-            $isRegisterQueryString = 
-            $this->loginView->isRegisterQueryString();
-
-            if ($isRegisterQueryString) {
-                $this->loginView->wantsToRegister(true);
-            }
-
             $this->layoutView->render(false, $this->loginView, $this->dtv);
         }
 
-        // TODO: put content in if in PostController
+        // $submit = $_POST["LoginView::Login"];
+        // $submit = $_POST["DoRegistration"];
+
+        // TODO: put content in if in PostController, with funcs
         if ($reqType === "POST") {
-            $submit = $_POST["DoRegistration"];
-            $rawUserName = $_POST["RegisterView::UserName"];
-            $rawPassword = $_POST["RegisterView::Password"];
-            $rawPasswordRepeat = $_POST["RegisterView::PasswordRepeat"];
+            if (!$isRegisterQueryString) {
+                $this->loginUser();
+            } else {
+                $this->registerUser();
+            }
+        }
+    }
+
+    private function loginUser() {
+        $rawUserName = $_POST["LoginView::UserName"];
+        $rawPassword = $_POST["LoginView::Password"];
+
+        $isLoginValid = $this->userValidation->
+            isLoginValid($rawUserName, $rawPassword);
+
+        if (!$isLoginValid) {
+            echo "Login not valid :(";
+        } else {
+            echo "Login is valid :D";
+        }
+    }
+
+    private function registerUser() {
+        $rawUserName = $_POST["RegisterView::UserName"];
+        $rawPassword = $_POST["RegisterView::Password"];
+        $rawPasswordRepeat = $_POST["RegisterView::PasswordRepeat"];
 
         $isRegistrationValid = $this->userValidation->isRegistrationValid(
                 $rawUserName, $rawPassword, $rawPasswordRepeat
@@ -62,7 +86,6 @@ class MainController {
 
             $username = $this->userModel->getCleanUsername();
             echo "Welcome aboard $username";
-            }
         }
     }
 }
