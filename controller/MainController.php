@@ -7,13 +7,16 @@ require_once('view/LayoutView.php');
 
 class MainController {
 
-    private $userModel;
     private $loginView;
     private $dtv;
     private $layoutView;
 
+    private $userModel;
+    private $userValidation;
+
     public function __construct() {
         $this->userModel = new UserModel();
+        $this->userValidation = new UserValidation();
 
         //CREATE OBJECTS OF THE VIEWS
         $this->loginView = new LoginView();
@@ -43,11 +46,23 @@ class MainController {
             $rawPassword = $_POST["RegisterView::Password"];
             $rawPasswordRepeat = $_POST["RegisterView::PasswordRepeat"];
 
+        $isRegistrationValid = $this->userValidation->isRegistrationValid(
+                $rawUserName, $rawPassword, $rawPasswordRepeat
+            );
+    
+        if (!$isRegistrationValid) {
+            $errorMessage = $this->userValidation->
+                getErrorMessage();
+
+            echo "$errorMessage";
+        } else {
             $this->userModel->storeNewUser(
                 $rawUserName, $rawPassword, $rawPasswordRepeat
             );
 
-            echo "Welcome aboard $rawUserName";
+            $username = $this->userModel->getCleanUsername();
+            echo "Welcome aboard $username";
+            }
         }
     }
 }
