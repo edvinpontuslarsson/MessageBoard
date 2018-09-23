@@ -52,8 +52,14 @@ class MainController {
     }
 
     private function loginUser() {
-        $rawUserName = $_POST["LoginView::UserName"];
-        $rawPassword = $_POST["LoginView::Password"];
+        $rawUserName = "";
+        $rawPassword = "";
+        if (isset($_POST["LoginView::UserName"])) {
+            $rawUserName = $_POST["LoginView::UserName"];
+        }
+        if (isset($_POST["LoginView::Password"])) {
+            $rawPassword = $_POST["LoginView::Password"];
+        }
 
         $isLoginValid = $this->userValidation->
             isLoginValid($rawUserName, $rawPassword);
@@ -66,9 +72,18 @@ class MainController {
     }
 
     private function registerUser() {
-        $rawUserName = $_POST["RegisterView::UserName"];
-        $rawPassword = $_POST["RegisterView::Password"];
-        $rawPasswordRepeat = $_POST["RegisterView::PasswordRepeat"];
+        $rawUserName = "";
+        $rawPassword = ""; 
+        $rawPasswordRepeat = "";
+        if (isset($_POST["RegisterView::UserName"])) {
+            $rawUserName = $_POST["RegisterView::UserName"];
+        }
+        if (isset($_POST["RegisterView::Password"])) {
+            $rawPassword = $_POST["RegisterView::Password"];
+        }
+        if (isset($_POST["RegisterView::PasswordRepeat"])) {
+            $rawPasswordRepeat = $_POST["RegisterView::PasswordRepeat"];
+        }
 
         $isRegistrationValid = $this->userValidation->isRegistrationValid(
                 $rawUserName, $rawPassword, $rawPasswordRepeat

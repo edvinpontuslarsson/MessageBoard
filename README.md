@@ -8,7 +8,7 @@ To run this application, you need to have php 7+, apache2, MySql, php-mysql inst
 `reg_date TIMESTAMP`
 
 You also need to have the following line uncommented (beginning semicolon removed) from the php.ini file:
-`extension=mysqli`
+`extension=mysqli`<br/>
 Restart server after making that change. 
 
 You also need an environment.php file in the root folder with the following code (but replace the `<examples>`):

@@ -3,24 +3,25 @@
 
 class LayoutView {
   
-  public function render($isLoggedIn, LoginView $loginView, DateTimeView $dtv) {
+  public function render($isLoggedIn, $contentView, DateTimeView $dtv) {
     echo '
       <!DOCTYPE html>
       <html lang="en">
         <head>
           <meta charset="utf-8">
-          <title>My Login Example</title>
+          <title>Login Example</title>
         </head>
         <body>
+
+          <h1>Assignment 2</h1>
 
           <!-- TODO: Make this conditional -->
           <a href="?register">Register a new user</a>
 
-          <h1>Assignment 2</h1>
           ' . $this->renderIsLoggedIn($isLoggedIn) . '
           
           <div class="container">
-              ' . $loginView->response() . '
+              ' . $contentView->response() . '
               
               ' . $dtv->show() . '
           </div>

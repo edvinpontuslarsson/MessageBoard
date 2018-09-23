@@ -15,13 +15,13 @@ class LoginView {
 	public function wantsToRegister($wantsToRegister) {
 		$this->wantsToRegister = $wantsToRegister;
 	}
-	
-	public function getRequestType() : string {
-		return $_SERVER["REQUEST_METHOD"];
-	}
 
 	public function isRegisterQueryString() : bool {
 		return isset($_GET["register"]);
+	}
+	
+	public function getRequestType() : string {
+		return $_SERVER["REQUEST_METHOD"];
 	}
 
 	/**
@@ -83,7 +83,7 @@ class LoginView {
 				</fieldset>
 			</form>
 			';
-		} else {
+		} else { // TODO: put in RegisterView
 			return "
 			<!-- TODO: Put above Not logged in-h2 -->
 			<a href='?'>Back to login</a>
