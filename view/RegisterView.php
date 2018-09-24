@@ -36,9 +36,9 @@ class RegisterView {
 			<form action='?register' method='post' enctype='multipart/form-data'>
 				<fieldset>
 				<legend>Register a new user - Write username and password</legend>
-					<p id='RegisterView::Message'>$message</p>
+					<p id='RegisterView::Message'>$this->errorMessage</p>
 					<label for='RegisterView::UserName' >Username :</label>
-					<input type='text' size='20' name='RegisterView::UserName' id='RegisterView::UserName' value='' />
+					<input type='text' size='20' name='RegisterView::UserName' id='RegisterView::UserName' value='$this->username' />
 					<br/>
 					<label for='RegisterView::Password' >Password  :</label>
 					<input type='password' size='20' name='RegisterView::Password' id='RegisterView::Password' value='' />

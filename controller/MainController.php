@@ -100,8 +100,10 @@ class MainController {
         if (!$isRegistrationValid) {
             $errorMessage = $this->userValidation->
                 getErrorMessage();
+            $this->registerView->
+                setViewErrorMessage($errorMessage);
 
-            echo "$errorMessage";
+            $this->layoutView->render(false, $this->registerView, $this->dtv);
         } else {
             $this->userStorage->storeNewUser(
                 $rawUserName, $rawPassword, $rawPasswordRepeat

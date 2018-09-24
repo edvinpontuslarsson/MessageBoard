@@ -50,20 +50,25 @@ class UserValidation {
         } 
         elseif (strlen($rawUserName) < 3) {
             $this->errorMessage = "Username has too few characters, at least 3 characters.";
+            $this->shouldPrefillUsername = true;
         }
         elseif (strlen($rawPassword) < 6) {
             $this->errorMessage = "Password has too few characters, at least 6 characters.";
+            $this->shouldPrefillUsername = true;
         } 
         elseif ($rawPassword !== $rawPasswordRepeat) {
             $this->errorMessage = "Passwords do not match.";
+            $this->shouldPrefillUsername = true;
         }
         elseif ($this->hasInvalidCharacters($rawUserName)) {
             $this->errorMessage = "Username contains invalid characters.";
+            $this->shouldPrefillUsername = true;
         } 
         elseif ($this->cleanUsername === $this->getFromDatabase(
             $connection, "Users", "username", $this->cleanUsername
         )["username"]) {
             $this->errorMessage = "User exists, pick another username.";
+            $this->shouldPrefillUsername = true;
         }
 
         $connection->close();
