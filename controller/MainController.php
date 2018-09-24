@@ -2,12 +2,14 @@
 
 require_once('model/UserStorage.php');
 require_once('view/LoginView.php');
+require_once('view/RegisterView.php');
 require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
 
 class MainController {
 
     private $loginView;
+    private $registerView;
     private $dtv;
     private $layoutView;
 
@@ -20,6 +22,7 @@ class MainController {
 
         //CREATE OBJECTS OF THE VIEWS
         $this->loginView = new LoginView();
+        $this->registerView = new RegisterView();
         $this->dtv = new DateTimeView();
         $this->layoutView = new LayoutView();
     }
@@ -27,22 +30,16 @@ class MainController {
     public function initialize() {        
         $isRegisterQueryString = 
             $this->loginView->isRegisterQueryString();
-        if ($isRegisterQueryString) {
-            $this->loginView->wantsToRegister(true);
-        }
 
         $reqType = $this->loginView->getRequestType();
+
+        if ($isRegisterQueryString && $reqType === "GET") {
+            $this->layoutView->render(false, $this->registerView, $this->dtv);
         
-        // TODO: put content in if in GetController
-        if ($reqType === "GET") {
+        } elseif ($reqType === "GET") { // TODO: put content in if in GetController
             $this->layoutView->render(false, $this->loginView, $this->dtv);
-        }
 
-        // $submit = $_POST["LoginView::Login"];
-        // $submit = $_POST["DoRegistration"];
-
-        // TODO: put content in if in PostController, with funcs
-        if ($reqType === "POST") {
+        } elseif ($reqType === "POST") { // TODO: put content in if in PostController, with funcs
             if (!$isRegisterQueryString) {
                 $this->loginUser();
             } else {
