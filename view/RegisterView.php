@@ -6,9 +6,17 @@ class RegisterView {
     private static $rawPassword = 'RegisterView::Password';
     private static $rawPasswordRepeat = 
         'RegisterView::PasswordRepeat';
-    private static $errorMessage;
 
-	// TODO: function that returns string if set or ""
+	private $errorMessage = "";
+	private $username = "";
+
+	public function setViewErrorMessage(string $errorMessage) {
+		$this->errorMessage = $errorMessage;
+	}
+
+	public function setViewUsername(string $username) {
+		$this->username = $username;
+	}
 	
 	public function getNavLink() {
 		return "<a href='?'>Back to login</a>";

@@ -11,9 +11,14 @@ class LoginView {
 	private static $messageId = 'LoginView::Message';
 
 	private $errorMessage = "";
+	private $username = "";
 
 	public function setViewErrorMessage(string $errorMessage) {
 		$this->errorMessage = $errorMessage;
+	}
+
+	public function setViewUsername(string $username) {
+		$this->username = $username;
 	}
 
 	public function isRegisterQueryString() : bool {
@@ -74,7 +79,7 @@ class LoginView {
 					<p id="' . self::$messageId . '">' . $this->errorMessage . '</p>
 					
 					<label for="' . self::$name . '">Username :</label>
-					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="" />
+					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="'. $this->username .'" />
 
 					<label for="' . self::$password . '">Password :</label>
 					<input type="password" id="' . self::$password . '" name="' . self::$password . '" />

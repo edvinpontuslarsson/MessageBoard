@@ -67,7 +67,13 @@ class MainController {
             $this->loginView->
                 setViewErrorMessage($errorMessage);
 
-                $this->layoutView->render(false, $this->loginView, $this->dtv);
+            if ($this->userValidation->getShouldPrefillUsername()) {
+                $cleanUsername = $this->userValidation->getCleanUsername();
+                $this->loginView->
+                    setViewUsername($cleanUsername);
+            }
+
+            $this->layoutView->render(false, $this->loginView, $this->dtv);
         } else {
             echo "Login is valid :D";
         }

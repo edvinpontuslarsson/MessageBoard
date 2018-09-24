@@ -6,7 +6,8 @@ class UserValidation {
 
     private $databaseModel;
     private $errorMessage;
-    private $cleanUsername;
+    private $shouldPrefillUsername = false;
+    private $cleanUsername = "";
 
     public function __construct() {
         $this->databaseModel = new DatabaseModel();
@@ -20,6 +21,10 @@ class UserValidation {
 
     public function getErrorMessage() : string {
         return $this->errorMessage;
+    }
+
+    public function getShouldPrefillUsername() : bool {
+        return $this->shouldPrefillUsername;
     }
 
     public function getCleanUsername() : string {
@@ -72,16 +77,19 @@ class UserValidation {
             $this->errorMessage = "Username is missing";
             return false;
         }
-        if ($rawPassword === "") {
-            $this->errorMessage = "Password is missing";
-            return false;
-        }
 
+        // got to have connection to escape string
         $connection = $this->databaseModel->getOpenConnection();
 
         $this->cleanUsername = mysqli_real_escape_string(
             $connection, $rawUserName
         );
+
+        if ($rawPassword === "") {
+            $this->errorMessage = "Password is missing";
+            $this->shouldPrefillUsername = true;
+            return false;
+        }
         
         $dbRow = $this->getFromDatabase(
             $connection, "Users", "username", $this->cleanUsername
@@ -93,6 +101,7 @@ class UserValidation {
 
         if (!$isLoginValid) {
             $this->errorMessage = "Wrong name or password";
+            $this->shouldPrefillUsername = true;
         }
         
         return $isLoginValid;
