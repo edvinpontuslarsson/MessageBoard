@@ -8,7 +8,11 @@ class RegisterView {
         'RegisterView::PasswordRepeat';
     private static $errorMessage;
 
-    // TODO: function that returns string if set or ""
+	// TODO: function that returns string if set or ""
+	
+	public function getNavLink() {
+		return '<a href="?">Back to login</a>';
+	}
     
     public function response() {
         $message = '';
@@ -19,10 +23,7 @@ class RegisterView {
     }
 
     private function generateRegFormHTML(string $message) {
-        return "
-			<!-- TODO: Put above Not logged in-h2 -->
-			<a href='?'>Back to login</a>
-			
+        return "			
 			<h2>Register new user</h2>
 			<form action='?register' method='post' enctype='multipart/form-data'>
 				<fieldset>

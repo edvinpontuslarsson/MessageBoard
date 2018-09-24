@@ -18,6 +18,10 @@ class LoginView {
 		return $_SERVER["REQUEST_METHOD"];
 	}
 
+	public function getNavLink() {
+		return '<a href="?register">Register a new user</a>';
+	}
+
 	/**
 	 * Create HTTP response
 	 *

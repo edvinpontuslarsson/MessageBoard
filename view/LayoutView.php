@@ -15,8 +15,7 @@ class LayoutView {
 
           <h1>Assignment 2</h1>
 
-          <!-- TODO: Make this conditional -->
-          <a href="?register">Register a new user</a>
+          ' . $contentView->getNavLink() . '
 
           ' . $this->renderIsLoggedIn($isLoggedIn) . '
           
