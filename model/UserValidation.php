@@ -55,9 +55,9 @@ class UserValidation {
         elseif ($this->hasInvalidCharacters($rawUserName)) {
             $this->errorMessage = "Username contains invalid characters.";
         } 
-        elseif (!empty($this->getFromDatabase(
+        elseif ($this->cleanUsername === $this->getFromDatabase(
             $connection, "Users", "username", $this->cleanUsername
-        ))) {
+        )["username"]) {
             $this->errorMessage = "User exists, pick another username.";
         }
 
@@ -87,9 +87,8 @@ class UserValidation {
             $connection, "Users", "username", $this->cleanUsername
         );
 
-        $isLoginValid = !empty($dbRow) && $this->isPasswordCorrect(
-            $rawPassword, $dbRow["password"]
-        );
+        $isLoginValid = $this->cleanUsername === $dbRow && 
+        $this->isPasswordCorrect($rawPassword, $dbRow["password"]);
         $connection->close();
 
         if (!$isLoginValid) {
