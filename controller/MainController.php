@@ -62,7 +62,12 @@ class MainController {
             isLoginValid($rawUserName, $rawPassword);
 
         if (!$isLoginValid) {
-            echo "Login not valid :(";
+            $errorMessage = $this->userValidation->
+                getErrorMessage();
+            $this->loginView->
+                setViewErrorMessage($errorMessage);
+
+                $this->layoutView->render(false, $this->loginView, $this->dtv);
         } else {
             echo "Login is valid :D";
         }

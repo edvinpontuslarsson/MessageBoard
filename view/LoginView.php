@@ -10,6 +10,12 @@ class LoginView {
 	private static $keep = 'LoginView::KeepMeLoggedIn';
 	private static $messageId = 'LoginView::Message';
 
+	private $errorMessage = "";
+
+	public function setViewErrorMessage(string $errorMessage) {
+		$this->errorMessage = $errorMessage;
+	}
+
 	public function isRegisterQueryString() : bool {
 		return isset($_GET["register"]);
 	}
@@ -65,7 +71,7 @@ class LoginView {
 			<form method="post" > 
 				<fieldset>
 					<legend>Login - enter Username and password</legend>
-					<p id="' . self::$messageId . '">' . $message . '</p>
+					<p id="' . self::$messageId . '">' . $this->errorMessage . '</p>
 					
 					<label for="' . self::$name . '">Username :</label>
 					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="" />

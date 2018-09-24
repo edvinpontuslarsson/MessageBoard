@@ -11,7 +11,7 @@ class RegisterView {
 	// TODO: function that returns string if set or ""
 	
 	public function getNavLink() {
-		return '<a href="?">Back to login</a>';
+		return "<a href='?'>Back to login</a>";
 	}
     
     public function response() {
@@ -28,7 +28,7 @@ class RegisterView {
 			<form action='?register' method='post' enctype='multipart/form-data'>
 				<fieldset>
 				<legend>Register a new user - Write username and password</legend>
-					<p id='RegisterView::Message'> $message </p>
+					<p id='RegisterView::Message'>$message</p>
 					<label for='RegisterView::UserName' >Username :</label>
 					<input type='text' size='20' name='RegisterView::UserName' id='RegisterView::UserName' value='' />
 					<br/>

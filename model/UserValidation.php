@@ -68,6 +68,15 @@ class UserValidation {
     public function isLoginValid(
         string $rawUserName, string $rawPassword
     ) : bool {
+        if ($rawUserName === "") {
+            $this->errorMessage = "Username is missing";
+            return false;
+        }
+        if ($rawPassword === "") {
+            $this->errorMessage = "Password is missing";
+            return false;
+        }
+
         $connection = $this->databaseModel->getOpenConnection();
 
         $this->cleanUsername = mysqli_real_escape_string(
@@ -81,8 +90,11 @@ class UserValidation {
         $isLoginValid = !empty($dbRow) && $this->isPasswordCorrect(
             $rawPassword, $dbRow["password"]
         );
-
         $connection->close();
+
+        if (!$isLoginValid) {
+            $this->errorMessage = "Wrong name or password";
+        }
         
         return $isLoginValid;
     }
