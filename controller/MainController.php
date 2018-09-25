@@ -31,7 +31,8 @@ class MainController {
     }
 
     public function initialize() {
-        // session_start();
+        session_start();
+        unset($_SESSION["username"]); // to stop session
 
         $isRegisterQueryString = 
             $this->loginView->isRegisterQueryString();
@@ -48,7 +49,6 @@ class MainController {
 
         } elseif ($reqType === "POST") {
             if (isset($_POST["LoginView::Logout"])) {
-                echo "Out";
                 $this->logOut();
             } else {
                 $this->loginOrRegister($isRegisterQueryString);
@@ -57,8 +57,13 @@ class MainController {
     }
 
     private function logOut() {        
+        echo "Anything?"; // this runs
+        session_start();
+        
         session_unset();
         session_destroy();
+
+        unset($_SESSION["username"]);
 
         $this->loginView->setViewMessage("Bye bye!");
         $this->layoutView->render(false, $this->loginView, $this->dtv);
