@@ -7,19 +7,26 @@ require_once('view/InsideView.php');
 require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
 
+require_once('controller/RouteController.php');
+
 class MainController {
 
     private $loginView;
     private $registerView;
+    private $insideView;
     private $dtv;
     private $layoutView;
 
     private $userStorage;
     private $userValidation;
 
+    private $routeController;
+
     public function __construct() {
         $this->userStorage = new UserStorage();
         $this->userValidation = new UserValidation();
+
+        $this->routeController = new RouteController();
 
         //CREATE OBJECTS OF THE VIEWS
         $this->loginView = new LoginView();
@@ -29,24 +36,39 @@ class MainController {
         $this->layoutView = new LayoutView();
     }
 
-    public function initialize() {        
+    public function initialize() {   
+        $this->routeController->echoWhatUserWants(); 
+
         $isRegisterQueryString = 
             $this->loginView->isRegisterQueryString();
 
         $reqType = $this->loginView->getRequestType();
 
-        if ($isRegisterQueryString && $reqType === "GET") {
+        if ($isRegisterQueryString && $reqType === "GET") { // registration
             $this->layoutView->render(false, $this->registerView, $this->dtv);
         
-        } elseif ($reqType === "GET") { // TODO: put content in if in GetController
+        } elseif ($reqType === "GET") { // login start page
             $this->layoutView->render(false, $this->loginView, $this->dtv);
 
-        } elseif ($reqType === "POST") { // TODO: put content in if in PostController, with funcs
-            if (!$isRegisterQueryString) {
-                $this->loginUser();
+        } elseif ($reqType === "POST") {
+            if (isset($_POST["LoginView::Logout"])) {
+                $this->logOut();
             } else {
-                $this->registerUser();
+                $this->loginOrRegister($isRegisterQueryString);
             }
+        }
+    }
+
+    private function logOut() {
+        $this->loginView->setViewMessage("Bye bye!");
+        $this->layoutView->render(false, $this->loginView, $this->dtv);
+    }
+
+    private function loginOrRegister($isRegisterQueryString) {
+        if (!$isRegisterQueryString) {
+            $this->loginUser();
+        } else {
+            $this->registerUser();
         }
     }
 
