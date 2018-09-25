@@ -73,17 +73,17 @@ class MainController {
     }
 
     private function loginUser() {
-        if (!$this->isLoginValid()) {
+        if (!$this->isLoginSuccessful()) {
             $this->handleLoginFail();
         } else {
             // Congratulations, have a cookie!
-            
+
             $this->insideView->setViewMessage("Welcome");
             $this->layoutView->render(true, $this->insideView, $this->dtv);
         }
     }
 
-    private function isLoginValid() {
+    private function isLoginSuccessful() : bool {
         $rawUserName = "";
         $rawPassword = "";
         if (isset($_POST["LoginView::UserName"])) {
@@ -95,6 +95,8 @@ class MainController {
 
         $isLoginValid = $this->userValidation->
             isLoginValid($rawUserName, $rawPassword);
+
+        return $isLoginValid;
     }
 
     private function handleLoginFail() {
