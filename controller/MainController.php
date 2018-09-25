@@ -31,7 +31,7 @@ class MainController {
     }
 
     public function initialize() {
-        session_start();
+        // session_start();
 
         $isRegisterQueryString = 
             $this->loginView->isRegisterQueryString();
@@ -48,6 +48,7 @@ class MainController {
 
         } elseif ($reqType === "POST") {
             if (isset($_POST["LoginView::Logout"])) {
+                echo "Out";
                 $this->logOut();
             } else {
                 $this->loginOrRegister($isRegisterQueryString);
