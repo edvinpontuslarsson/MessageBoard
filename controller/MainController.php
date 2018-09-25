@@ -38,8 +38,8 @@ class MainController {
 
         $reqType = $this->loginView->getRequestType();
 
-        if (isset($_SESSION["username"]) === "Session started") {
-            $this->loginUser();
+        if (isset($_SESSION["username"])) { // logged in
+            $this->layoutView->render(true, $this->insideView, $this->dtv);
         } elseif ($isRegisterQueryString && $reqType === "GET") { // registration
             $this->layoutView->render(false, $this->registerView, $this->dtv);
         
@@ -55,7 +55,7 @@ class MainController {
         }
     }
 
-    private function logOut() {
+    private function logOut() {        
         session_unset();
         session_destroy();
 
@@ -81,6 +81,7 @@ class MainController {
             // Congratulations, have a cookie!
             // We'll have a session at least.
 
+            // TODO: change to username
             $_SESSION["username"] = "Session started";
 
             $this->insideView->setViewMessage("Welcome");
