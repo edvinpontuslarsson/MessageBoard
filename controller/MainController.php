@@ -7,8 +7,6 @@ require_once('view/InsideView.php');
 require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
 
-require_once('controller/RouteController.php');
-
 class MainController {
 
     private $loginView;
@@ -20,13 +18,9 @@ class MainController {
     private $userStorage;
     private $userValidation;
 
-    private $routeController;
-
     public function __construct() {
         $this->userStorage = new UserStorage();
         $this->userValidation = new UserValidation();
-
-        $this->routeController = new RouteController();
 
         //CREATE OBJECTS OF THE VIEWS
         $this->loginView = new LoginView();
@@ -36,15 +30,17 @@ class MainController {
         $this->layoutView = new LayoutView();
     }
 
-    public function initialize() {   
-        $this->routeController->echoWhatUserWants(); 
+    public function initialize() {
+        session_start();
 
         $isRegisterQueryString = 
             $this->loginView->isRegisterQueryString();
 
         $reqType = $this->loginView->getRequestType();
 
-        if ($isRegisterQueryString && $reqType === "GET") { // registration
+        if (isset($_SESSION["username"]) === "Session started") {
+            $this->loginUser();
+        } elseif ($isRegisterQueryString && $reqType === "GET") { // registration
             $this->layoutView->render(false, $this->registerView, $this->dtv);
         
         } elseif ($reqType === "GET") { // login start page
@@ -60,27 +56,35 @@ class MainController {
     }
 
     private function logOut() {
+        session_unset();
+        session_destroy();
+
         $this->loginView->setViewMessage("Bye bye!");
         $this->layoutView->render(false, $this->loginView, $this->dtv);
     }
 
     private function loginOrRegister($isRegisterQueryString) {
-        if (!$isRegisterQueryString) {
-            $this->loginUser();
+        if (!$isRegisterQueryString) { // no register query string, start page
+            $isLoginValid = $this->isLoginSuccessful();
+
+            if (!$isLoginValid) {
+                $this->handleLoginFail();
+            } else {
+                $this->loginUser();
+            }
         } else {
             $this->registerUser();
         }
     }
 
     private function loginUser() {
-        if (!$this->isLoginSuccessful()) {
-            $this->handleLoginFail();
-        } else {
             // Congratulations, have a cookie!
+            // We'll have a session at least.
+
+            $_SESSION["username"] = "Session started";
 
             $this->insideView->setViewMessage("Welcome");
             $this->layoutView->render(true, $this->insideView, $this->dtv);
-        }
     }
 
     private function isLoginSuccessful() : bool {
