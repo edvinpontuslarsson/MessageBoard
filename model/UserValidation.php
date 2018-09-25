@@ -6,7 +6,7 @@ class UserValidation {
 
     private $databaseModel;
     private $errorMessage;
-    private $shouldPrefillUsername = false;
+    private $shouldPrefillUsername;
     private $cleanUsername = "";
 
     public function __construct() {
@@ -31,6 +31,11 @@ class UserValidation {
         return $this->cleanUsername;
     }
 
+    /**
+     * TODO: break out into smaller funcs that I call
+     * from controller. Then I can set proper error message
+     * and decide if username should be shown there. 
+     */
     public function isRegistrationValid(
         string $rawUserName, 
         string $rawPassword,
@@ -62,6 +67,7 @@ class UserValidation {
         }
         elseif ($this->hasInvalidCharacters($rawUserName)) {
             $this->errorMessage = "Username contains invalid characters.";
+            $this->cleanUsername = $this->removeHTMLTags($this->cleanUsername);
             $this->shouldPrefillUsername = true;
         } 
         elseif ($this->cleanUsername === $this->getFromDatabase(
@@ -75,6 +81,11 @@ class UserValidation {
         return empty($this->errorMessage);
     }
 
+    /**
+     * TODO: break out into smaller funcs that I call
+     * from controller. Then I can set proper error message
+     * and decide if username should be shown there. 
+     */
     public function isLoginValid(
         string $rawUserName, string $rawPassword
     ) : bool {
@@ -112,15 +123,35 @@ class UserValidation {
         return $isLoginValid;
     }
 
-    // TODO: Make this better
     private function hasInvalidCharacters(string $rawUserName) : bool {
         $characters = str_split($rawUserName);
         foreach ($characters as $char) {
-            if ($char === "<" || $char === ">") {
+            if ($char === "<") {
                 return true;
             }
         }
         return false;
+    }
+
+    private function removeHTMLTags(string $string) : string {
+        $invalidCharacter;
+        $characters = str_split($string);
+        $validString = "";
+
+        for ($i = 0; $i < count($characters); $i++) {
+            $currentChar = $characters[$i];
+            if ($currentChar === "<") {
+                $invalidCharacter = true;
+            }
+            if (!$invalidCharacter) {
+                $validString .= $currentChar;
+            }
+            if ($currentChar === ">") {
+                $invalidCharacter = false;
+            }
+        }
+
+        return $validString;
     }
 
     /**

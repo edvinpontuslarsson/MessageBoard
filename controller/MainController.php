@@ -69,8 +69,7 @@ class MainController {
 
             if ($this->userValidation->getShouldPrefillUsername()) {
                 $cleanUsername = $this->userValidation->getCleanUsername();
-                $this->loginView->
-                    setViewUsername($cleanUsername);
+                $this->loginView->setViewUsername($cleanUsername);
             }
 
             $this->layoutView->render(false, $this->loginView, $this->dtv);
@@ -102,6 +101,11 @@ class MainController {
                 getErrorMessage();
             $this->registerView->
                 setViewErrorMessage($errorMessage);
+
+            if ($this->userValidation->getShouldPrefillUsername()) {
+                $cleanUsername = $this->userValidation->getCleanUsername();
+                $this->registerView->setViewUsername($cleanUsername);
+            }
 
             $this->layoutView->render(false, $this->registerView, $this->dtv);
         } else {
