@@ -3,6 +3,7 @@
 require_once('model/UserStorage.php');
 require_once('view/LoginView.php');
 require_once('view/RegisterView.php');
+require_once('view/InsideView.php');
 require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
 
@@ -23,6 +24,7 @@ class MainController {
         //CREATE OBJECTS OF THE VIEWS
         $this->loginView = new LoginView();
         $this->registerView = new RegisterView();
+        $this->insideView = new InsideView();
         $this->dtv = new DateTimeView();
         $this->layoutView = new LayoutView();
     }
@@ -64,8 +66,7 @@ class MainController {
         if (!$isLoginValid) {
             $errorMessage = $this->userValidation->
                 getErrorMessage();
-            $this->loginView->
-                setViewMessage($errorMessage);
+            $this->loginView->setViewMessage($errorMessage);
 
             if ($this->userValidation->getShouldPrefillUsername()) {
                 $cleanUsername = $this->userValidation->getCleanUsername();
@@ -74,7 +75,8 @@ class MainController {
 
             $this->layoutView->render(false, $this->loginView, $this->dtv);
         } else {
-            echo "Login is valid :D";
+            $this->insideView->setViewMessage("Welcome");
+            $this->layoutView->render(true, $this->insideView, $this->dtv);
         }
     }
 
