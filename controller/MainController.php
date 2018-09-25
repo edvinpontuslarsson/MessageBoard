@@ -73,6 +73,17 @@ class MainController {
     }
 
     private function loginUser() {
+        if (!$this->isLoginValid()) {
+            $this->handleLoginFail();
+        } else {
+            // Congratulations, have a cookie!
+            
+            $this->insideView->setViewMessage("Welcome");
+            $this->layoutView->render(true, $this->insideView, $this->dtv);
+        }
+    }
+
+    private function isLoginValid() {
         $rawUserName = "";
         $rawPassword = "";
         if (isset($_POST["LoginView::UserName"])) {
@@ -84,22 +95,19 @@ class MainController {
 
         $isLoginValid = $this->userValidation->
             isLoginValid($rawUserName, $rawPassword);
+    }
 
-        if (!$isLoginValid) {
-            $errorMessage = $this->userValidation->
+    private function handleLoginFail() {
+        $errorMessage = $this->userValidation->
                 getErrorMessage();
-            $this->loginView->setViewMessage($errorMessage);
+        $this->loginView->setViewMessage($errorMessage);
 
-            if ($this->userValidation->getShouldPrefillUsername()) {
-                $cleanUsername = $this->userValidation->getCleanUsername();
-                $this->loginView->setViewUsername($cleanUsername);
-            }
-
-            $this->layoutView->render(false, $this->loginView, $this->dtv);
-        } else {
-            $this->insideView->setViewMessage("Welcome");
-            $this->layoutView->render(true, $this->insideView, $this->dtv);
+        if ($this->userValidation->getShouldPrefillUsername()) {
+            $cleanUsername = $this->userValidation->getCleanUsername();
+            $this->loginView->setViewUsername($cleanUsername);
         }
+
+        $this->layoutView->render(false, $this->loginView, $this->dtv);
     }
 
     private function registerUser() {
