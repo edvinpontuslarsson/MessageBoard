@@ -112,7 +112,7 @@ class MainController {
                 $rawUserName, $rawPassword, $rawPasswordRepeat
             );
 
-            $this->registerView->setViewMessage("Registered new user.");
+            $this->loginView->setViewMessage("Registered new user.");
 
             $cleanUsername = $this->userStorage->getCleanUsername();
             $this->loginView->setViewUsername($cleanUsername);
