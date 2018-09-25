@@ -47,6 +47,10 @@ class UserValidation {
             $connection, $rawUserName
         );
 
+        $usernameInDbRow = $this->getFromDatabase(
+            $connection, "Users", "username", $this->cleanUsername
+        );
+
         if (strlen($rawUserName) === 0) {
             $this->errorMessage = "
                 Username has too few characters, at least 3 characters. 
@@ -70,9 +74,8 @@ class UserValidation {
             $this->cleanUsername = $this->removeHTMLTags($this->cleanUsername);
             $this->shouldPrefillUsername = true;
         } 
-        elseif ($this->cleanUsername === $this->getFromDatabase(
-            $connection, "Users", "username", $this->cleanUsername
-        )["username"]) {
+        elseif (!empty($usernameInDbRow) && 
+        $this->cleanUsername === $usernameInDbRow["username"]) {
             $this->errorMessage = "User exists, pick another username.";
             $this->shouldPrefillUsername = true;
         }

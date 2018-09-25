@@ -113,8 +113,9 @@ class MainController {
                 $rawUserName, $rawPassword, $rawPasswordRepeat
             );
 
-            $username = $this->userStorage->getCleanUsername();
-            echo "Welcome aboard $username";
+            $cleanUsername = $this->userStorage->getCleanUsername();
+            $this->loginView->setViewUsername($cleanUsername);
+            $this->layoutView->render(false, $this->loginView, $this->dtv);
         }
     }
 }
