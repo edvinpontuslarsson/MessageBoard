@@ -7,11 +7,11 @@ class RegisterView {
     private static $rawPasswordRepeat = 
         'RegisterView::PasswordRepeat';
 
-	private $errorMessage = "";
+	private $message = "";
 	private $username = "";
 
-	public function setViewErrorMessage(string $errorMessage) {
-		$this->errorMessage = $errorMessage;
+	public function setViewMessage(string $message) {
+		$this->message = $message;
 	}
 
 	public function setViewUsername(string $username) {
@@ -36,7 +36,7 @@ class RegisterView {
 			<form action='?register' method='post' enctype='multipart/form-data'>
 				<fieldset>
 				<legend>Register a new user - Write username and password</legend>
-					<p id='RegisterView::Message'>$this->errorMessage</p>
+					<p id='RegisterView::Message'>$this->message</p>
 					<label for='RegisterView::UserName' >Username :</label>
 					<input type='text' size='20' name='RegisterView::UserName' id='RegisterView::UserName' value='$this->username' />
 					<br/>

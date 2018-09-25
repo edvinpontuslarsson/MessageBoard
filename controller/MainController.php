@@ -65,7 +65,7 @@ class MainController {
             $errorMessage = $this->userValidation->
                 getErrorMessage();
             $this->loginView->
-                setViewErrorMessage($errorMessage);
+                setViewMessage($errorMessage);
 
             if ($this->userValidation->getShouldPrefillUsername()) {
                 $cleanUsername = $this->userValidation->getCleanUsername();
@@ -99,8 +99,7 @@ class MainController {
         if (!$isRegistrationValid) {
             $errorMessage = $this->userValidation->
                 getErrorMessage();
-            $this->registerView->
-                setViewErrorMessage($errorMessage);
+            $this->registerView->setViewMessage($errorMessage);
 
             if ($this->userValidation->getShouldPrefillUsername()) {
                 $cleanUsername = $this->userValidation->getCleanUsername();
@@ -108,10 +107,12 @@ class MainController {
             }
 
             $this->layoutView->render(false, $this->registerView, $this->dtv);
-        } else {
+        } else { // registration is valid
             $this->userStorage->storeNewUser(
                 $rawUserName, $rawPassword, $rawPasswordRepeat
             );
+
+            $this->registerView->setViewMessage("Registered new user.");
 
             $cleanUsername = $this->userStorage->getCleanUsername();
             $this->loginView->setViewUsername($cleanUsername);

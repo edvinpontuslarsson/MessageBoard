@@ -10,11 +10,11 @@ class LoginView {
 	private static $keep = 'LoginView::KeepMeLoggedIn';
 	private static $messageId = 'LoginView::Message';
 
-	private $errorMessage = "";
+	private $message = "";
 	private $username = "";
 
-	public function setViewErrorMessage(string $errorMessage) {
-		$this->errorMessage = $errorMessage;
+	public function setViewMessage(string $message) {
+		$this->message = $message;
 	}
 
 	public function setViewUsername(string $username) {
@@ -76,7 +76,7 @@ class LoginView {
 			<form method="post" > 
 				<fieldset>
 					<legend>Login - enter Username and password</legend>
-					<p id="' . self::$messageId . '">' . $this->errorMessage . '</p>
+					<p id="' . self::$messageId . '">' . $this->message . '</p>
 					
 					<label for="' . self::$name . '">Username :</label>
 					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value="'. $this->username .'" />
