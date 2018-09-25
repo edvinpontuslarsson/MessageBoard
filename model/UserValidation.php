@@ -96,11 +96,6 @@ class UserValidation {
             $this->errorMessage = "Username is missing";
             return false;
         }
-        if ($rawPassword === "") {
-            $this->errorMessage = "Password is missing";
-            $this->shouldPrefillUsername = true;
-            return false;
-        }
 
         // got to have connection to escape string
         $connection = $this->databaseModel->getOpenConnection();
@@ -108,6 +103,13 @@ class UserValidation {
         $this->cleanUsername = mysqli_real_escape_string(
             $connection, $rawUserName
         );
+
+        // have to do this below setting $this->cleanUsername
+        if ($rawPassword === "") {
+            $this->errorMessage = "Password is missing";
+            $this->shouldPrefillUsername = true;
+            return false;
+        }
         
         $dbRow = $this->getFromDatabase(
             $connection, "Users", "username", $this->cleanUsername
