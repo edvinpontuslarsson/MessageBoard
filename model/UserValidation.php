@@ -6,7 +6,7 @@ class UserValidation {
 
     private $databaseModel;
     private $errorMessage;
-    private $shouldPrefillUsername;
+    private $shouldPrefillUsername = false;
     private $cleanUsername = "";
 
     public function __construct() {
