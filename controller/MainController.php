@@ -46,7 +46,10 @@ class MainController {
                 !isset($_SESSION["username"])) { // wants to log out without session
                     // just start page
                     $this->layoutView->render(false, $this->loginView, $this->dtv);
-            } else {
+            } elseif (isset($_SESSION["username"])) { // post with a session, so still logged in
+                // TODO: this shouldn't be necessary, reorder these and I'll need fewer ifs
+                $this->layoutView->render(true, $this->insideView, $this->dtv);
+            } else { 
                 $this->loginOrRegister($isRegisterQueryString);
             }
         } elseif (isset($_SESSION["username"])) { // logged in
@@ -81,10 +84,10 @@ class MainController {
     }
 
     private function loginUser() {
-            // Congratulations, have a cookie!
-            // We'll have a session at least.
-
-            // TODO: change to username
+            // TODO: change to secrent random string
+            // have that stored with user in DB,
+            // later at verifications, 
+            // see if both username and secret is correct
             $_SESSION["username"] = "Session started";
 
             $this->insideView->setViewMessage("Welcome");
