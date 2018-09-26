@@ -30,39 +30,35 @@ class MainController {
         $this->layoutView = new LayoutView();
     }
 
+    // https://stackoverflow.com/questions/10097887/using-sessions-session-variables-in-a-php-login-script
+
+    // see OOP way
+
     public function initialize() {
         session_start();
-        unset($_SESSION["username"]); // to stop session
 
         $isRegisterQueryString = 
             $this->loginView->isRegisterQueryString();
 
         $reqType = $this->loginView->getRequestType();
 
-        if (isset($_SESSION["username"])) { // logged in
+        if ($reqType === "POST") {
+            if (isset($_POST["LoginView::Logout"])) {
+                $this->logOut();
+            } else {
+                $this->loginOrRegister($isRegisterQueryString);
+            }
+        } elseif (isset($_SESSION["username"])) { // logged in
             $this->layoutView->render(true, $this->insideView, $this->dtv);
         } elseif ($isRegisterQueryString && $reqType === "GET") { // registration
             $this->layoutView->render(false, $this->registerView, $this->dtv);
         
         } elseif ($reqType === "GET") { // login start page
             $this->layoutView->render(false, $this->loginView, $this->dtv);
-
-        } elseif ($reqType === "POST") {
-            if (isset($_POST["LoginView::Logout"])) {
-                $this->logOut();
-            } else {
-                $this->loginOrRegister($isRegisterQueryString);
-            }
         }
     }
 
-    private function logOut() {        
-        echo "Anything?"; // this runs
-        session_start();
-        
-        session_unset();
-        session_destroy();
-
+    private function logOut() {
         unset($_SESSION["username"]);
 
         $this->loginView->setViewMessage("Bye bye!");
