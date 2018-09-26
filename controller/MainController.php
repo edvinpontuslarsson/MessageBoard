@@ -40,8 +40,12 @@ class MainController {
 
         if ($reqType === "POST") {
             if (isset($_POST["LoginView::Logout"]) && 
-                isset($_SESSION["username"])) {
+                isset($_SESSION["username"])) { // wants to log out with session
                 $this->logOut();
+            } elseif (isset($_POST["LoginView::Logout"]) &&
+                !isset($_SESSION["username"])) { // wants to log out without session
+                    // just start page
+                    $this->layoutView->render(false, $this->loginView, $this->dtv);
             } else {
                 $this->loginOrRegister($isRegisterQueryString);
             }
