@@ -30,10 +30,6 @@ class MainController {
         $this->layoutView = new LayoutView();
     }
 
-    // https://stackoverflow.com/questions/10097887/using-sessions-session-variables-in-a-php-login-script
-
-    // see OOP way
-
     public function initialize() {
         session_start();
 
@@ -43,7 +39,8 @@ class MainController {
         $reqType = $this->loginView->getRequestType();
 
         if ($reqType === "POST") {
-            if (isset($_POST["LoginView::Logout"])) {
+            if (isset($_POST["LoginView::Logout"]) && 
+                isset($_SESSION["username"])) {
                 $this->logOut();
             } else {
                 $this->loginOrRegister($isRegisterQueryString);
