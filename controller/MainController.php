@@ -90,7 +90,37 @@ class MainController {
             // see if both username and secret is correct
             $_SESSION["username"] = "Session started";
 
-            $this->insideView->setViewMessage("Welcome");
+            if (isset($_POST["LoginView::KeepMeLoggedIn"])) {
+                $this->insideView->setViewMessage(
+                    "Welcome and you will be remembered"
+                );
+
+                $day = time() + (86400 * 30);
+
+                $usernameCookie = "LoginView::CookieName";
+                $usernameCookieValue = "Admin";
+
+                setcookie(
+                    $usernameCookie,
+                    $usernameCookieValue,
+                    $day,
+                    "/"
+                );
+
+                $passwordCookie = "LoginView::CookiePassword";
+                $passwordCookieValue = random_bytes(42);
+
+                setcookie(
+                    $passwordCookie,
+                    $passwordCookieValue,
+                    $day,
+                    "/"
+                );
+
+            } else {
+                $this->insideView->setViewMessage("Welcome");
+            }
+
             $this->layoutView->render(true, $this->insideView, $this->dtv);
     }
 
