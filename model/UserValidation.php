@@ -189,15 +189,6 @@ class UserValidation {
         );
     }
 
-    // TODO: Remove from final version
-    private function getUsersSqlColumnsString() : string {
-        return "id INT(7) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        username VARCHAR(25) NOT NULL,
-        password VARCHAR(128) NOT NULL,
-        reg_date TIMESTAMP
-        ";
-    }
-
     private function getPreparedSqlSelectStatement($sqlTable, $sqlColumn) : string {
         return "SELECT * FROM $sqlTable WHERE $sqlColumn = ?";
     }
