@@ -16,6 +16,7 @@ class DatabaseModel {
         $this->databaseName = getenv('db');
     }
 
+    // TODO: make this private, DB-model detail
     public function getOpenConnection() {
         $connection = mysqli_connect(
             $this->hostname,
@@ -29,5 +30,18 @@ class DatabaseModel {
         }
 
         return $connection;
+    }
+
+    public function getMysqlEscapedString(
+        string $rawString
+    ) : string {
+        $connection = $this->getOpenConnection();
+
+        $escapedString = mysqli_real_escape_string(
+            $connection, $rawString
+        );
+
+        $connection->close();
+        return $escapedString;
     }
 }

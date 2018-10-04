@@ -11,12 +11,6 @@ class UserValidation {
 
     public function __construct() {
         $this->databaseModel = new DatabaseModel();
-
-        // TODO: Remove from final version
-        $this->databaseModel->createDbTableIfNotExists(
-            "Users",
-            $this->getUsersSqlColumnsString()
-        );
     }
 
     public function getErrorMessage() : string {
@@ -43,9 +37,8 @@ class UserValidation {
     ) : bool {
         $connection = $this->databaseModel->getOpenConnection();
 
-        $this->cleanUsername = mysqli_real_escape_string(
-            $connection, $rawUserName
-        );
+        $this->cleanUsername = $this->databaseModel->
+            getMysqlEscapedString($rawUserName);
 
         $usernameInDbRow = $this->getFromDatabase(
             $connection, "Users", "username", $this->cleanUsername
@@ -100,9 +93,8 @@ class UserValidation {
         // got to have connection to escape string
         $connection = $this->databaseModel->getOpenConnection();
 
-        $this->cleanUsername = mysqli_real_escape_string(
-            $connection, $rawUserName
-        );
+        $this->cleanUsername = $this->databaseModel->
+            getMysqlEscapedString($rawUserName);
 
         // have to do this below setting $this->cleanUsername
         if ($rawPassword === "") {
