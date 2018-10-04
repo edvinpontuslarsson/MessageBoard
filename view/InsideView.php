@@ -1,6 +1,7 @@
 <?php
 
 // TODO: do this less hardcoded and use premade functions
+// Can have this in LoginView, perhaps
 
 class InsideView {
     private $message = "";
