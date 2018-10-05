@@ -35,13 +35,13 @@ class UserValidation {
         string $rawPassword,
         string $rawPasswordRepeat
     ) : bool {
-        $connection = $this->databaseModel->getOpenConnection();
-
         $this->cleanUsername = $this->databaseModel->
             getMysqlEscapedString($rawUserName);
 
-        $usernameInDbRow = $this->getFromDatabase(
-            $connection, "Users", "username", $this->cleanUsername
+        $usernameInDbRow = $this->databaseModel->getFromDatabase(
+            $this->databaseModel->getUsersTable(),
+            $this->databaseModel->getUsernameColumn(),
+            $this->cleanUsername
         );
 
         if (strlen($rawUserName) === 0) {
@@ -73,7 +73,6 @@ class UserValidation {
             $this->shouldPrefillUsername = true;
         }
 
-        $connection->close();
         return empty($this->errorMessage);
     }
 
@@ -90,9 +89,6 @@ class UserValidation {
             return false;
         }
 
-        // got to have connection to escape string
-        $connection = $this->databaseModel->getOpenConnection();
-
         $this->cleanUsername = $this->databaseModel->
             getMysqlEscapedString($rawUserName);
 
@@ -103,13 +99,14 @@ class UserValidation {
             return false;
         }
         
-        $dbRow = $this->getFromDatabase(
-            $connection, "Users", "username", $this->cleanUsername
+        $dbRow = $this->databaseModel->getFromDatabase(
+            $this->databaseModel->getUsersTable(),
+            $this->databaseModel->getUsernameColumn(),
+            $this->cleanUsername
         );
 
         $isLoginValid = $this->cleanUsername === $dbRow["username"] && 
         $this->isPasswordCorrect($rawPassword, $dbRow["password"]);
-        $connection->close();
 
         if (!$isLoginValid) {
             $this->errorMessage = "Wrong name or password";
@@ -150,46 +147,11 @@ class UserValidation {
         return $validString;
     }
 
-    /**
-     * Function inspired by code on this page:
-     * https://stackoverflow.com/questions/28803342/php-prepared-statements-mysql-check-if-user-exists
-     */  
-    private function getFromDatabase(
-        $connection, string $sqlTable, 
-        string $sqlColumn, string $toSearchFor
-    ) : array {
-        $statement = mysqli_prepare(
-            $connection, 
-            $this->getPreparedSqlSelectStatement($sqlTable, $sqlColumn)
-        );
-
-        $string = "s";
-        mysqli_stmt_bind_param(
-            $statement, $string, $toSearchFor
-        );
-        mysqli_stmt_execute($statement);
-
-        $result = mysqli_stmt_get_result($statement);
-        $row = mysqli_fetch_assoc($result);
-
-        $statement->close();
-
-        if (!empty($row)) {
-            return $row;
-        } else {
-            return [];
-        }
-    }
-
     private function isPasswordCorrect(
         string $rawPassword, string $hashedPassword
     )  : bool {
         return password_verify(
             $rawPassword, $hashedPassword
         );
-    }
-
-    private function getPreparedSqlSelectStatement($sqlTable, $sqlColumn) : string {
-        return "SELECT * FROM $sqlTable WHERE $sqlColumn = ?";
     }
 }

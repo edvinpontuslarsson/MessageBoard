@@ -8,6 +8,16 @@ class DatabaseModel {
     private $mysqlUsername;
     private $mysqlPassword;
     private $databaseName;
+
+    private $usersTable = "Users";
+    public function getUsersTable() : string {
+        return $this->usersTable;
+    }
+
+    private $usernameColumn = "username";
+    public function getUsernameColumn() : string {
+        return $this->usernameColumn;
+    }
     
     public function __construct() {
         $this->hostname = getenv('host');
@@ -43,5 +53,49 @@ class DatabaseModel {
 
         $connection->close();
         return $escapedString;
+    }
+
+    /**
+     * Function inspired by code on this page:
+     * https://stackoverflow.com/questions/28803342/php-prepared-statements-mysql-check-if-user-exists
+     */  
+    public function getFromDatabase(
+        string $sqlTable, 
+        string $sqlColumn, 
+        string $toSearchFor
+    ) : array {
+        $connection = $this->getOpenConnection();
+
+        $statement = mysqli_prepare(
+            $connection, 
+            $this->getPreparedSqlSelectStatement(
+                $sqlTable, $sqlColumn
+            )
+        );
+
+        $string = "s";
+        mysqli_stmt_bind_param(
+            $statement, $string, $toSearchFor
+        );
+        mysqli_stmt_execute($statement);
+
+        $result = mysqli_stmt_get_result($statement);
+        $row = mysqli_fetch_assoc($result);
+
+        $statement->close();
+        $connection->close();
+
+        if (!empty($row)) {
+            return $row;
+        } else {
+            return [];
+        }
+    }
+
+    private function getPreparedSqlSelectStatement(
+        $sqlTable, $sqlColumn
+    ) : string {
+        return 
+            "SELECT * FROM $sqlTable WHERE $sqlColumn = ?";
     }
 }
