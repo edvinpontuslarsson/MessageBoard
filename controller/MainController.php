@@ -1,6 +1,7 @@
 <?php
 
-require_once('model/UserStorage.php');
+require_once('model/DatabaseModel.php');
+require_once('model/UserValidation.php');
 require_once('view/LoginView.php');
 require_once('view/RegisterView.php');
 require_once('view/InsideView.php');
@@ -9,17 +10,21 @@ require_once('view/LayoutView.php');
 
 class MainController {
 
+    /**
+     * TODO: have a main view perhaps
+     */
+
     private $loginView;
     private $registerView;
     private $insideView;
     private $dtv;
     private $layoutView;
 
-    private $userStorage;
+    private $databaseModel;
     private $userValidation;
 
     public function __construct() {
-        $this->userStorage = new UserStorage();
+        $this->databaseModel = new DatabaseModel();
         $this->userValidation = new UserValidation();
 
         //CREATE OBJECTS OF THE VIEWS
@@ -183,13 +188,13 @@ class MainController {
 
             $this->layoutView->render(false, $this->registerView, $this->dtv);
         } else { // registration is valid
-            $this->userStorage->storeNewUser(
-                $rawUserName, $rawPassword, $rawPasswordRepeat
+            $this->databaseModel->storeNewUser(
+                $rawUserName, $rawPassword
             );
 
             $this->loginView->setViewMessage("Registered new user.");
 
-            $cleanUsername = $this->userStorage->getCleanUsername();
+            $cleanUsername = $this->databaseModel->getCleanUsername();
             $this->loginView->setViewUsername($cleanUsername);
             $this->layoutView->render(false, $this->loginView, $this->dtv);
         }

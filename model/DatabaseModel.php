@@ -9,6 +9,14 @@ class DatabaseModel {
     private $mysqlPassword;
     private $databaseName;
 
+    private $userInsertionStatement = "INSERT INTO Users (username, password) 
+        VALUES (?, ?)";
+
+    private $cleanUserName;
+    public function getCleanUsername() {
+        return $this->cleanUserName;
+    }
+
     private $usersTable = "Users";
     public function getUsersTable() : string {
         return $this->usersTable;
@@ -106,9 +114,9 @@ class DatabaseModel {
             )
         );
 
-        $stringType = "s";
+        $aString = "s";
         mysqli_stmt_bind_param(
-            $statement, $stringType, $toSearchFor
+            $statement, $aString, $toSearchFor
         );
         mysqli_stmt_execute($statement);
 
@@ -130,5 +138,35 @@ class DatabaseModel {
     ) : string {
         return 
             "SELECT * FROM $sqlTable WHERE $sqlColumn = ?";
+    }
+
+    public function storeNewUser(
+        string $rawUserName, 
+        string $rawPassword
+    ) {
+        $connection = $this->getOpenConnection();
+ 
+        $this->cleanUserName = 
+            $this->getMysqlEscapedString($rawUserName);
+
+        $hashedPassword = password_hash(
+            $rawPassword, PASSWORD_DEFAULT
+        );
+
+        $statement = $connection->prepare(
+            $this->userInsertionStatement
+        );
+
+        $twoStrings = "ss";
+        $statement->bind_param(
+            $twoStrings, $userName, $password
+        );
+
+        $userName = $this->cleanUserName;
+        $password = $hashedPassword;
+        $statement->execute();
+
+        $statement->close();
+        $connection->close();
     }
 }
