@@ -62,9 +62,11 @@ class UserValidation {
             $this->errorMessage = "Passwords do not match.";
             $this->shouldPrefillUsername = true;
         }
-        elseif ($this->hasInvalidCharacters($rawUserName)) {
+        elseif ($this->databaseModel->
+        doesContainHtmlCharacter($rawUserName)) {
             $this->errorMessage = "Username contains invalid characters.";
-            $this->cleanUsername = $this->removeHTMLTags($this->cleanUsername);
+            $this->cleanUsername = $this->databaseModel->
+                removeHTMLTags($this->cleanUsername);
             $this->shouldPrefillUsername = true;
         } 
         elseif (!empty($usernameInDbRow) && 
@@ -114,37 +116,6 @@ class UserValidation {
         }
         
         return $isLoginValid;
-    }
-
-    private function hasInvalidCharacters(string $rawUserName) : bool {
-        $characters = str_split($rawUserName);
-        foreach ($characters as $char) {
-            if ($char === "<") {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private function removeHTMLTags(string $string) : string {
-        $invalidCharacter;
-        $characters = str_split($string);
-        $validString = "";
-
-        for ($i = 0; $i < count($characters); $i++) {
-            $currentChar = $characters[$i];
-            if ($currentChar === "<") {
-                $invalidCharacter = true;
-            }
-            if (!$invalidCharacter) {
-                $validString .= $currentChar;
-            }
-            if ($currentChar === ">") {
-                $invalidCharacter = false;
-            }
-        }
-
-        return $validString;
     }
 
     private function isPasswordCorrect(

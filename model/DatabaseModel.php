@@ -55,6 +55,39 @@ class DatabaseModel {
         return $escapedString;
     }
 
+    public function doesContainHtmlCharacter(
+        string $string
+    ) : bool {
+        $characters = str_split($string);
+        foreach ($characters as $char) {
+            if ($char === "<") {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function removeHTMLTags(string $string) : string {
+        $invalidCharacter;
+        $characters = str_split($string);
+        $validString = "";
+
+        for ($i = 0; $i < count($characters); $i++) {
+            $currentChar = $characters[$i];
+            if ($currentChar === "<") {
+                $invalidCharacter = true;
+            }
+            if (!$invalidCharacter) {
+                $validString .= $currentChar;
+            }
+            if ($currentChar === ">") {
+                $invalidCharacter = false;
+            }
+        }
+
+        return $validString;
+    }
+
     /**
      * Function inspired by code on this page:
      * https://stackoverflow.com/questions/28803342/php-prepared-statements-mysql-check-if-user-exists
@@ -73,9 +106,9 @@ class DatabaseModel {
             )
         );
 
-        $string = "s";
+        $stringType = "s";
         mysqli_stmt_bind_param(
-            $statement, $string, $toSearchFor
+            $statement, $stringType, $toSearchFor
         );
         mysqli_stmt_execute($statement);
 
