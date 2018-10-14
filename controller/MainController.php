@@ -2,6 +2,7 @@
 
 require_once('model/UserValidation.php');
 require_once('model/UserModel.php');
+require_once('model/CustomException.php');
 require_once('view/LoginView.php');
 require_once('view/RegisterView.php');
 require_once('view/InsideView.php');
@@ -101,35 +102,46 @@ class MainController {
             // see if both username and secret is correct
             $_SESSION["username"] = "Session started";
 
-            if (isset($_POST["LoginView::KeepMeLoggedIn"])) {
-                $this->insideView->setViewMessage(
-                    "Welcome and you will be remembered"
-                );
+            try { // just to test
 
-                $day = time() + (86400 * 30);
+                if (isset($_POST["LoginView::KeepMeLoggedIn"])) {
+                    $this->insideView->setViewMessage(
+                        "Welcome and you will be remembered"
+                    );
+    
+                    $day = time() + (86400 * 30);
+    
+                    $usernameCookie = "LoginView::CookieName";
+                    $usernameCookieValue = "Admin";
+    
+                    setcookie(
+                        $usernameCookie,
+                        $usernameCookieValue,
+                        $day,
+                        "/"
+                    );
+    
+                    $passwordCookie = "LoginView::CookiePassword";
+                    $passwordCookieValue = random_bytes(42);
+    
+                    setcookie(
+                        $passwordCookie,
+                        $passwordCookieValue,
+                        $day,
+                        "/"
+                    );
+    
+                } else {
+                    throw new RandomException();
+    
+                    $this->insideView->setViewMessage("Welcome");
+                }
+            } 
 
-                $usernameCookie = "LoginView::CookieName";
-                $usernameCookieValue = "Admin";
-
-                setcookie(
-                    $usernameCookie,
-                    $usernameCookieValue,
-                    $day,
-                    "/"
-                );
-
-                $passwordCookie = "LoginView::CookiePassword";
-                $passwordCookieValue = random_bytes(42);
-
-                setcookie(
-                    $passwordCookie,
-                    $passwordCookieValue,
-                    $day,
-                    "/"
-                );
-
-            } else {
-                $this->insideView->setViewMessage("Welcome");
+            catch (Exception $e) {
+                if(get_class($e) === "RandomException") {
+                    echo "can catch custom exception";
+                }
             }
 
             $this->layoutView->render(true, $this->insideView, $this->dtv);

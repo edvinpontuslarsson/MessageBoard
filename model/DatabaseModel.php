@@ -30,7 +30,8 @@ class DatabaseModel {
     // TODO: have field & get for temp pass
     
     public function __construct() {
-        $this->hostname = getenv('host');
+        // TODO: maybe I can have dynamic php arrays with keys for these
+        $this->hostname = getenv('host'); 
         $this->mysqlUsername = getenv('username');
         $this->mysqlPassword = getenv('password');
         $this->databaseName = getenv('db');
