@@ -51,6 +51,12 @@ class MainController {
     private function runController() {
         session_start();
 
+        // TODO: if wants log out, check if logged in
+
+
+        // TODO: now I should be able to just get the if conditions
+        // from UserRequest class
+
         $isRegisterQueryString = 
             $this->loginView->isRegisterQueryString();
 
@@ -62,7 +68,7 @@ class MainController {
                 $this->logOut();
             } elseif (isset($_POST["LoginView::Logout"]) &&
                 !isset($_SESSION["username"])) { // wants to log out without session
-                    // just start page
+                    // just start page, 
                     $this->layoutView->render(false, $this->loginView, $this->dtv);
             } elseif (isset($_SESSION["username"])) { // post with a session, so still logged in
                 // TODO: this shouldn't be necessary, reorder these and I'll need fewer ifs
