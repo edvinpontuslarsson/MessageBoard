@@ -1,6 +1,5 @@
 <?php
 
-require_once('model/DatabaseModel.php');
 require_once('model/UserValidation.php');
 require_once('model/UserModel.php');
 require_once('view/LoginView.php');
@@ -21,11 +20,9 @@ class MainController {
     private $dtv;
     private $layoutView;
 
-    private $databaseModel;
     private $userValidation;
 
     public function __construct() {
-        $this->databaseModel = new DatabaseModel();
         $this->userValidation = new UserValidation();
 
         //CREATE OBJECTS OF THE VIEWS
@@ -77,13 +74,21 @@ class MainController {
 
     private function loginOrRegister($isRegisterQueryString) {
         if (!$isRegisterQueryString) { // no register query string, start page
-            $isLoginValid = $this->isLoginSuccessful();
-
-            if (!$isLoginValid) {
-                $this->handleLoginFail();
-            } else {
-                $this->loginUser();
+            $rawUserName = "";
+            $rawPassword = "";
+            if (isset($_POST["LoginView::UserName"])) {
+                $rawUserName = $_POST["LoginView::UserName"];
             }
+            if (isset($_POST["LoginView::Password"])) {
+                $rawPassword = $_POST["LoginView::Password"];
+            }
+
+            $userModel = new UserModel();
+            $userModel->validateLogin($rawUserName, $rawPassword);
+            
+            // $this->handleLoginFail(); in view
+            
+            $this->loginUser();
         } else {
             $this->registerUser();
         }
@@ -128,22 +133,6 @@ class MainController {
             }
 
             $this->layoutView->render(true, $this->insideView, $this->dtv);
-    }
-
-    private function isLoginSuccessful() : bool {
-        $rawUserName = "";
-        $rawPassword = "";
-        if (isset($_POST["LoginView::UserName"])) {
-            $rawUserName = $_POST["LoginView::UserName"];
-        }
-        if (isset($_POST["LoginView::Password"])) {
-            $rawPassword = $_POST["LoginView::Password"];
-        }
-
-        $isLoginValid = $this->userValidation->
-            isLoginValid($rawUserName, $rawPassword);
-
-        return $isLoginValid;
     }
 
     private function handleLoginFail() {

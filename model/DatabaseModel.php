@@ -65,6 +65,9 @@ class DatabaseModel {
         return $escapedString;
     }
 
+    /**
+     * TODO: perhaps move this to a Helper model
+     */
     public function doesContainHtmlCharacter(
         string $string
     ) : bool {
@@ -77,6 +80,9 @@ class DatabaseModel {
         return false;
     }
 
+    /**
+     * TODO: perhaps move this to a Helper model
+     */
     public function removeHTMLTags(string $string) : string {
         $invalidCharacter;
         $characters = str_split($string);

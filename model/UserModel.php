@@ -64,10 +64,14 @@ class UserModel {
 
         if (!$isPasswordTemporary) {
             $isPasswordCorrect = $this->isPasswordCorrect(
-                $rawPassword, $dbRow[$passwordKey]
+                $rawPassword, $userArray[$passwordKey]
             );
         } else {
             // check the temporary
+        }
+
+        if (!$isUsernameCorrect && !$isPasswordCorrect) {
+            // throw incorrect username/password exception
         }
     }
 
