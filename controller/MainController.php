@@ -2,6 +2,7 @@
 
 require_once('model/DatabaseModel.php');
 require_once('model/UserValidation.php');
+require_once('model/UserModel.php');
 require_once('view/LoginView.php');
 require_once('view/RegisterView.php');
 require_once('view/InsideView.php');
@@ -172,31 +173,20 @@ class MainController {
             $rawPasswordRepeat = $_POST["RegisterView::PasswordRepeat"];
         }
 
-        $isRegistrationValid = $this->userValidation->isRegistrationValid(
-                $rawUserName, $rawPassword, $rawPasswordRepeat
-            );
-    
-        if (!$isRegistrationValid) {
-            $errorMessage = $this->userValidation->
-                getErrorMessage();
-            $this->registerView->setViewMessage($errorMessage);
+        // Invalid registration: 
+        // $this->layoutView->render(false, $this->registerView, $this->dtv);
+        
+        $user = new UserModel(
+            true, $rawUserName, $rawPassword
+        );
 
-            if ($this->userValidation->getShouldPrefillUsername()) {
-                $cleanUsername = $this->userValidation->getCleanUsername();
-                $this->registerView->setViewUsername($cleanUsername);
-            }
+        $this->databaseModel->storeNewUser($user);
 
-            $this->layoutView->render(false, $this->registerView, $this->dtv);
-        } else { // registration is valid
-            $this->databaseModel->storeNewUser(
-                $rawUserName, $rawPassword
-            );
+        $this->loginView->setViewMessage("Registered new user.");
 
-            $this->loginView->setViewMessage("Registered new user.");
+        $cleanUsername = $user->getCleanUsername();
 
-            $cleanUsername = $this->databaseModel->getCleanUsername();
-            $this->loginView->setViewUsername($cleanUsername);
-            $this->layoutView->render(false, $this->loginView, $this->dtv);
-        }
+        $this->loginView->setViewUsername($cleanUsername);
+        $this->layoutView->render(false, $this->loginView, $this->dtv);
     }
 }

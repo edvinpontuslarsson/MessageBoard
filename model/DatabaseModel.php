@@ -135,10 +135,7 @@ class DatabaseModel {
             "SELECT * FROM $sqlTable WHERE $sqlColumn = ?";
     }
 
-    public function storeNewUser(
-        string $cleanUserName, 
-        string $hashedPassword
-    ) {
+    public function storeNewUser($newUser) {
         $connection = $this->getOpenConnection();
 
         $statement = $connection->prepare(
@@ -150,8 +147,8 @@ class DatabaseModel {
             $twoStrings, $userName, $password
         );
 
-        $userName = $cleanUserName;
-        $password = $hashedPassword;
+        $userName = $newUser->getCleanUsername();
+        $password = $newUser->getHashedPassword();
         $statement->execute();
 
         $statement->close();

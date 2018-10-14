@@ -7,46 +7,47 @@ class UserModel {
         return $this->cleanUsername;
     }
 
+    private $hashedPassword;
+    public function getHashedPassword() : string {
+        return $this->hashedPassword;
+    }
+
     private $databaseModel;
 
     public function __construct(
-        bool $registerUser,
+        bool $newUser,
         string $rawUsername, 
         string $rawPassword,
-        bool $isPasswordTemporary,
+        bool $isPasswordTemporary = false,
         bool $keepLoggedIn = false
     ) {
         $this->databaseModel = new DatabaseModel();
 
-        if ($registerUser) {
-            $this->registerUser($rawUsername, $rawPassword);
+        if ($newUser) {
+            $this->newUser($rawUsername, $rawPassword);
         } else {
             # code...
         }   
     }
 
-    private function registerUser(
+    private function newUser(
         string $rawUsername, string $rawPassword
     ) {
         $this->validateCredentialsLength($rawUsername, $rawPassword);
 
         $this->cleanUsername = $this->databaseModel->
-            getMysqlEscapedString($rawUserName);
+            getMysqlEscapedString($rawUsername);
 
         if ($this->userNameExists()) {
             // throw occupiedUsernameException
         } elseif ( // TODO: remove does from func name
-            $this->databaseModel->doesContainHtmlCharacter($rawUserName)
+            $this->databaseModel->doesContainHtmlCharacter($rawUsername)
         ) {
             # throw htmlCharException
             // remove html tags, call from view
         } else {
-            $hashedPassword = password_hash(
+            $this->hashedPassword = password_hash(
                 $rawPassword, PASSWORD_DEFAULT
-            );
-
-            $this->databaseModel->storeNewUser(
-                $this->cleanUsername, $hashedPassword
             );
         }
     }
@@ -58,9 +59,11 @@ class UserModel {
             strlen($rawPassword) > 0) {
             # throw noCredentialsException
         } elseif (strlen($rawUserName) < 3) {
-            // throw usernameToShort
+            // throw usernameTooShort
+        } elseif (strlen($rawUserName) > 25) {
+            // throw usernameTooLong
         } elseif (strlen($rawPassword) < 6) {
-            // throw passwordToShort
+            // throw passwordTooShort
         }        
     }
 
