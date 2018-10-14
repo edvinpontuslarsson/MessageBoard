@@ -7,20 +7,69 @@ class UserCredentials {
         return $this->cleanUsername;
     }
 
-    private $temporaryPassword;
-    public function getTemporaryPassword() : string {
-        return $this->temporaryPassword;
-    }
-
     private $databaseModel;
 
     public function __construct(
+        bool $registerUser,
         string $rawUsername, 
         string $rawPassword,
-        bool $newUser,
+        bool $isPasswordTemporary,
         bool $keepLoggedIn = false
     ) {
-        // TODO:
-        // have fields, setters and throw custom exeptions
+        $this->databaseModel = new DatabaseModel();
+
+        if ($registerUser) {
+            $this->registerUser($rawUsername, $rawPassword);
+        } else {
+            # code...
+        }   
     }
+
+    private function registerUser(
+        string $rawUsername, string $rawPassword
+    ) {
+        $this->validateCredentialsLength($rawUsername, $rawPassword);
+
+        $this->cleanUsername = $this->databaseModel->
+            getMysqlEscapedString($rawUserName);
+
+        if ($this->userNameExists()) {
+            // throw occupiedUsernameException
+        } elseif ( // TODO: remove does from func name
+            $this->databaseModel->doesContainHtmlCharacter($rawUserName)
+        ) {
+            # throw htmlCharException
+            // remove html tags, call from view
+        } else {
+            $this->setUsername();
+        }
+    }
+
+    private function validateCredentialsLength(
+        string $rawUsername, string $rawPassword
+    ) {
+        if (strlen($rawUsername) > 0 && 
+            strlen($rawPassword) > 0) {
+            # throw noCredentialsException
+        } elseif (strlen($rawUserName) < 3) {
+            // throw usernameToShort
+        } elseif (strlen($rawPassword) < 6) {
+            // throw passwordToShort
+        }        
+    }
+
+    private function userNameExists() : bool {
+        $usersTable = $this->databaseModel->getUsersTable();
+        $usernameColumn = $this->databaseModel->getUsernameColumn();
+        
+        $usernameInDbRow = $this->databaseModel->getFromDatabase(
+            $usersTable,
+            $usernameColumn,
+            $this->cleanUsername
+        );
+        return !empty($usernameInDbRow) &&
+            $this->cleanUsername === $usernameInDbRow[$usernameColumn];
+    }
+
+    
 }
