@@ -176,15 +176,12 @@ class MainController {
         // Invalid registration: 
         // $this->layoutView->render(false, $this->registerView, $this->dtv);
         
-        $user = new UserModel(
-            true, $rawUserName, $rawPassword
-        );
-
-        $this->databaseModel->storeNewUser($user);
+        $userModel = new UserModel();
+        $userModel->registerUser($rawUserName, $rawPassword);
 
         $this->loginView->setViewMessage("Registered new user.");
 
-        $cleanUsername = $user->getCleanUsername();
+        $cleanUsername = $userModel->getCleanUsername();
 
         $this->loginView->setViewUsername($cleanUsername);
         $this->layoutView->render(false, $this->loginView, $this->dtv);

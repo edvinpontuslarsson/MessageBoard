@@ -21,6 +21,13 @@ class DatabaseModel {
     public function getUsernameColumn() : string {
         return $this->usernameColumn;
     }
+
+    private $passwordColumn = "password";
+    public function getPasswordColumn() : string {
+        return $this->passwordColumn;
+    }
+
+    // TODO: have field & get for temp pass
     
     public function __construct() {
         $this->hostname = getenv('host');
@@ -135,7 +142,9 @@ class DatabaseModel {
             "SELECT * FROM $sqlTable WHERE $sqlColumn = ?";
     }
 
-    public function storeNewUser($newUser) {
+    public function storeNewUser(
+        string $cleanUsername, string $hashedPassword
+    ) {
         $connection = $this->getOpenConnection();
 
         $statement = $connection->prepare(
@@ -147,8 +156,8 @@ class DatabaseModel {
             $twoStrings, $userName, $password
         );
 
-        $userName = $newUser->getCleanUsername();
-        $password = $newUser->getHashedPassword();
+        $userName = $cleanUsername;
+        $password = $hashedPassword;
         $statement->execute();
 
         $statement->close();

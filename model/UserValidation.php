@@ -2,6 +2,10 @@
 
 require_once('model/DatabaseModel.php');
 
+/**
+ * TODO: remove this class, handle elsewhere
+ */
+
 class UserValidation {
 
     private $databaseModel;
@@ -25,11 +29,6 @@ class UserValidation {
         return $this->cleanUsername;
     }
 
-    /**
-     * TODO: break out into smaller funcs that I call
-     * from controller. Then I can set proper error message
-     * and decide if username should be shown there. 
-     */
     public function isRegistrationValid(
         string $rawUserName, 
         string $rawPassword,
