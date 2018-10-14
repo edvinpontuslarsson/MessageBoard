@@ -2,7 +2,7 @@
 
 class DateTimeModel {
 	
-    public function getDateTimeString() {
+    public function getDateTimeString() : string {
 
 		$this->setDefaultTimezone();
 

@@ -140,6 +140,8 @@ class DatabaseModel {
             "SELECT * FROM $sqlTable WHERE $sqlColumn = ?";
     }
 
+    // TODO: break out into smaller reusable funcs
+    // have hash and escape in UserCredentials
     public function storeNewUser(
         string $rawUserName, 
         string $rawPassword
