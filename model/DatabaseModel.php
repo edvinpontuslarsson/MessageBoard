@@ -12,11 +12,6 @@ class DatabaseModel {
     private $userInsertionStatement = "INSERT INTO Users (username, password) 
         VALUES (?, ?)";
 
-    private $cleanUserName;
-    public function getCleanUsername() {
-        return $this->cleanUserName;
-    }
-
     private $usersTable = "Users";
     public function getUsersTable() : string {
         return $this->usersTable;
@@ -140,20 +135,11 @@ class DatabaseModel {
             "SELECT * FROM $sqlTable WHERE $sqlColumn = ?";
     }
 
-    // TODO: break out into smaller reusable funcs
-    // have hash and escape in UserCredentials
     public function storeNewUser(
-        string $rawUserName, 
-        string $rawPassword
+        string $cleanUserName, 
+        string $hashedPassword
     ) {
         $connection = $this->getOpenConnection();
- 
-        $this->cleanUserName = 
-            $this->getMysqlEscapedString($rawUserName);
-
-        $hashedPassword = password_hash(
-            $rawPassword, PASSWORD_DEFAULT
-        );
 
         $statement = $connection->prepare(
             $this->userInsertionStatement
@@ -164,7 +150,7 @@ class DatabaseModel {
             $twoStrings, $userName, $password
         );
 
-        $userName = $this->cleanUserName;
+        $userName = $cleanUserName;
         $password = $hashedPassword;
         $statement->execute();
 

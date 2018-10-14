@@ -1,6 +1,6 @@
 <?php
 
-class UserCredentials {
+class UserModel {
 
     private $cleanUsername;
     public function getCleanUsername() : string {
@@ -41,7 +41,13 @@ class UserCredentials {
             # throw htmlCharException
             // remove html tags, call from view
         } else {
-            $this->setUsername();
+            $hashedPassword = password_hash(
+                $rawPassword, PASSWORD_DEFAULT
+            );
+
+            $this->databaseModel->storeNewUser(
+                $this->cleanUsername, $hashedPassword
+            );
         }
     }
 
@@ -70,6 +76,4 @@ class UserCredentials {
         return !empty($usernameInDbRow) &&
             $this->cleanUsername === $usernameInDbRow[$usernameColumn];
     }
-
-    
 }
