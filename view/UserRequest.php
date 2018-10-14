@@ -23,9 +23,9 @@ class UserRequest {
      * For POST
      */
 
-    public function wantsLogOut() : bool {
-        return isset($_POST["LoginView::Logout"]) && 
-            isset($_SESSION["username"]);
+     // have to check if logged in first
+    public function wantsLogOut() : bool { 
+        return isset($_POST["LoginView::Logout"]); 
     }
 
     private function getRequestType() : string {
