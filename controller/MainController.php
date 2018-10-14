@@ -3,6 +3,7 @@
 require_once('model/UserValidation.php');
 require_once('model/UserModel.php');
 require_once('model/CustomException.php');
+require_once('view/ExceptionView.php');
 require_once('view/LoginView.php');
 require_once('view/RegisterView.php');
 require_once('view/InsideView.php');
@@ -20,6 +21,7 @@ class MainController {
     private $insideView;
     private $dtv;
     private $layoutView;
+    private $exceptionView;
 
     private $userValidation;
 
@@ -32,9 +34,21 @@ class MainController {
         $this->insideView = new InsideView();
         $this->dtv = new DateTimeView();
         $this->layoutView = new LayoutView();
+        $this->exceptionView = new ExceptionView();
     }
 
     public function initialize() {
+        try {
+            $this->runController();
+        }
+
+        catch (Exception $e) {
+            // have a main view, that delegates
+            // $this->exceptionView->displayException($e);
+        }
+    }
+
+    private function runController() {
         session_start();
 
         $isRegisterQueryString = 
@@ -96,55 +110,45 @@ class MainController {
     }
 
     private function loginUser() {
-            // TODO: change to secrent random string
-            // have that stored with user in DB,
-            // later at verifications, 
-            // see if both username and secret is correct
-            $_SESSION["username"] = "Session started";
+        // TODO: change to secrent random string
+        // have that stored with user in DB,
+        // later at verifications, 
+        // see if both username and secret is correct
+        $_SESSION["username"] = "Session started";
 
-            try { // just to test
+        if (isset($_POST["LoginView::KeepMeLoggedIn"])) {
+            $this->insideView->setViewMessage(
+                "Welcome and you will be remembered"
+            );
 
-                if (isset($_POST["LoginView::KeepMeLoggedIn"])) {
-                    $this->insideView->setViewMessage(
-                        "Welcome and you will be remembered"
-                    );
-    
-                    $day = time() + (86400 * 30);
-    
-                    $usernameCookie = "LoginView::CookieName";
-                    $usernameCookieValue = "Admin";
-    
-                    setcookie(
-                        $usernameCookie,
-                        $usernameCookieValue,
-                        $day,
-                        "/"
-                    );
-    
-                    $passwordCookie = "LoginView::CookiePassword";
-                    $passwordCookieValue = random_bytes(42);
-    
-                    setcookie(
-                        $passwordCookie,
-                        $passwordCookieValue,
-                        $day,
-                        "/"
-                    );
-    
-                } else {
-                    throw new RandomException();
-    
-                    $this->insideView->setViewMessage("Welcome");
-                }
-            } 
+            $day = time() + (86400 * 30);
 
-            catch (Exception $e) {
-                if(get_class($e) === "RandomException") {
-                    echo "can catch custom exception";
-                }
-            }
+            $usernameCookie = "LoginView::CookieName";
+            $usernameCookieValue = "Admin";
 
-            $this->layoutView->render(true, $this->insideView, $this->dtv);
+            setcookie(
+                $usernameCookie,
+                $usernameCookieValue,
+                $day,
+                "/"
+            );
+
+            $passwordCookie = "LoginView::CookiePassword";
+            $passwordCookieValue = random_bytes(42);
+
+            setcookie(
+                $passwordCookie,
+                $passwordCookieValue,
+                $day,
+                "/"
+            );
+
+        } else {    
+            $this->insideView->setViewMessage("Welcome");
+        }
+        
+
+        $this->layoutView->render(true, $this->insideView, $this->dtv);
     }
 
     private function handleLoginFail() {

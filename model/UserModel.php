@@ -1,6 +1,7 @@
 <?php
 
 require_once('model/DatabaseModel.php');
+require_once('model/CustomException.php');
 
 class UserModel {
 
@@ -10,9 +11,10 @@ class UserModel {
     }
 
     private $databaseModel;
+    private $customException;
 
     public function __construct() {
-        $this->databaseModel = new DatabaseModel();  
+        $this->databaseModel = new DatabaseModel();
     }
 
     public function registerUser(string $rawUsername, string $rawPassword) {
@@ -26,11 +28,11 @@ class UserModel {
 
         if (!empty($userArray) &&
             $this->cleanUsername === $userArray[$usernameKey]) {
-            // throw occupiedUsernameException
-        } elseif ( // TODO: remove does from func name
+            throw new OccupiedUsernameException();
+        } elseif ( // TODO: remove does from function name
             $this->databaseModel->doesContainHtmlCharacter($rawUsername)
         ) {
-            # throw htmlCharException
+            throw new HtmlCharacterException();
             // remove html tags, call from view
         } else {
             $hashedPassword = password_hash(
@@ -71,26 +73,26 @@ class UserModel {
         }
 
         if (!$isUsernameCorrect && !$isPasswordCorrect) {
-            // throw incorrect username/password exception
+            throw new WrongUsernameOrPasswordException();
         }
+
+        // set session here
     }
 
-    // set proper err message in view based on this
-    // & based on what user is trying to do
     private function validateCredentialsLength(
         string $rawUsername, string $rawPassword
     ) {
         if (strlen($rawUsername) > 0) {
-            # throw missingUsername
+            throw new MissingUsernameException();
         } elseif (strlen($rawPassword) > 0) {
-            # throw missingPassword
+            throw new MissingPasswordException();
         }
         elseif (strlen($rawUserName) < 3) {
-            // throw usernameTooShort
+            throw new UsernameTooShortException();
         } elseif (strlen($rawUserName) > 25) {
-            // throw usernameTooLong
+            throw new UsernameTooLongException();
         } elseif (strlen($rawPassword) < 6) {
-            // throw passwordTooShort
+            throw new PasswordTooShortException();
         }        
     }
 
