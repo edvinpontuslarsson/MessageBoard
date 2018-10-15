@@ -1,25 +1,43 @@
 <?php
 
-require_once('view/ExceptionView.php');
+require_once('view/LayoutView.php');
+require_once('view/RegisterView.php');
 require_once('view/LoginView.php');
 
+// TODON'TDO: this
+require_once('view/InsideView.php');
+
+require_once('view/DateTimeView.php');
+
 class MainView {
-    // fetch from other views
+    
+    private $loginView;
+    private $registerView;
+    private $insideView;
+    private $dtv;
+    private $layoutView;
+    private $userRequest;
 
-    private $navLink;
-    public function getNavLink() : string {
-        return $this->navLink;
+    public function __construct() {
+        $this->loginView = new LoginView();
+        $this->registerView = new RegisterView();
+        $this->insideView = new InsideView();
+        $this->dtv = new DateTimeView();
+        $this->layoutView = new LayoutView();
+        $this->userRequest = new UserRequest();
     }
 
-    public function displayStartPage($isLoggedIn) {
-
+    public function renderLoginView(
+        bool $isNewlyRegistered = false
+    ) {
+        $this->layoutView->render(false, $this->loginView, $this->dtv);
     }
 
-    public function displayRegisterPage() {
-        
+    public function renderRegisterView() {
+        $this->layoutView->render(false, $this->registerView, $this->dtv);
     }
 
-    public function response() : string {
+    public function renderAuthenticatedView() {
 
     }
 }

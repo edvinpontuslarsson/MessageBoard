@@ -1,22 +1,24 @@
 <?php
 
+// TODO: Have necessary views dependency injected
+
+// Should be able to switch views w.o. changing this class
+
 require_once('model/UserModel.php');
+require_once('view/MainView.php');
 require_once('view/LoginView.php');
 require_once('view/RegisterView.php');
 require_once('view/InsideView.php');
 require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
 require_once('view/UserRequest.php');
-
+require_once('view/InsideView.php');
 require_once('controller/RegisterController.php');
 require_once('controller/LoginController.php');
 
 class MainController {
 
-    /**
-     * TODO: have a main view perhaps
-     */
-
+    private $mainView;
     private $loginView;
     private $registerView;
     private $insideView;
@@ -28,6 +30,7 @@ class MainController {
     private $loginController;
 
     public function __construct() {
+        $this->mainView = new MainView();
         $this->loginView = new LoginView();
         $this->registerView = new RegisterView();
         $this->insideView = new InsideView();
@@ -35,7 +38,9 @@ class MainController {
         $this->layoutView = new LayoutView();
         $this->userRequest = new UserRequest();
 
-        $this->registerController = new RegisterController();
+        $this->registerController = new RegisterController(
+            $this->userRequest, $this->mainView
+        );
         $this->loginController = new LoginController();
     }
 
