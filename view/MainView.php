@@ -1,7 +1,5 @@
 <?php
 
-// Put this into LayoutView
-
 require_once('view/ExceptionView.php');
 require_once('view/LoginView.php');
 

@@ -9,6 +9,7 @@ require_once('view/RegisterView.php');
 require_once('view/InsideView.php');
 require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
+require_once('view/UserRequest.php');
 
 class MainController {
 
@@ -22,6 +23,7 @@ class MainController {
     private $dtv;
     private $layoutView;
     private $exceptionView;
+    private $userRequest;
 
     private $userValidation;
 
@@ -35,6 +37,7 @@ class MainController {
         $this->dtv = new DateTimeView();
         $this->layoutView = new LayoutView();
         $this->exceptionView = new ExceptionView();
+        $this->userRequest = new UserRequest();
     }
 
     public function initialize() {
@@ -51,37 +54,26 @@ class MainController {
     private function runController() {
         session_start();
 
-        // TODO: if wants log out, check if logged in
-
-
-        // TODO: now I should be able to just get the if conditions
-        // from UserRequest class
-
-        $isRegisterQueryString = 
-            $this->loginView->isRegisterQueryString();
-
-        $reqType = $this->loginView->getRequestType();
-
-        if ($reqType === "POST") {
-            if (isset($_POST["LoginView::Logout"]) && 
-                isset($_SESSION["username"])) { // wants to log out with session
+        if ($this->userRequest->madePost()) {
+            if ($this->userRequest->wantsLogOut() && 
+                $this->userRequest->isLoggedIn()) { // wants to log out with session
                 $this->logOut();
-            } elseif (isset($_POST["LoginView::Logout"]) &&
-                !isset($_SESSION["username"])) { // wants to log out without session
+            } elseif ($this->userRequest->wantsLogOut() &&
+                !$this->userRequest->isLoggedIn()) { // wants to log out without session
                     // just start page, 
                     $this->layoutView->render(false, $this->loginView, $this->dtv);
-            } elseif (isset($_SESSION["username"])) { // post with a session, so still logged in
+            } elseif ($this->userRequest->isLoggedIn()) { // post with a session, so still logged in
                 // TODO: this shouldn't be necessary, reorder these and I'll need fewer ifs
                 $this->layoutView->render(true, $this->insideView, $this->dtv);
             } else { 
                 $this->loginOrRegister($isRegisterQueryString);
             }
-        } elseif (isset($_SESSION["username"])) { // logged in
+        } elseif ($this->userRequest->isLoggedIn()) { // logged in
             $this->layoutView->render(true, $this->insideView, $this->dtv);
-        } elseif ($isRegisterQueryString && $reqType === "GET") { // registration
+        } elseif ($this->userRequest->wantsRegistration() ) { // registration
             $this->layoutView->render(false, $this->registerView, $this->dtv);
         
-        } elseif ($reqType === "GET") { // login start page
+        } else { // login start page
             $this->layoutView->render(false, $this->loginView, $this->dtv);
         }
     }

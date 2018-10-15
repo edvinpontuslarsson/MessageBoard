@@ -1,11 +1,9 @@
 <?php
 
-require_once('model/DateTimeModel.php');
-
 class DateTimeView {
 
-	public function show() {
-		$timeString = $dateTimeModel->getDateTimeString();
+	public function show() : string {
+		$timeString = $this->getDateTimeString();
 
 		return '<p>' . $timeString . '</p>';
 	}
