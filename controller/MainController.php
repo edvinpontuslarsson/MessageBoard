@@ -45,13 +45,28 @@ class MainController {
     }
 
     public function initialize() {
-        session_start(); // TODO, have this in model
+        // TODO, have this in model
+        session_start();
+
+        // TODO: ask model instead
+        $isLoggedIn = $this->userRequest->isLoggedIn();
+
+        // TODO: have a switch thingy here
 
         if ($this->userRequest->registrationGET()) {
             $this->registerController->prepareRegistration();
         }
-        if ($this->userRequest->registrationPOST()) {
+        elseif ($this->userRequest->registrationPOST()) {
             $this->registerController->handleRegistration();
+        }
+        elseif ($this->userRequest->wantsToLogIn()) {
+            $this->loginController->handleLogin();
+        }
+        elseif ($this->userRequest->wantsLogOut()) {
+            $this->loginController->handleLogOut($isLoggedIn);
+        }
+        else { // the switch default
+            $this->loginController->prepareStart($isLoggedIn);
         }
 
         if ($this->userRequest->madePost()) {

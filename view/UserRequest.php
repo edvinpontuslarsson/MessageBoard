@@ -18,7 +18,10 @@ class UserRequest {
         return isset($_GET["register"]);
     }
 
-     // have to check if logged in first
+    public function wantsToLogIn() : bool {
+        return isset($_POST["LoginView::Login"]);
+    }
+
     public function wantsLogOut() : bool { 
         return isset($_POST["LoginView::Logout"]); 
     }
