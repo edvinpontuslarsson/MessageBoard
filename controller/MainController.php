@@ -1,15 +1,15 @@
 <?php
 
-require_once('model/UserValidation.php');
 require_once('model/UserModel.php');
-require_once('model/CustomException.php');
-require_once('view/ExceptionView.php');
 require_once('view/LoginView.php');
 require_once('view/RegisterView.php');
 require_once('view/InsideView.php');
 require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
 require_once('view/UserRequest.php');
+
+require_once('controller/RegisterController.php');
+require_once('controller/LoginController.php');
 
 class MainController {
 
@@ -22,37 +22,32 @@ class MainController {
     private $insideView;
     private $dtv;
     private $layoutView;
-    private $exceptionView;
     private $userRequest;
 
-    private $userValidation;
+    private $registerController;
+    private $loginController;
 
     public function __construct() {
-        $this->userValidation = new UserValidation();
-
-        //CREATE OBJECTS OF THE VIEWS
         $this->loginView = new LoginView();
         $this->registerView = new RegisterView();
         $this->insideView = new InsideView();
         $this->dtv = new DateTimeView();
         $this->layoutView = new LayoutView();
-        $this->exceptionView = new ExceptionView();
         $this->userRequest = new UserRequest();
+
+        $this->registerController = new RegisterController();
+        $this->loginController = new LoginController();
     }
 
     public function initialize() {
-        try {
-            $this->runController();
-        }
+        session_start(); // TODO, have this in model
 
-        catch (Exception $e) {
-            // have a main view, that delegates
-            // $this->exceptionView->displayException($e);
+        if ($this->userRequest->registrationGET()) {
+            $this->registerController->prepareRegistration();
         }
-    }
-
-    private function runController() {
-        session_start();
+        if ($this->userRequest->registrationPOST()) {
+            $this->registerController->handleRegistration();
+        }
 
         if ($this->userRequest->madePost()) {
             if ($this->userRequest->wantsLogOut() && 
@@ -70,9 +65,6 @@ class MainController {
             }
         } elseif ($this->userRequest->isLoggedIn()) { // logged in
             $this->layoutView->render(true, $this->insideView, $this->dtv);
-        } elseif ($this->userRequest->wantsRegistration() ) { // registration
-            $this->layoutView->render(false, $this->registerView, $this->dtv);
-        
         } else { // login start page
             $this->layoutView->render(false, $this->loginView, $this->dtv);
         }
@@ -149,6 +141,7 @@ class MainController {
         $this->layoutView->render(true, $this->insideView, $this->dtv);
     }
 
+    // TODO: remove this, view responsibility
     private function handleLoginFail() {
         $errorMessage = $this->userValidation->
                 getErrorMessage();
@@ -159,34 +152,6 @@ class MainController {
             $this->loginView->setViewUsername($cleanUsername);
         }
 
-        $this->layoutView->render(false, $this->loginView, $this->dtv);
-    }
-
-    private function registerUser() {
-        $rawUserName = "";
-        $rawPassword = ""; 
-        $rawPasswordRepeat = "";
-        if (isset($_POST["RegisterView::UserName"])) {
-            $rawUserName = $_POST["RegisterView::UserName"];
-        }
-        if (isset($_POST["RegisterView::Password"])) {
-            $rawPassword = $_POST["RegisterView::Password"];
-        }
-        if (isset($_POST["RegisterView::PasswordRepeat"])) {
-            $rawPasswordRepeat = $_POST["RegisterView::PasswordRepeat"];
-        }
-
-        // Invalid registration: 
-        // $this->layoutView->render(false, $this->registerView, $this->dtv);
-        
-        $userModel = new UserModel();
-        $userModel->registerUser($rawUserName, $rawPassword);
-
-        $this->loginView->setViewMessage("Registered new user.");
-
-        $cleanUsername = $userModel->getCleanUsername();
-
-        $this->loginView->setViewUsername($cleanUsername);
         $this->layoutView->render(false, $this->loginView, $this->dtv);
     }
 }

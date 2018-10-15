@@ -1,5 +1,7 @@
 <?php
 
+class PasswordsDoNotMatchException extends Exception {}
+
 class MissingUsernameException extends Exception {}
 
 class MissingPasswordException extends Exception {}
