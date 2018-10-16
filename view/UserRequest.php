@@ -66,7 +66,7 @@ class UserRequest {
         return $password;
     }
 
-    // TODO: redo this
+    // TODO: remove this
     private function getRequestType() : string {
 		return $_SERVER["REQUEST_METHOD"];
 	}

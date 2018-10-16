@@ -1,14 +1,16 @@
 <?php
 
-require_once('model/UserModel.php');
+require_once('model/DatabaseModel.php');
 
 class RegisterController {
     private $userRequest;
     private $mainView;
+    private $databaseModel;
 
     public function __construct($userRequest, $mainView) {
         $this->userRequest = $userRequest;
         $this->mainView = $mainView;
+        $this->databaseModel = new DatabaseModel();
     }
 
     public function prepareRegistration() {
@@ -16,12 +18,9 @@ class RegisterController {
     }
 
     public function handleRegistration() { 
-        // TODO: instantiate User from view send to storage from here
-        $rawUsername = $this->userRequest->getRegisterUsername();
-        $rawPassword = $this->userRequest->getRegisterPassword();
-        
-        $userModel = new UserModel();
-        $userModel->registerUser($rawUsername, $rawPassword);
+        $userCredentials = 
+            $this->mainView->getUserCredentials();
+        $this->databaseModel->storeUser($userCredentials);
 
         $this->mainView->renderLoginView(true);
     }

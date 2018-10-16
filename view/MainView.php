@@ -8,6 +8,7 @@ require_once('view/LoginView.php');
 require_once('view/InsideView.php');
 
 require_once('view/DateTimeView.php');
+require_once('model/UserCredentials.php');
 
 class MainView {
     
@@ -25,6 +26,25 @@ class MainView {
         $this->dtv = new DateTimeView();
         $this->layoutView = new LayoutView();
         $this->userRequest = new UserRequest();
+    }
+
+    /**
+     * Returns instantiated UserCredentials class
+     */
+    public function getUserCredentials() {
+        $rawUsername = $this->userRequest->getRegisterUsername();
+        $rawPassword = $this->userRequest->getRegisterPassword();
+        $userCredentials;
+        
+        try {
+            $userCredentials = 
+                new UserCredentials($rawUsername, $rawPassword);
+        }
+        catch (Exception $e) { // catch all possible exceptions
+            echo $e; // TODO: handle this, message
+        }
+
+        return $userCredentials;
     }
 
     public function renderLoginView(
