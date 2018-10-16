@@ -1,57 +1,32 @@
 <?php
 
-// TODO: Have necessary views dependency injected
-
-// Should be able to switch views w.o. changing this class
-
-require_once('model/UserModel.php');
-require_once('view/MainView.php');
-require_once('view/LoginView.php');
-require_once('view/RegisterView.php');
-require_once('view/InsideView.php');
-require_once('view/DateTimeView.php');
-require_once('view/LayoutView.php');
-require_once('view/UserRequest.php');
-require_once('view/InsideView.php');
+require_once('model/SessionModel.php');
 require_once('controller/RegisterController.php');
 require_once('controller/LoginController.php');
 
 class MainController {
-
-    private $mainView;
-    private $loginView;
-    private $registerView;
-    private $insideView;
-    private $dtv;
-    private $layoutView;
+    private $sessionModel;
     private $userRequest;
-
+    private $mainView;
     private $registerController;
     private $loginController;
 
-    public function __construct() {
-        $this->mainView = new MainView();
-        $this->loginView = new LoginView();
-        $this->registerView = new RegisterView();
-        $this->insideView = new InsideView();
-        $this->dtv = new DateTimeView();
-        $this->layoutView = new LayoutView();
-        $this->userRequest = new UserRequest();
+    public function __construct($userRequest, $mainView) {
+        $this->userRequest = $userRequest;
+        $this->mainView = $mainView;
+
+        $this->sessionModel = new SessionModel();
 
         $this->registerController = new RegisterController(
             $this->userRequest, $this->mainView
         );
-        $this->loginController = new LoginController();
+        $this->loginController = new LoginController(
+            $this->userRequest, $this->mainView
+        );
     }
 
     public function initialize() {
-        // TODO, have this in model
-        session_start();
-
-        // TODO: ask model instead
-        $isLoggedIn = $this->userRequest->isLoggedIn();
-
-        // TODO: have a switch thingy here
+        $isLoggedIn = $this->sessionModel->isLoggedIn();
 
         if ($this->userRequest->registrationGET()) {
             $this->registerController->prepareRegistration();
@@ -65,99 +40,8 @@ class MainController {
         elseif ($this->userRequest->wantsLogOut()) {
             $this->loginController->handleLogOut($isLoggedIn);
         }
-        else { // the switch default
+        else {
             $this->loginController->prepareStart($isLoggedIn);
         }
-
-        if ($this->userRequest->madePost()) {
-            if ($this->userRequest->wantsLogOut() && 
-                $this->userRequest->isLoggedIn()) { // wants to log out with session
-                $this->logOut();
-            } elseif ($this->userRequest->wantsLogOut() &&
-                !$this->userRequest->isLoggedIn()) { // wants to log out without session
-                    // just start page, 
-                    $this->layoutView->render(false, $this->loginView, $this->dtv);
-            } elseif ($this->userRequest->isLoggedIn()) { // post with a session, so still logged in
-                // TODO: this shouldn't be necessary, reorder these and I'll need fewer ifs
-                $this->layoutView->render(true, $this->insideView, $this->dtv);
-            } else { 
-                $this->loginOrRegister($isRegisterQueryString);
-            }
-        } elseif ($this->userRequest->isLoggedIn()) { // logged in
-            $this->layoutView->render(true, $this->insideView, $this->dtv);
-        } else { // login start page
-            $this->layoutView->render(false, $this->loginView, $this->dtv);
-        }
-    }
-
-    private function logOut() {
-        unset($_SESSION["username"]);
-
-        $this->loginView->setViewMessage("Bye bye!");
-        $this->layoutView->render(false, $this->loginView, $this->dtv);
-    }
-
-    private function loginOrRegister($isRegisterQueryString) {
-        if (!$isRegisterQueryString) { // no register query string, start page
-            $rawUserName = "";
-            $rawPassword = "";
-            if (isset($_POST["LoginView::UserName"])) {
-                $rawUserName = $_POST["LoginView::UserName"];
-            }
-            if (isset($_POST["LoginView::Password"])) {
-                $rawPassword = $_POST["LoginView::Password"];
-            }
-
-            $userModel = new UserModel();
-            $userModel->validateLogin($rawUserName, $rawPassword);
-            
-            // $this->handleLoginFail(); in view
-            
-            $this->loginUser();
-        } else {
-            $this->registerUser();
-        }
-    }
-
-    private function loginUser() {
-        // TODO: change to secrent random string
-        // have that stored with user in DB,
-        // later at verifications, 
-        // see if both username and secret is correct
-        $_SESSION["username"] = "Session started";
-
-        if (isset($_POST["LoginView::KeepMeLoggedIn"])) {
-            $this->insideView->setViewMessage(
-                "Welcome and you will be remembered"
-            );
-
-            $day = time() + (86400 * 30);
-
-            $usernameCookie = "LoginView::CookieName";
-            $usernameCookieValue = "Admin";
-
-            setcookie(
-                $usernameCookie,
-                $usernameCookieValue,
-                $day,
-                "/"
-            );
-
-            $passwordCookie = "LoginView::CookiePassword";
-            $passwordCookieValue = random_bytes(42);
-
-            setcookie(
-                $passwordCookie,
-                $passwordCookieValue,
-                $day,
-                "/"
-            );
-
-        } else {    
-            $this->insideView->setViewMessage("Welcome");
-        }
-        
-
-        $this->layoutView->render(true, $this->insideView, $this->dtv);
     }
 }

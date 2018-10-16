@@ -1,18 +1,22 @@
 <?php
 
 class SessionModel {
-    private $userIDsession = "userID";
+    private $userSecret = "userSecret";
 
     public function __construct() {
         session_start();
     }
 
+    public function isLoggedIn() : bool {
+        return isset($_SESSION[$userSecret]);
+    }
+
     /**
-     *  Param1: Instantiated User class
+     *  Param1: Instantiated UserCredentials class
      */
-    public function setSession($user) {
-        // get id from User
-        $_SESSION[$userIDsession] = $user->getID();
+    public function setSession($userCredentials) {
+        $_SESSION[$userSecret] = 
+            $userCredentials->getPermanentSecret();
     }
 
     /**

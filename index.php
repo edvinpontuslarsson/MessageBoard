@@ -5,6 +5,8 @@
 
 require_once('controller/MainController.php');
 require_once('model/CustomException.php');
+require_once('view/MainView.php');
+require_once('view/UserRequest.php');
 
 //MAKE SURE ERRORS ARE SHOWN... MIGHT WANT TO TURN THIS OFF ON A PUBLIC SERVER
 error_reporting(E_ALL);
@@ -12,7 +14,10 @@ ini_set('display_errors', 'On');
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-$mainController = new MainController();
+$userRequest = new UserRequest();
+$mainView = new MainView();
+
+$mainController = new MainController($userRequest, $mainView);
 
 try {
     $mainController->initialize();

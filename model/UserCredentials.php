@@ -40,6 +40,8 @@ class User {
      */
     public function getPermanentSecret() : string {
         // get from DB with username
+
+        // throw wrongnameorpassword exception
     }
 
     private function setCredentials(

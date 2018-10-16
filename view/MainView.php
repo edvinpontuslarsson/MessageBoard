@@ -9,6 +9,7 @@ require_once('view/InsideView.php');
 
 require_once('view/DateTimeView.php');
 require_once('model/UserCredentials.php');
+require_once('model/CustomException.php');
 
 class MainView {
     
@@ -32,32 +33,46 @@ class MainView {
      * Returns instantiated UserCredentials class
      */
     public function getUserCredentials() {
+
+        // TODO: check if user has cookie
+
         $rawUsername = $this->userRequest->getRegisterUsername();
         $rawPassword = $this->userRequest->getRegisterPassword();
-        $userCredentials;
-        
-        try {
-            $userCredentials = 
-                new UserCredentials($rawUsername, $rawPassword);
-        }
-        catch (Exception $e) { // catch all possible exceptions
-            echo $e; // TODO: handle this, message
-        }
 
-        return $userCredentials;
-    }
-
-    public function renderLoginView(
-        bool $isNewlyRegistered = false
-    ) {
-        $this->layoutView->render(false, $this->loginView, $this->dtv);
+        return new UserCredentials($rawUsername, $rawPassword);
     }
 
     public function renderRegisterView() {
         $this->layoutView->render(false, $this->registerView, $this->dtv);
     }
 
-    public function renderAuthenticatedView() {
+    public function renderNotAuthenticatedView(
+        bool $isNewlyRegistered = false,
+        bool $justLoggedOut = false
+    ) {
+        $this->layoutView->render(false, $this->loginView, $this->dtv);
+    }
 
+    public function renderAuthenticatedView(
+        bool $justLoggedIn = false
+    ) {
+        // if just logged in, check how
+        $this->layoutView->render(true, $this->loginView, $this->dtv);
+    }
+
+    /**
+     * TODO: Don't need to reference here, just temp
+     * For tip https://stackoverflow.com/questions/8439581/catching-multiple-exception-types-in-one-catch-block/37522012
+     */
+    public function handleRegistrationFail($exception) {
+        if ($exception instanceof PasswordsDoNotMatchException) {
+
+        }
+        elseif ($exception instanceof MissingUsernameException) {
+            # code...
+        }
+        elseif (condition) {
+            # code...
+        }
     }
 }

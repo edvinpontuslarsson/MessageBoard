@@ -7,17 +7,6 @@ require_once('model/CustomException.php');
 // get names of gets and posts from classes
 
 class UserRequest {
-
-    // TODO: remove this
-    public function madePost() : bool {
-        return "POST" === $this->getRequestType();
-    }
-
-    // TODO: redo, session info from model
-    public function isLoggedIn() : bool {
-        return isset($_SESSION["username"]);
-    }
-
     public function userHasCookie() : bool {
         /**
          * TODO: implement this
@@ -65,9 +54,4 @@ class UserRequest {
 
         return $password;
     }
-
-    // TODO: remove this
-    private function getRequestType() : string {
-		return $_SERVER["REQUEST_METHOD"];
-	}
 }

@@ -17,11 +17,17 @@ class RegisterController {
         $this->mainView->renderRegisterView();
     }
 
-    public function handleRegistration() { 
-        $userCredentials = 
+    public function handleRegistration() {
+        try {
+            $userCredentials = 
             $this->mainView->getUserCredentials();
-        $this->databaseModel->storeUser($userCredentials);
+            $this->databaseModel->storeUser($userCredentials);
 
-        $this->mainView->renderLoginView(true);
+            $this->mainView->renderNotAuthenticatedView(true);
+        }
+
+        catch (Exception $e) {
+            $this->mainView->handleRegistrationFail($e);
+        }
     }
 }
