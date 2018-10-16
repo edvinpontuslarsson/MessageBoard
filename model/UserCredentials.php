@@ -31,14 +31,15 @@ class User {
         $this->keepLoggedIn = $keepLoggedIn;
     }
 
-    public function isPasswordCorrect(
-        bool $isPasswordTemporary = false
-    ) : bool {
-        return $this->databaseModel->isPasswordCorrect(
-            $isPasswordTemporary, 
-            $this->username, 
-            $this->password
-        );
+    public function getTemporaryPassword() : string {
+        // get from DB with username
+    }
+
+    /**
+     * For the session
+     */
+    public function getPermanentSecret() : string {
+        // get from DB with username
     }
 
     private function setCredentials(

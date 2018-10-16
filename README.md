@@ -7,7 +7,7 @@ To run this application locally, you need to have php 7+, apache2, MySql, php-my
 `username VARCHAR(25) NOT NULL,`<br/>
 `password VARCHAR(1000) NOT NULL,`<br/>
 `temporarypassword VARCHAR(1000) NOT NULL,`<br/>
-`permanentsecret VARCHAR(1000) NOT NULL`
+`permanentsecret VARCHAR(1000) NOT NULL`<br/>
 `);`
 
 I have set the password length to 1000 characters here, users can post passwords of any length (above 6 characters) and the passwords will of course be hashed before storing. This application currently uses the php default hash. 

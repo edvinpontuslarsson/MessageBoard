@@ -10,16 +10,9 @@ class DatabaseModel {
     private $mysqlPassword;
     private $databaseName;
 
-    // TODO: have in function
-    private $userInsertionStatement = "INSERT INTO Users (username, password) 
-        VALUES (?, ?)";
-
-    // TODO: can be local vars
     private $usersTable = "Users";
     private $usernameColumn = "username";
     private $passwordColumn = "password";
-
-    // TODO: have field & get for temp pass
     
     public function __construct() {
         // TODO: maybe I can have dynamic php arrays with keys for these
@@ -69,36 +62,46 @@ class DatabaseModel {
     /**
      * Param1: instantiated UserCredentials class
      */
-    public function storeNewUser($userCredentials) {
+    public function storeUser($userCredentials) {
         $connection = $this->getOpenConnection();
         $statement = $connection->prepare(
-            $this->userInsertionStatement
+            $this->getUserInsertionStatement()
         );
 
-        /**
-         * username
-         * password
-         * temporarypassword // hash
-         * permanentsecret
-         */
+        $fourStrings = "ssss";
 
-        $twoStrings = "ss"; // TODO: 4 strings, redo DB
         $statement->bind_param(
-            $twoStrings, $userName, $password
+            $fourStrings, 
+            $userName, 
+            $password, 
+            $temporaryPassword,
+            $permanentSecret
         );
-        $userName = $cleanUsername;
-        $password = $hashedPassword;
+
+        $userName = $this->getMysqlEscapedString(
+            $userCredentials->getUsername()
+        );
+        $password = password_hash(
+            $userCredentials->getPassword(), PASSWORD_DEFAULT
+        );
+        $temporaryPassword = random_bytes(42);
+        $permanentSecret = random_bytes(42);
+
         $statement->execute();
         $statement->close();
         $connection->close();
     }
 
+    /**
+     * Param1: instantiated UserCredentials class
+     */
     public function isPasswordCorrect(
-        bool $isPasswordTemporary,
-        string $rawUsername, 
-        string $rawPassword
+        $userCredentials,
+        bool $isPasswordTemporary = false
     )  : bool {
-        $cleanUsername = $this->getMysqlEscapedString($rawUsername);
+        $cleanUsername = $this->getMysqlEscapedString(
+            $userCredentials->getUsername()
+        );
         $userArray = $this->getFromDatabase(
             $usersTable, $usernameColumn, $cleanUsername
         );
@@ -113,10 +116,11 @@ class DatabaseModel {
             $hashedPassword = $userArray[$this->passwordColumn];
         } else {
             // = temporary
+            // TODO: also generate new one and store
         }        
 
         return password_verify(
-            $rawPassword, $hashedPassword
+            $userCredentials->getPassword(), $hashedPassword
         );
     }
 
@@ -176,6 +180,16 @@ class DatabaseModel {
         $connection->close();
 
         return $escapedString;
+    }
+
+    private function getUserInsertionStatement() : string {
+        return "INSERT INTO Users (
+            username, 
+            password, 
+            temporarypassword, 
+            permanentsecret
+        ) 
+        VALUES (?, ?, ?, ?)";
     }
 
     private function getOpenConnection() {
