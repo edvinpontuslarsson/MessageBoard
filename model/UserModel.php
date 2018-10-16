@@ -1,16 +1,22 @@
 <?php
+
 require_once('model/DatabaseModel.php');
 require_once('model/CustomException.php');
+
 class UserModel {
     private $cleanUsername;
+
     public function getCleanUsername() : string {
         return $this->cleanUsername;
     }
+
     private $databaseModel;
     private $customException;
+
     public function __construct() {
         $this->databaseModel = new DatabaseModel();
     }
+
     public function registerUser(string $rawUsername, string $rawPassword) {
         $this->validateCredentialsLength($rawUsername, $rawPassword);
         $this->cleanUsername = $this->databaseModel->
@@ -34,6 +40,7 @@ class UserModel {
             );
         }
     }
+
     public function validateLogin(
         string $rawUsername, 
         string $rawPassword,
@@ -60,6 +67,7 @@ class UserModel {
         }
         // set session here
     }
+
     private function validateCredentialsLength(
         string $rawUsername, string $rawPassword
     ) {
@@ -76,6 +84,7 @@ class UserModel {
             throw new PasswordTooShortException();
         }        
     }
+
     private function getUserArray() : array {
         $userArray = $this->databaseModel->getFromDatabase(
             $this->databaseModel->getUsersTable(),
@@ -84,6 +93,7 @@ class UserModel {
         );
         return $userArray;
     }
+
     private function isPasswordCorrect(
         string $rawPassword, string $hashedPassword
     )  : bool {
