@@ -23,6 +23,10 @@ catch (Exception $e) {
     echo $e;
 }
 
+catch (Exception500 $e) {
+    echo "<h1>500</h1><p>Internal Server Error</p>";
+}
+
 // If something goes wrong, call appropriate view function
 // check with UserRequest what user tried to do
 

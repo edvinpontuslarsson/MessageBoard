@@ -4,8 +4,10 @@ require_once('model/DatabaseModel.php');
 require_once('model/CustomException.php');
 
 class User {
+    private $databaseModel;
     private $username;
     private $password;
+    private $keepLoggedIn;
 
     public function getUsername() : string {
         return $this->username;
@@ -15,21 +17,24 @@ class User {
         return $this->password;
     }
 
-    public function getPermanentSecret() : string {
-        // fetch from DB
-    }
-
-    public function getTemporarySecret() : string {
-        // fetch from DB
+    public function keepLoggedIn() : bool {
+        return $this->keepLoggedIn;
     }
 
     public function __construct(
-        string $username, 
-        string $password, 
+        string $username,
+        string $password,
         bool $keepLoggedIn = false
     ) {
         $this->databaseModel = new DatabaseModel();
         $this->setCredentials($username, $password);
+        $this->keepLoggedIn = $keepLoggedIn;
+    }
+
+    public function isPasswordCorrect() : bool {
+        return $this->databaseModel->isPasswordCorrect(
+            $this->username, $this->password
+        );
     }
 
     private function setCredentials(

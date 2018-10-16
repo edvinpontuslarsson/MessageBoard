@@ -1,24 +1,24 @@
 <?php
+
 require_once('environment.php');
+require_once('model/CustomException.php');
+require_once('model/User.php');
+
 class DatabaseModel {
     private $hostname;
     private $mysqlUsername;
     private $mysqlPassword;
     private $databaseName;
+
+    // TODO: have in function
     private $userInsertionStatement = "INSERT INTO Users (username, password) 
         VALUES (?, ?)";
+
+    // TODO: can be local vars
     private $usersTable = "Users";
-    public function getUsersTable() : string {
-        return $this->usersTable;
-    }
     private $usernameColumn = "username";
-    public function getUsernameColumn() : string {
-        return $this->usernameColumn;
-    }
     private $passwordColumn = "password";
-    public function getPasswordColumn() : string {
-        return $this->passwordColumn;
-    }
+
     // TODO: have field & get for temp pass
     
     public function __construct() {
@@ -28,29 +28,7 @@ class DatabaseModel {
         $this->mysqlPassword = getenv('password');
         $this->databaseName = getenv('db');
     }
-    // TODO: make this private, DB-model detail
-    public function getOpenConnection() {
-        $connection = mysqli_connect(
-            $this->hostname,
-            $this->mysqlUsername, 
-            $this->mysqlPassword,
-            $this->databaseName
-        );
-        if ($connection->connect_error) {
-            die('Connection error: ' . $connection->connect_error);
-        }
-        return $connection;
-    }
-    public function getMysqlEscapedString(
-        string $rawString
-    ) : string {
-        $connection = $this->getOpenConnection();
-        $escapedString = mysqli_real_escape_string(
-            $connection, $rawString
-        );
-        $connection->close();
-        return $escapedString;
-    }
+
     /**
      * TODO: perhaps move this to a Helper model
      */
@@ -65,6 +43,7 @@ class DatabaseModel {
         }
         return false;
     }
+
     /**
      * TODO: perhaps move this to a Helper model
      */
@@ -86,51 +65,16 @@ class DatabaseModel {
         }
         return $validString;
     }
+
     /**
-     * Function inspired by code on this page:
-     * https://stackoverflow.com/questions/28803342/php-prepared-statements-mysql-check-if-user-exists
-     */  
-    public function getFromDatabase(
-        string $sqlTable, 
-        string $sqlColumn, 
-        string $toSearchFor
-    ) : array {
-        $connection = $this->getOpenConnection();
-        $statement = mysqli_prepare(
-            $connection, 
-            $this->getPreparedSqlSelectStatement(
-                $sqlTable, $sqlColumn
-            )
-        );
-        $aString = "s";
-        mysqli_stmt_bind_param(
-            $statement, $aString, $toSearchFor
-        );
-        mysqli_stmt_execute($statement);
-        $result = mysqli_stmt_get_result($statement);
-        $row = mysqli_fetch_assoc($result);
-        $statement->close();
-        $connection->close();
-        if (!empty($row)) {
-            return $row;
-        } else {
-            return [];
-        }
-    }
-    private function getPreparedSqlSelectStatement(
-        $sqlTable, $sqlColumn
-    ) : string {
-        return 
-            "SELECT * FROM $sqlTable WHERE $sqlColumn = ?";
-    }
-    public function storeNewUser(
-        string $cleanUsername, string $hashedPassword
-    ) {
+     * Param1: instantiated UserCredentials class
+     */
+    public function storeNewUser($userCredentials) {
         $connection = $this->getOpenConnection();
         $statement = $connection->prepare(
             $this->userInsertionStatement
         );
-        $twoStrings = "ss";
+        $twoStrings = "ss"; // TODO: 4 strings, redo DB
         $statement->bind_param(
             $twoStrings, $userName, $password
         );
@@ -139,5 +83,97 @@ class DatabaseModel {
         $statement->execute();
         $statement->close();
         $connection->close();
+    }
+
+    public function isPasswordCorrect(
+        string $rawUsername, string $rawPassword
+    )  : bool {
+        $cleanUsername = $this->getMysqlEscapedString($rawUsername);
+        $userArray = $this->getFromDatabase(
+            $usersTable, $usernameColumn, $cleanUsername
+        );
+
+        if (empty($userArray)) {
+            throw new WrongUsernameOrPasswordException();
+        }
+
+        $hashedPassword = $userArray[$this->passwordColumn];
+
+        return password_verify(
+            $rawPassword, $hashedPassword
+        );
+    }
+
+    /**
+     * Function inspired by code on this page:
+     * https://stackoverflow.com/questions/28803342/php-prepared-statements-mysql-check-if-user-exists
+     */  
+    private function getFromDatabase(
+        string $sqlTable, 
+        string $sqlColumn, 
+        string $toSearchFor
+    ) : array {
+        $connection = $this->getOpenConnection();
+
+        $statement = mysqli_prepare(
+            $connection, 
+            $this->getPreparedSqlSelectStatement(
+                $sqlTable, $sqlColumn
+            )
+        );
+
+        $aString = "s";
+        mysqli_stmt_bind_param(
+            $statement, $aString, $toSearchFor
+        );
+
+        mysqli_stmt_execute($statement);
+        $result = mysqli_stmt_get_result($statement);
+        $row = mysqli_fetch_assoc($result);
+
+        $statement->close();
+        $connection->close();
+
+        if (!empty($row)) {
+            return $row;
+        } else {
+            return [];
+        }
+    }
+
+    private function getPreparedSqlSelectStatement(
+        $sqlTable, $sqlColumn
+    ) : string {
+        return 
+            "SELECT * FROM $sqlTable WHERE $sqlColumn = ?";
+    }
+
+    private function getMysqlEscapedString(
+        string $rawString
+    ) : string {
+        $connection = $this->getOpenConnection();
+
+        $escapedString = mysqli_real_escape_string(
+            $connection, $rawString
+        );
+
+        $connection->close();
+
+        return $escapedString;
+    }
+
+    private function getOpenConnection() {
+        $connection = mysqli_connect(
+            $this->hostname,
+            $this->mysqlUsername, 
+            $this->mysqlPassword,
+            $this->databaseName
+        );
+
+        if ($connection->connect_error) {
+            throw new Exception500();
+        }
+
+        return $connection;
     }
 }
