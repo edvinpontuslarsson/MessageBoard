@@ -31,9 +31,13 @@ class User {
         $this->keepLoggedIn = $keepLoggedIn;
     }
 
-    public function isPasswordCorrect() : bool {
+    public function isPasswordCorrect(
+        bool $isPasswordTemporary = false
+    ) : bool {
         return $this->databaseModel->isPasswordCorrect(
-            $this->username, $this->password
+            $isPasswordTemporary, 
+            $this->username, 
+            $this->password
         );
     }
 

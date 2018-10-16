@@ -74,6 +74,14 @@ class DatabaseModel {
         $statement = $connection->prepare(
             $this->userInsertionStatement
         );
+
+        /**
+         * username
+         * password
+         * temporarypassword // hash
+         * permanentsecret
+         */
+
         $twoStrings = "ss"; // TODO: 4 strings, redo DB
         $statement->bind_param(
             $twoStrings, $userName, $password
@@ -86,7 +94,9 @@ class DatabaseModel {
     }
 
     public function isPasswordCorrect(
-        string $rawUsername, string $rawPassword
+        bool $isPasswordTemporary,
+        string $rawUsername, 
+        string $rawPassword
     )  : bool {
         $cleanUsername = $this->getMysqlEscapedString($rawUsername);
         $userArray = $this->getFromDatabase(
@@ -97,7 +107,13 @@ class DatabaseModel {
             throw new WrongUsernameOrPasswordException();
         }
 
-        $hashedPassword = $userArray[$this->passwordColumn];
+        $hashedPassword;
+        
+        if (!$isPasswordTemporary) {
+            $hashedPassword = $userArray[$this->passwordColumn];
+        } else {
+            // = temporary
+        }        
 
         return password_verify(
             $rawPassword, $hashedPassword
