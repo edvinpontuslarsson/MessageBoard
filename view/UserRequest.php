@@ -2,6 +2,10 @@
 
 require_once('model/CustomException.php');
 
+// TODO: now there are string dependencies here
+
+// get names of gets and posts from classes
+
 class UserRequest {
 
     // TODO: remove this
@@ -12,6 +16,12 @@ class UserRequest {
     // TODO: redo, session info from model
     public function isLoggedIn() : bool {
         return isset($_SESSION["username"]);
+    }
+
+    public function userHasCookie() : bool {
+        /**
+         * TODO: implement this
+         */
     }
 
     public function registrationGET() : bool {
@@ -56,6 +66,7 @@ class UserRequest {
         return $password;
     }
 
+    // TODO: redo this
     private function getRequestType() : string {
 		return $_SERVER["REQUEST_METHOD"];
 	}

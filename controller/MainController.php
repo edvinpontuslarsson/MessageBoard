@@ -160,18 +160,4 @@ class MainController {
 
         $this->layoutView->render(true, $this->insideView, $this->dtv);
     }
-
-    // TODO: remove this, view responsibility
-    private function handleLoginFail() {
-        $errorMessage = $this->userValidation->
-                getErrorMessage();
-        $this->loginView->setViewMessage($errorMessage);
-
-        if ($this->userValidation->getShouldPrefillUsername()) {
-            $cleanUsername = $this->userValidation->getCleanUsername();
-            $this->loginView->setViewUsername($cleanUsername);
-        }
-
-        $this->layoutView->render(false, $this->loginView, $this->dtv);
-    }
 }

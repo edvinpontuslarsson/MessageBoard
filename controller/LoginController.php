@@ -18,7 +18,9 @@ class LoginController {
     }
 
     public function handleLogin() {
+        // $this->userRequest->userHasCookie();
         
+
     }
 
     public function handleLogOut(bool $isLoggedIn) {
