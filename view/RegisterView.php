@@ -1,10 +1,10 @@
 <?php
 
 class RegisterView {
-    private static $regButton = 'DoRegistration';
-    private static $rawUsername = 'RegisterView::UserName';
-    private static $rawPassword = 'RegisterView::Password';
-    private static $rawPasswordRepeat = 
+    private $regButton = 'DoRegistration';
+    private $rawUsername = 'RegisterView::UserName';
+    private $rawPassword = 'RegisterView::Password';
+    private $rawPasswordRepeat = 
         'RegisterView::PasswordRepeat';
 
 	private $message = "";

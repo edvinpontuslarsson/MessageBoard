@@ -61,10 +61,6 @@ class MainView {
         return $userCredentials;
     }
 
-    /**
-     * TODO: Don't need to reference here, just temp
-     * For tip https://stackoverflow.com/questions/8439581/catching-multiple-exception-types-in-one-catch-block/37522012
-     */
     public function handleRegistrationFail($exception) {
         if ($exception instanceof PasswordsDoNotMatchException) {
             echo "PasswordsDoNotMatch";
