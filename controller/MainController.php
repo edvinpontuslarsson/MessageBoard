@@ -28,11 +28,11 @@ class MainController {
     public function initialize() {
         $isLoggedIn = $this->sessionModel->isLoggedIn();
 
-        if ($this->userRequest->registrationPOST()) {
-            $this->registerController->handleRegistration();
-        }
-        elseif ($this->userRequest->registrationGET()) {
+        if ($this->userRequest->registrationGET()) {
             $this->registerController->prepareRegistration();
+        }
+        elseif ($this->userRequest->registrationPOST()) {
+            $this->registerController->handleRegistration();
         }
         elseif ($this->userRequest->wantsToLogIn()) {
             $this->loginController->handleLogin();
