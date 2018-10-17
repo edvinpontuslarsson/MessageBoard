@@ -12,7 +12,7 @@ To run this application locally, you need to have php 7.2 (or higher), apache2, 
 
 https://www.digitalocean.com/community/tutorials/a-basic-mysql-tutorial
 
-I have set the password length to 1000 characters here, users can post passwords of any length (above 6 characters) and the passwords will of course be hashed before storing. This application currently uses the php default hash. 
+I have set the maximum password length to 1000 characters here, users can post passwords of any length (above 6 characters) and the passwords will of course be hashed before being stored. This application currently uses the php default hash. 
 
 You also need to have the following line uncommented (beginning semicolon removed) from the php.ini file:
 `extension=mysqli`<br/>
