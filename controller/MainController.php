@@ -31,16 +31,20 @@ class MainController {
         if ($this->userRequest->registrationGET()) {
             $this->registerController->prepareRegistration();
         }
-        elseif ($this->userRequest->registrationPOST()) {
+        
+        if ($this->userRequest->registrationPOST()) {
             $this->registerController->handleRegistration();
         }
-        elseif ($this->userRequest->wantsToLogIn()) {
+        
+        if ($this->userRequest->wantsToLogIn()) {
             $this->loginController->handleLogin();
         }
-        elseif ($this->userRequest->wantsLogOut()) {
+        
+        if ($this->userRequest->wantsLogOut()) {
             $this->loginController->handleLogOut($isLoggedIn);
         }
-        elseif ($this->userRequest->userWantsToStart()) {
+        
+        if ($this->userRequest->userWantsToStart()) {
             $this->loginController->prepareStart($isLoggedIn);
         }
     }

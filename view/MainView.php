@@ -29,9 +29,6 @@ class MainView {
     }
 
     public function renderRegisterView() {
-        $this->registerView->setViewMessage(
-            "Gets this first?"
-        );
         $this->layoutView->render(false, $this->registerView, $this->dtv);
     }
 
@@ -50,11 +47,23 @@ class MainView {
      * Returns instantiated UserCredentials class
      */
     public function getUserCredentials() {
+        $rawUsername;
+        $rawPassword;
 
-        // TODO: check if user has cookie, perhaps in userRequest
+        if ($this->userRequest->registrationPOST()) {
+            $rawUsername = 
+                $this->userRequest->getRegisterUsername();
+            $rawPassword =
+                $this->userRequest->getRegisterPassword();
+        }
 
-        $rawUsername = $this->userRequest->getRegisterUsername();
-        $rawPassword = $this->userRequest->getRegisterPassword();
+        if ($this->userRequest->wantsToLogIn()) {
+            $rawUsername =
+                $this->userRequest->getLoginUsername();
+            $rawPassword =
+                $this->userRequest->getLoginPassword();
+        }
+
         $userCredentials = new UserCredentials($rawUsername, $rawPassword);
 
         return $userCredentials;
@@ -125,7 +134,7 @@ class MainView {
             throw new Exception500();
         }
 
-        $this->layoutView->render(false, $this->registerView, $this->dtv);
+        $this->renderRegisterView();
     }
 
     public function handleLoginFail($exception) {
