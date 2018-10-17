@@ -13,8 +13,14 @@ class UserRequest {
          */
     }
 
+    public function userWantsToStart() : bool {
+        return $_SERVER["REQUEST_METHOD"] === "GET" &&
+            !isset($_GET["register"]);
+    }
+
     public function registrationGET() : bool {
-        return isset($_GET["register"]);
+        return $_SERVER["REQUEST_METHOD"] === "GET" &&
+            isset($_GET["register"]);
     }
 
     public function wantsToLogIn() : bool {
@@ -26,7 +32,8 @@ class UserRequest {
     }
 
     public function registrationPOST() {
-        return isset($_POST["DoRegistration"]);
+        return $_SERVER["REQUEST_METHOD"] === "POST" && 
+            isset($_POST["DoRegistration"]);
     }
 
     public function getRegisterUsername() {
