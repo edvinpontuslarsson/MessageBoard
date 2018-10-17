@@ -33,13 +33,13 @@ class MainController {
         }
         elseif ($this->userRequest->registrationPOST()) {
             $this->registerController->handleRegistration();
-        }
+        }/*
         elseif ($this->userRequest->wantsToLogIn()) {
             $this->loginController->handleLogin();
         }
         elseif ($this->userRequest->wantsLogOut()) {
             $this->loginController->handleLogOut($isLoggedIn);
-        }
+        }*/
         else {
             $this->loginController->prepareStart($isLoggedIn);
         }
