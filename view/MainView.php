@@ -48,7 +48,7 @@ class MainView {
      */
     public function getUserCredentials() {
 
-        // TODO: check if user has cookie
+        // TODO: check if user has cookie, perhaps in userRequest
 
         $rawUsername = $this->userRequest->getRegisterUsername();
         $rawPassword = $this->userRequest->getRegisterPassword();
@@ -61,7 +61,7 @@ class MainView {
         $this->registerView->setViewUsername(
             $this->userRequest->getRegisterUsername()
         );
-        $this->layoutView->render(false, $this->loginView, $this->dtv);
+        $this->renderNotAuthenticatedView();
     }
 
  
@@ -122,7 +122,26 @@ class MainView {
             throw new Exception500();
         }
 
-        $this->layoutView->render(false, $this->registerView, $this->dtv);
+        $this->renderRegisterView();
+    }
+
+    public function handleLoginFail($exception) {
+        $username = $this->userRequest->getRegisterUsername();
+
+        if ($exception instanceof MissingUsernameException) {
+            $this->loginView->setViewMessage("Username is missing");
+        }
+        elseif ($exception instanceof MissingPasswordException) {
+            $this->loginView->setViewMessage("Password is missing");
+        }
+        elseif ($exception instanceof WrongUsernameOrPasswordException) {
+            $this->loginView->setViewMessage("Wrong name or password");
+        }
+        else {
+            throw new Exception500();
+        }
+
+        $this->renderNotAuthenticatedView();
     }
 
     public function render500Error() {

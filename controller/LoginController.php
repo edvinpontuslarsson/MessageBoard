@@ -17,15 +17,21 @@ class LoginController {
         if (!$isLoggedIn) {
             $this->mainView->renderNotAuthenticatedView();
         } else {
-            $this->mainView->renderAuthenticatedView();
+            $this->mainView->renderAuthenticatedView(true);
         }
     }
 
     public function handleLogin() {
-        $userCredentials = 
+        try {
+            $userCredentials = 
             $this->mainView->getUserCredentials();
-        $this->sessionModel->setSession($userCredentials);
-        $this->mainView->renderAuthenticatedView(true);
+            $this->sessionModel->setSession($userCredentials);
+            $this->mainView->renderAuthenticatedView(true);
+        }
+
+        catch (Exception $e) {
+            $this->mainView->handleLoginFail($e);
+        }
     }
 
     public function handleLogOut(bool $isLoggedIn) {
@@ -33,9 +39,7 @@ class LoginController {
             $this->mainView->renderNotAuthenticatedView();
         } else {
             $this->sessionModel->destroySession();
-            $this->mainView->renderNotAuthenticatedView(
-                false, true
-            );
+            $this->mainView->renderNotAuthenticatedView(true);
         }
     }
 }
