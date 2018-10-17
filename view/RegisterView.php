@@ -33,19 +33,15 @@ class RegisterView {
 				<fieldset>
 				<legend>Register a new user - Write username and password</legend>
 					<p id='RegisterView::Message'>$this->message</p>
-					
 					<label for='$this->usernameField' >Username :</label>
 					<input type='text' size='20' name='$this->usernameField' id='$this->usernameField' value='$this->username' />
 					<br/>
-					
 					<label for='$this->passwordField' >Password  :</label>
 					<input type='password' size='20' name='$this->passwordField' id='$this->passwordField' value='' />
 					<br/>
-					
 					<label for='$this->repeatPasswordField' >Repeat password  :</label>
 					<input type='password' size='20' name='$this->repeatPasswordField' id='$this->repeatPasswordField' value='' />
 					<br/>
-					
 					<input id='submit' type='submit' name='$this->regButton'  value='Register' />
 					<br/>
 				</fieldset>
