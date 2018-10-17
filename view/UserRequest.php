@@ -14,8 +14,7 @@ class UserRequest {
     }
 
     public function registrationGET() : bool {
-        return !isset($_POST["DoRegistration"]) && 
-            isset($_GET["register"]);
+        return isset($_GET["register"]);
     }
 
     public function wantsToLogIn() : bool {

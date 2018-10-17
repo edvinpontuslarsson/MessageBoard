@@ -28,19 +28,19 @@ class MainController {
     public function initialize() {
         $isLoggedIn = $this->sessionModel->isLoggedIn();
 
-        if ($this->userRequest->registrationGET()) {
+        if ($this->userRequest->registrationPOST()) {
+            $this->registerController->handleRegistration();
+        }
+        elseif ($this->userRequest->registrationGET()) {
             $this->registerController->prepareRegistration();
         }
-        elseif ($this->userRequest->registrationPOST()) {
-            $this->registerController->handleRegistration();
-        }/*
         elseif ($this->userRequest->wantsToLogIn()) {
             $this->loginController->handleLogin();
         }
         elseif ($this->userRequest->wantsLogOut()) {
             $this->loginController->handleLogOut($isLoggedIn);
-        }*/
-        else {
+        }
+        else { // TODON'T do it like this, check if get or post
             $this->loginController->prepareStart($isLoggedIn);
         }
     }
