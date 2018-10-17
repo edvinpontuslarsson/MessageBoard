@@ -2,14 +2,12 @@
 
 class LoginView {
 	private $login = 'LoginView::Login';
-	private $logout = 'LoginView::Logout';
 	private $name = 'LoginView::UserName';
 	private $password = 'LoginView::Password';
 	private $cookieName = 'LoginView::CookieName';
 	private $cookiePassword = 'LoginView::CookiePassword';
 	private $keep = 'LoginView::KeepMeLoggedIn';
 	private $messageId = 'LoginView::Message';
-
 	private $message = "";
 	private $username = "";
 
@@ -19,14 +17,6 @@ class LoginView {
 
 	public function setViewUsername(string $username) {
 		$this->username = $username;
-	}
-
-	public function isRegisterQueryString() : bool {
-		return isset($_GET["register"]);
-	}
-	
-	public function getRequestType() : string {
-		return $_SERVER["REQUEST_METHOD"];
 	}
 
 	public function getNavLink() {
@@ -41,29 +31,7 @@ class LoginView {
 	 * @return  void BUT writes to standard output and cookies!
 	 */
 	public function response() {
-		$message = '';
-		
-		$response = $this->generateLoginFormHTML($message);
-
-		// this was commented away from start
-		// put in if perhaps 
-		// $response .= $this->generateLogoutButtonHTML($message);
-
-		return $response;
-	}
-
-	/**
-	* Generate HTML code on the output buffer for the logout button
-	* @param $message, String output message
-	* @return  void, BUT writes to standard output!
-	*/
-	private function generateLogoutButtonHTML($message) {
-		return '
-			<form  method="post" >
-				<p id="' . $this->$messageId . '">' . $message .'</p>
-				<input type="submit" name="' . $this->$logout . '" value="logout"/>
-			</form>
-		';
+		return $this->generateLoginFormHTML();
 	}
 	
 	/**
@@ -71,7 +39,7 @@ class LoginView {
 	* @param $message, String output message
 	* @return  void, BUT writes to standard output!
 	*/
-	private function generateLoginFormHTML($message) {
+	private function generateLoginFormHTML() {
 			return '
 			<form method="post" > 
 				<fieldset>
@@ -92,9 +60,4 @@ class LoginView {
 			</form>
 			';
 	}
-	
-	//CREATE GET-FUNCTIONS TO FETCH REQUEST VARIABLES
-	private function getRequestUserName() {
-		//RETURN REQUEST VARIABLE: USERNAME
-	}	
 }

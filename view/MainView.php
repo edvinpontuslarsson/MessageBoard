@@ -1,29 +1,26 @@
 <?php
 
+require_once('model/UserCredentials.php');
+require_once('model/CustomException.php');
 require_once('view/LayoutView.php');
 require_once('view/RegisterView.php');
 require_once('view/LoginView.php');
-
-// TODON'TDO: this
-require_once('view/InsideView.php');
-
+require_once('view/AuthenticatedView.php');
 require_once('view/DateTimeView.php');
-require_once('model/UserCredentials.php');
-require_once('model/CustomException.php');
 
 class MainView {
     
-    private $loginView;
     private $registerView;
-    private $insideView;
+    private $loginView;
+    private $authenticatedView;
     private $dtv;
     private $layoutView;
     private $userRequest;
 
     public function __construct() {
-        $this->loginView = new LoginView();
         $this->registerView = new RegisterView();
-        $this->insideView = new InsideView();
+        $this->loginView = new LoginView();
+        $this->authenticatedView = new AuthenticatedView();
         $this->dtv = new DateTimeView();
         $this->layoutView = new LayoutView();
         $this->userRequest = new UserRequest();
