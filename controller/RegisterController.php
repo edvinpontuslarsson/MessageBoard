@@ -27,7 +27,9 @@ class RegisterController {
         }
 
         catch (Exception $e) {
-            $this->mainView->handleRegistrationFail($e);
+            $this->mainView->handleRegistrationFail(
+                $userCredentials, $e
+            );
         }
     }
 }

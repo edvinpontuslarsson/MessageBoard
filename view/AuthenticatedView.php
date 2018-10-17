@@ -1,7 +1,5 @@
 <?php
 
-// TODO: make less hardcoded
-
 class AuthenticatedView {
     private $logout = 'LoginView::Logout';
     private $messageId = 'LoginView::Message';

@@ -10,6 +10,7 @@ require_once('view/DateTimeView.php');
 
 class MainView {
     
+    private $databaseModel;
     private $registerView;
     private $loginView;
     private $authenticatedView;
@@ -18,6 +19,7 @@ class MainView {
     private $userRequest;
 
     public function __construct() {
+        $this->databaseModel = new DatabaseModel();
         $this->registerView = new RegisterView();
         $this->loginView = new LoginView();
         $this->authenticatedView = new AuthenticatedView();
@@ -58,37 +60,67 @@ class MainView {
         return $userCredentials;
     }
 
-    public function handleRegistrationFail($exception) {
+    /**
+     * Param1: instantiated UserCredentials class
+     */
+    public function handleRegistrationFail(
+        $userCredentials, $exception
+    ) {        
         if ($exception instanceof PasswordsDoNotMatchException) {
-            echo "PasswordsDoNotMatch";
+            $this->registerView->setViewUsername($userCredentials->getUsername());
+            $this->registerView->setViewMessage(
+                "Passwords do not match."
+            );
         }
         elseif ($exception instanceof MissingUsernameException) {
-            echo "MissingUsername";
+            $this->registerView->setViewMessage(
+                "Username has too few characters, at least 3 characters. 
+                Password has too few characters, at least 6 characters."
+            );
         }
         elseif ($exception instanceof MissingPasswordException) {
-            echo "MissingPassword";
+            $this->registerView->setViewMessage(
+                "Username has too few characters, at least 3 characters. 
+                Password has too few characters, at least 6 characters."
+            );
         }
         elseif ($exception instanceof UsernameTooShortException) {
-            echo "UsernameTooShortException";
+            $this->registerView->setViewUsername($userCredentials->getUsername());
+            $this->registerView->setViewMessage(
+                "Username has too few characters, at least 3 characters."
+            );
         }
         elseif ($exception instanceof UsernameTooLongException) {
-            echo "UsernameTooLongException";
+            $this->registerView->setViewMessage(
+                "Username has too many characters, not more than 25 characters."
+            );
         }
         elseif ($exception instanceof PasswordTooShortException) {
-            echo "PasswordTooShortException";
+            $this->registerView->setViewUsername($userCredentials->getUsername());
+            $this->registerView->setViewMessage(
+                "Password has too few characters, at least 6 characters."
+            );
         }
         elseif ($exception instanceof OccupiedUsernameException) {
-            echo "OccupiedUsernameException";
-        }
-        elseif ($exception instanceof OccupiedUsernameException) {
-            echo "OccupiedUsernameException";
+            $this->registerView->setViewUsername($userCredentials->getUsername());
+            $this->registerView->setViewMessage(
+                "User exists, pick another username."
+            );
         }
         elseif ($exception instanceof HtmlCharacterException) {
-            echo "HtmlCharacterException";
+            $cleanUsername = $this->databaseModel->
+                removeHTMLTags($userCredentials->getUsername());
+            $this->registerView->setViewUsername($cleanUsername);
+            
+            $this->registerView->setViewMessage(
+                "Username contains invalid characters."
+            );
         }
         else {
-            $this->render500Error();
+            throw new Exception500();
         }
+
+        $this->layoutView->render(false, $this->registerView, $this->dtv);
     }
 
     public function render500Error() {
