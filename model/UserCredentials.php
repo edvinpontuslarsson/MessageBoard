@@ -55,7 +55,6 @@ class UserCredentials {
     private function validateCredentials(
         string $username, string $password
     ) {
-        echo strlen($username); // 0 ... OK
         if (strlen($username) === 0) {
             throw new MissingUsernameException();
         } 
