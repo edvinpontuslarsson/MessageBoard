@@ -1,25 +1,17 @@
 <?php
 
-require_once('environment.php');
+require_once('Environment.php');
 require_once('model/CustomException.php');
 require_once('model/User.php');
 
 class DatabaseModel {
-    private $hostname;
-    private $mysqlUsername;
-    private $mysqlPassword;
-    private $databaseName;
-
+    private $environment;
     private $usersTable = "Users";
     private $usernameColumn = "username";
     private $passwordColumn = "password";
     
     public function __construct() {
-        // TODO: maybe I can have dynamic php arrays with keys for these
-        $this->hostname = getenv('host'); 
-        $this->mysqlUsername = getenv('username');
-        $this->mysqlPassword = getenv('password');
-        $this->databaseName = getenv('db');
+        $this->environment = new Environment();
     }
 
     /**
@@ -117,6 +109,9 @@ class DatabaseModel {
         } else {
             // = temporary
             // TODO: also generate new one and store
+
+            // how to update time stamp:
+            // https://stackoverflow.com/questions/5869392/how-to-update-mysql-timestamp-column-manually-to-current-timestamp-through-php
         }        
 
         return password_verify(
@@ -194,10 +189,10 @@ class DatabaseModel {
 
     private function getOpenConnection() {
         $connection = mysqli_connect(
-            $this->hostname,
-            $this->mysqlUsername, 
-            $this->mysqlPassword,
-            $this->databaseName
+            $this->environment->getHostName(),
+            $this->environment->getMysqlUsername(), 
+            $this->environment->getMysqlPassword(),
+            $this->environment->getDatabaseName()
         );
 
         if ($connection->connect_error) {

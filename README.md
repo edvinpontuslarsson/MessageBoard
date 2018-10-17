@@ -1,6 +1,6 @@
 # Login_1DV610
 
-To run this application locally, you need to have php 7.2 (or higher), apache2, MySql, php-mysql installed as well as a MySQL-database prepared with a database name as well as a table called "Users" that you create by querying this command into the database:
+To run this application locally, you need to have php 7.2 (or higher), apache2, MySql, php-mysql installed as well as a MySQL-database prepared with a database name as well as a table called "Users" that you can create by querying this command into the database:
 
 `create table Users (`
 `id INT(7) UNSIGNED AUTO_INCREMENT PRIMARY KEY, `<br/>
@@ -10,19 +10,44 @@ To run this application locally, you need to have php 7.2 (or higher), apache2, 
 `permanentsecret VARCHAR(1000) NOT NULL`<br/>
 `);`
 
+https://www.digitalocean.com/community/tutorials/a-basic-mysql-tutorial
+
 I have set the password length to 1000 characters here, users can post passwords of any length (above 6 characters) and the passwords will of course be hashed before storing. This application currently uses the php default hash. 
 
 You also need to have the following line uncommented (beginning semicolon removed) from the php.ini file:
 `extension=mysqli`<br/>
 Restart server after making that change. 
 
-You also need an environment.php file in the root folder with the following code (but replace the `<examples>`):
+You also need a file called Environment.php in the root folder with the following code (but replace the `<examples>`):
 
 `<?php`
 
+`class Environment {`<br/>
+`    private $isProduction = <true/false>;`<br/>
+`    private $hostname = "<your host, e.g. localhost>";`<br/>
+`    private $mysqlUsername = "<your mysql username>";`<br/>
+`    private $mysqlPassword = "<your mysql password>";`<br/>
+`    private $databaseName = "<your database name>";`<br/>
 
-`putenv('host=<your host, e.g. localhost>');`<br/>
-`putenv('username=<your database username>');`<br/>
-`putenv('password=<your database password>');`<br/>
-`putenv('db=<your database name>');`<br/>
+`    public function isProduction() : bool {`<br/>
+`        return $this->isProduction;`<br/>
+`    }`<br/>
 
+`    public function getHostName() : string {`<br/>
+`        return $this->hostname;`<br/>
+`    }`<br/>
+
+`    public function getMysqlUsername() : string {`<br/>
+`        return $this->mysqlUsername;`<br/>
+`    }`<br/>
+
+`    public function getMysqlPassword() : string {`<br/>
+`        return $this->mysqlPassword;`<br/>
+`    }`<br/>
+
+`    public function getDatabaseName() : string {`<br/>
+`        return $this->databaseName;`<br/>
+`    }`<br/>
+`}`<br/>
+
+This file should be kept secret, make sure to have it in .gitignore

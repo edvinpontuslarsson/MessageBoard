@@ -29,19 +29,6 @@ class MainView {
         $this->userRequest = new UserRequest();
     }
 
-    /**
-     * Returns instantiated UserCredentials class
-     */
-    public function getUserCredentials() {
-
-        // TODO: check if user has cookie
-
-        $rawUsername = $this->userRequest->getRegisterUsername();
-        $rawPassword = $this->userRequest->getRegisterPassword();
-
-        return new UserCredentials($rawUsername, $rawPassword);
-    }
-
     public function renderRegisterView() {
         $this->layoutView->render(false, $this->registerView, $this->dtv);
     }
@@ -61,18 +48,56 @@ class MainView {
     }
 
     /**
+     * Returns instantiated UserCredentials class
+     */
+    public function getUserCredentials() {
+
+        // TODO: check if user has cookie
+
+        $rawUsername = $this->userRequest->getRegisterUsername();
+        $rawPassword = $this->userRequest->getRegisterPassword();
+
+        return new UserCredentials($rawUsername, $rawPassword);
+    }
+
+    /**
      * TODO: Don't need to reference here, just temp
      * For tip https://stackoverflow.com/questions/8439581/catching-multiple-exception-types-in-one-catch-block/37522012
      */
     public function handleRegistrationFail($exception) {
         if ($exception instanceof PasswordsDoNotMatchException) {
-
+            echo "PasswordsDoNotMatch";
         }
         elseif ($exception instanceof MissingUsernameException) {
-            # code...
+            echo "MissingUsername";
         }
-        elseif (condition) {
-            # code...
+        elseif ($exception instanceof MissingPasswordException) {
+            echo "MissingPassword";
         }
+        elseif ($exception instanceof UsernameTooShortException) {
+            echo "UsernameTooShortException";
+        }
+        elseif ($exception instanceof UsernameTooLongException) {
+            echo "UsernameTooLongException";
+        }
+        elseif ($exception instanceof PasswordTooShortException) {
+            echo "PasswordTooShortException";
+        }
+        elseif ($exception instanceof OccupiedUsernameException) {
+            echo "OccupiedUsernameException";
+        }
+        elseif ($exception instanceof OccupiedUsernameException) {
+            echo "OccupiedUsernameException";
+        }
+        elseif ($exception instanceof HtmlCharacterException) {
+            echo "HtmlCharacterException";
+        }
+        else {
+            $this->render500Error();
+        }
+    }
+
+    public function render500Error() {
+        echo "<h1>500</h1><p>Internal Server Error</p>";
     }
 }
