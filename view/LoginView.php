@@ -4,8 +4,6 @@ class LoginView {
 	private $login = 'LoginView::Login';
 	private $name = 'LoginView::UserName';
 	private $password = 'LoginView::Password';
-	private $cookieName = 'LoginView::CookieName';
-	private $cookiePassword = 'LoginView::CookiePassword';
 	private $keep = 'LoginView::KeepMeLoggedIn';
 	private $messageId = 'LoginView::Message';
 	private $message = "";
@@ -23,22 +21,10 @@ class LoginView {
 		return '<a href="?register">Register a new user</a>';
 	}
 
-	/**
-	 * Create HTTP response
-	 *
-	 * Should be called after a login attempt has been determined
-	 *
-	 * @return  void BUT writes to standard output and cookies!
-	 */
 	public function response() {
 		return $this->generateLoginFormHTML();
 	}
-	
-	/**
-	* Generate HTML code on the output buffer for the logout button
-	* @param $message, String output message
-	* @return  void, BUT writes to standard output!
-	*/
+
 	private function generateLoginFormHTML() {
 			return '
 			<form method="post" > 

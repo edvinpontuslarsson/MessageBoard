@@ -1,23 +1,30 @@
 <?php
 
-$day = time() + (86400 * 30);
+class Cookie {
+    private $cookieName = 'LoginView::CookieName';
+    private $cookiePassword = 'LoginView::CookiePassword';
 
-$usernameCookie = "LoginView::CookieName";
-$usernameCookieValue = "Admin";
+    public function serveCookie() {
+        $day = time() + (86400 * 30);
 
-setcookie(
-    $usernameCookie,
-    $usernameCookieValue,
-    $day,
-    "/"
-);
+        $usernameCookie = $this->cookieName;
+        $usernameCookieValue = "Admin"; // TODO: get username
 
-$passwordCookie = "LoginView::CookiePassword";
-$passwordCookieValue = random_bytes(42);
+        setcookie(
+            $usernameCookie,
+            $usernameCookieValue,
+            $day,
+            "/"
+        );
 
-setcookie(
-    $passwordCookie,
-    $passwordCookieValue,
-    $day,
-    "/"
-);
+        $passwordCookie = $this->cookiePassword;
+        $passwordCookieValue = random_bytes(42);
+
+        setcookie(
+            $passwordCookie,
+            $passwordCookieValue,
+            $day,
+            "/"
+        );
+    }
+}

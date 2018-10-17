@@ -2,9 +2,9 @@
 
 class RegisterView {
     private $regButton = 'DoRegistration';
-    private $rawUsername = 'RegisterView::UserName';
-    private $rawPassword = 'RegisterView::Password';
-    private $rawPasswordRepeat = 
+    private $usernameField = 'RegisterView::UserName';
+    private $passwordField = 'RegisterView::Password';
+    private $repeatPasswordField = 
         'RegisterView::PasswordRepeat';
 
 	private $message = "";
@@ -23,11 +23,7 @@ class RegisterView {
 	}
     
     public function response() {
-        $message = '';
-
-        $response = $this->generateRegFormHTML($message);
-
-        return $response;
+        return $this->generateRegFormHTML($message);
     }
 
     private function generateRegFormHTML(string $message) {
@@ -37,16 +33,20 @@ class RegisterView {
 				<fieldset>
 				<legend>Register a new user - Write username and password</legend>
 					<p id='RegisterView::Message'>$this->message</p>
-					<label for='RegisterView::UserName' >Username :</label>
-					<input type='text' size='20' name='RegisterView::UserName' id='RegisterView::UserName' value='$this->username' />
+					
+					<label for='$this->usernameField' >Username :</label>
+					<input type='text' size='20' name='$this->usernameField' id='$this->usernameField' value='$this->username' />
 					<br/>
-					<label for='RegisterView::Password' >Password  :</label>
-					<input type='password' size='20' name='RegisterView::Password' id='RegisterView::Password' value='' />
+					
+					<label for='$this->passwordField' >Password  :</label>
+					<input type='password' size='20' name='$this->passwordField' id='$this->passwordField' value='' />
 					<br/>
-					<label for='RegisterView::PasswordRepeat' >Repeat password  :</label>
-					<input type='password' size='20' name='RegisterView::PasswordRepeat' id='RegisterView::PasswordRepeat' value='' />
+					
+					<label for='$this->repeatPasswordField' >Repeat password  :</label>
+					<input type='password' size='20' name='$this->repeatPasswordField' id='$this->repeatPasswordField' value='' />
 					<br/>
-					<input id='submit' type='submit' name='DoRegistration'  value='Register' />
+					
+					<input id='submit' type='submit' name='$this->regButton'  value='Register' />
 					<br/>
 				</fieldset>
 			</form>
