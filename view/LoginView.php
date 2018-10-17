@@ -30,18 +30,18 @@ class LoginView {
 			<form method="post" > 
 				<fieldset>
 					<legend>Login - enter Username and password</legend>
-					<p id="' . $this->$messageId . '">' . $this->message . '</p>
+					<p id="' . $this->messageId . '">' . $this->message . '</p>
 					
-					<label for="' . $this->$name . '">Username :</label>
-					<input type="text" id="' . $this->$name . '" name="' . $this->$name . '" value="'. $this->username .'" />
+					<label for="' . $this->name . '">Username :</label>
+					<input type="text" id="' . $this->name . '" name="' . $this->name . '" value="'. $this->username .'" />
 
-					<label for="' . $this->$password . '">Password :</label>
-					<input type="password" id="' . $this->$password . '" name="' . $this->$password . '" />
+					<label for="' . $this->password . '">Password :</label>
+					<input type="password" id="' . $this->password . '" name="' . $this->password . '" />
 
-					<label for="' . $this->$keep . '">Keep me logged in  :</label>
-					<input type="checkbox" id="' . $this->$keep . '" name="' . $this->$keep . '" />
+					<label for="' . $this->keep . '">Keep me logged in  :</label>
+					<input type="checkbox" id="' . $this->keep . '" name="' . $this->keep . '" />
 					
-					<input type="submit" name="' . $this->$login . '" value="login" />
+					<input type="submit" name="' . $this->login . '" value="login" />
 				</fieldset>
 			</form>
 			';

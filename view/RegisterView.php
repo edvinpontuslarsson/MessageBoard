@@ -23,10 +23,10 @@ class RegisterView {
 	}
     
     public function response() {
-        return $this->generateRegFormHTML($message);
+        return $this->generateRegFormHTML();
     }
 
-    private function generateRegFormHTML(string $message) {
+    private function generateRegFormHTML() {
         return "			
 			<h2>Register new user</h2>
 			<form action='?register' method='post' enctype='multipart/form-data'>

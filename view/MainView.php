@@ -32,10 +32,7 @@ class MainView {
         $this->layoutView->render(false, $this->registerView, $this->dtv);
     }
 
-    public function renderNotAuthenticatedView(
-        bool $isNewlyRegistered = false,
-        bool $justLoggedOut = false
-    ) {
+    public function renderNotAuthenticatedView(bool $justLoggedOut = false) {
         $this->layoutView->render(false, $this->loginView, $this->dtv);
     }
 
@@ -60,14 +57,19 @@ class MainView {
         return $userCredentials;
     }
 
-    /**
-     * Param1: instantiated UserCredentials class
-     */
-    public function handleRegistrationFail(
-        $userCredentials, $exception
-    ) {        
+    public function handleSuccessfulRegistration() {
+        $this->registerView->setViewUsername(
+            $this->userRequest->getRegisterUsername()
+        );
+        $this->layoutView->render(false, $this->loginView, $this->dtv);
+    }
+
+ 
+    public function handleRegistrationFail($exception) {
+        $username = $this->userRequest->getRegisterUsername();
+
         if ($exception instanceof PasswordsDoNotMatchException) {
-            $this->registerView->setViewUsername($userCredentials->getUsername());
+            $this->registerView->setViewUsername($username);
             $this->registerView->setViewMessage(
                 "Passwords do not match."
             );
@@ -85,7 +87,7 @@ class MainView {
             );
         }
         elseif ($exception instanceof UsernameTooShortException) {
-            $this->registerView->setViewUsername($userCredentials->getUsername());
+            $this->registerView->setViewUsername($username);
             $this->registerView->setViewMessage(
                 "Username has too few characters, at least 3 characters."
             );
@@ -96,20 +98,20 @@ class MainView {
             );
         }
         elseif ($exception instanceof PasswordTooShortException) {
-            $this->registerView->setViewUsername($userCredentials->getUsername());
+            $this->registerView->setViewUsername($username);
             $this->registerView->setViewMessage(
                 "Password has too few characters, at least 6 characters."
             );
         }
         elseif ($exception instanceof OccupiedUsernameException) {
-            $this->registerView->setViewUsername($userCredentials->getUsername());
+            $this->registerView->setViewUsername($username);
             $this->registerView->setViewMessage(
                 "User exists, pick another username."
             );
         }
         elseif ($exception instanceof HtmlCharacterException) {
             $cleanUsername = $this->databaseModel->
-                removeHTMLTags($userCredentials->getUsername());
+                removeHTMLTags($username);
             $this->registerView->setViewUsername($cleanUsername);
             
             $this->registerView->setViewMessage(

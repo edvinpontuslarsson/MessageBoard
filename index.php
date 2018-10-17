@@ -23,5 +23,11 @@ try {
 }
 
 catch (Exception $e) {
-    $mainView->render500Error();
+    if (!$environment->isProduction()) {
+        echo "Caught in index: </br>";
+        echo get_class($e);
+        echo $e->getMessage();
+    } else {
+        $mainView->render500Error();
+    }
 }

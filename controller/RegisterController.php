@@ -23,13 +23,11 @@ class RegisterController {
             $this->mainView->getUserCredentials();
             $this->databaseModel->storeUser($userCredentials);
 
-            $this->mainView->renderNotAuthenticatedView(true);
+            $this->mainView->handleSuccessfulRegistration();
         }
 
         catch (Exception $e) {
-            $this->mainView->handleRegistrationFail(
-                $userCredentials, $e
-            );
+            $this->mainView->handleRegistrationFail($e);
         }
     }
 }
