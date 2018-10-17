@@ -29,6 +29,9 @@ class MainView {
     }
 
     public function renderRegisterView() {
+        $this->registerView->setViewMessage(
+            "Gets this one first?"
+        );
         $this->layoutView->render(false, $this->registerView, $this->dtv);
     }
 
