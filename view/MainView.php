@@ -29,6 +29,9 @@ class MainView {
     }
 
     public function renderRegisterView() {
+        $this->registerView->setViewMessage(
+            "Gets this first?"
+        );
         $this->layoutView->render(false, $this->registerView, $this->dtv);
     }
 
@@ -122,7 +125,7 @@ class MainView {
             throw new Exception500();
         }
 
-        $this->renderRegisterView();
+        $this->layoutView->render(false, $this->registerView, $this->dtv);
     }
 
     public function handleLoginFail($exception) {
