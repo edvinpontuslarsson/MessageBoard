@@ -58,7 +58,7 @@ class MainView {
     }
 
     public function handleSuccessfulRegistration() {
-        $this->registerView->setViewUsername(
+        $this->loginView->setViewUsername(
             $this->userRequest->getRegisterUsername()
         );
         $this->renderNotAuthenticatedView();
