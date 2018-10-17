@@ -32,8 +32,8 @@ class UserRequest {
     }
 
     public function registrationPOST() {
-        return $_SERVER["REQUEST_METHOD"] === "POST" && 
-            isset($_POST["DoRegistration"]);
+        return isset($_GET["register"]) && 
+            $_SERVER["REQUEST_METHOD"] === "POST";
     }
 
     public function getRegisterUsername() {
