@@ -3,7 +3,7 @@
 require_once('model/DatabaseModel.php');
 require_once('model/CustomException.php');
 
-class User {
+class UserCredentials {
     private $databaseModel;
     private $username;
     private $password;

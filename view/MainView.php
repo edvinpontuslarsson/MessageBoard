@@ -56,8 +56,9 @@ class MainView {
 
         $rawUsername = $this->userRequest->getRegisterUsername();
         $rawPassword = $this->userRequest->getRegisterPassword();
+        $userCredentials = new UserCredentials($rawUsername, $rawPassword);
 
-        return new UserCredentials($rawUsername, $rawPassword);
+        return $userCredentials;
     }
 
     /**
