@@ -2,7 +2,6 @@
 
 require_once('Environment.php');
 require_once('model/CustomException.php');
-require_once('model/User.php');
 
 class DatabaseModel {
     private $environment;
