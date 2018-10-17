@@ -55,10 +55,10 @@ class UserCredentials {
     private function validateCredentials(
         string $username, string $password
     ) {
-        if (strlen($username) < 0) {
+        if (strlen($username) === 0) {
             throw new MissingUsernameException();
         } 
-        elseif (strlen($password) < 0) {
+        elseif (strlen($password) === 0) {
             throw new MissingPasswordException();
         }
         elseif (strlen($username) < 3) {
