@@ -93,6 +93,7 @@ class MainView {
             );
         }
         elseif ($exception instanceof MissingPasswordException) {
+            $this->registerView->setViewUsername($username);
             $this->registerView->setViewMessage(
                 "Username has too few characters, at least 3 characters. 
                 Password has too few characters, at least 6 characters."
@@ -138,15 +139,17 @@ class MainView {
     }
 
     public function handleLoginFail($exception) {
-        $username = $this->userRequest->getRegisterUsername();
+        $username = $this->userRequest->getLoginUsername();
 
         if ($exception instanceof MissingUsernameException) {
             $this->loginView->setViewMessage("Username is missing");
         }
         elseif ($exception instanceof MissingPasswordException) {
+            $this->loginView->setViewUsername($username);
             $this->loginView->setViewMessage("Password is missing");
         }
         elseif ($exception instanceof WrongUsernameOrPasswordException) {
+            $this->loginView->setViewUsername($username);
             $this->loginView->setViewMessage("Wrong name or password");
         }
         else {
