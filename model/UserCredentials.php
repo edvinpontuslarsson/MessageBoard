@@ -57,5 +57,13 @@ class UserCredentials {
         elseif (strlen($password) < 6) {
             throw new PasswordTooShortException();
         }
+        elseif ($this->databaseModel->
+            doesContainHtmlCharacter($username)) {
+            $cleanUsername = $this->databaseModel
+                ->removeHTMLTags($username);
+            $this->username = $cleanUsername;
+
+            throw new HtmlCharacterException();
+        }
     }
 }
