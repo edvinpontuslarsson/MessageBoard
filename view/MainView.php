@@ -33,14 +33,21 @@ class MainView {
     }
 
     public function renderNotAuthenticatedView(bool $justLoggedOut = false) {
+        if ($justLoggedOut) {
+            $this->loginView->setViewMessage("Bye bye!");
+        }
+
         $this->layoutView->render(false, $this->loginView, $this->dtv);
     }
 
     public function renderAuthenticatedView(
         bool $justLoggedIn = false
     ) {
-        // if just logged in, check how
-        $this->layoutView->render(true, $this->loginView, $this->dtv);
+        if ($justLoggedIn) {
+            $this->authenticatedView->setViewMessage("Welcome");
+        }
+
+        $this->layoutView->render(true, $this->authenticatedView, $this->dtv);
     }
 
     /**
@@ -73,7 +80,7 @@ class MainView {
         $this->loginView->setViewUsername(
             $this->userRequest->getRegisterUsername()
         );
-        $this->renderNotAuthenticatedView();
+        $this->renderAuthenticatedView();
     }
 
  

@@ -26,6 +26,7 @@ class MainController {
     }
 
     public function initialize() {
+        $this->sessionModel->initializeSessionModel();
         $isLoggedIn = $this->sessionModel->isLoggedIn();
 
         if ($this->userRequest->registrationGET()) {
