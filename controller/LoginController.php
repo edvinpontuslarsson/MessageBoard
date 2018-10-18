@@ -17,7 +17,7 @@ class LoginController {
         if (!$isLoggedIn) {
             $this->mainView->renderNotAuthenticatedView();
         } else {
-            $this->mainView->renderAuthenticatedView(true);
+            $this->mainView->renderAuthenticatedView();
         }
     }
 
