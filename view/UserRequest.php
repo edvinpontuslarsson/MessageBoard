@@ -1,16 +1,21 @@
 <?php
 
 require_once('model/CustomException.php');
-
-// TODO: now there are string dependencies here
-
-// get names of gets and posts from classes
-
-// TODO: see if I can do things here more smoothly,
-
-// see examples
+require_once('view/RegisterView.php');
+require_once('view/LoginView.php');
+require_once('AuthenticatedView.php');
 
 class UserRequest {
+    private $registerView;
+    private $loginView;
+    private $authenticatedView;
+
+    public function __construct() {
+        $this->registerView = new RegisterView();
+        $this->loginView = new LoginView();
+        $this->authenticatedView = new AuthenticatedView();
+    }
+
     public function userHasCookie() : bool {
         /**
          * TODO: implement this
@@ -19,44 +24,63 @@ class UserRequest {
 
     public function userWantsToStart() : bool {
         return $_SERVER["REQUEST_METHOD"] === "GET" &&
-            !isset($_GET["register"]);
+            !isset($_GET[
+                $this->registerView->getRegisterQuery()
+            ]);
     }
 
     public function registrationGET() : bool {
         return $_SERVER["REQUEST_METHOD"] === "GET" &&
-            isset($_GET["register"]);
+            isset($_GET[
+                $this->registerView->getRegisterQuery()
+            ]);
     }
 
     public function wantsToLogIn() : bool {
-        return isset($_POST["LoginView::Login"]);
+        return isset($_POST[$this->loginView->getLogin()]);
     }
 
     public function wantsLogOut() : bool { 
-        return isset($_POST["LoginView::Logout"]); 
+        return isset($_POST[
+            $this->authenticatedView->getLogoutField()
+        ]); 
     }
 
     public function registrationPOST() : bool {
-        return isset($_GET["register"]) && // register should ideally not be hardcoded like this
-            $_SERVER["REQUEST_METHOD"] === "POST";
+        return isset($_GET[
+            $this->registerView->getRegisterQuery()
+        ]) && $_SERVER["REQUEST_METHOD"] === "POST";
     }
 
     public function getRegisterUsername() : string {
         $username = "";
-        if (isset($_POST["RegisterView::UserName"])) {
-            $username = $_POST["RegisterView::UserName"];
+        if (isset($_POST[
+            $this->registerView->getUsernameField()
+        ])) {
+            $username = $_POST[
+                $this->registerView->getUsernameField()
+            ];
         }
         return $username;
     }
 
     public function getRegisterPassword() : string {
         $password = "";
-        if (isset($_POST["RegisterView::Password"])) {
-            $password = $_POST["RegisterView::Password"];
+        if (isset($_POST[
+            $this->registerView->getPasswordField()
+        ])) {
+            $password = $_POST[
+                $this->registerView->getPasswordField()
+            ];
         }
         
         $passwordRepeat = "";
-        if (isset($_POST["RegisterView::PasswordRepeat"])) {
-            $passwordRepeat = $_POST["RegisterView::PasswordRepeat"];
+        if (isset($_POST[
+            $this->registerView->getRepeatPasswordField()
+        ])) {
+            $passwordRepeat = $_POST[
+                $this->registerView->getRepeatPasswordField()
+            ];
         }
 
         if ($password !== $passwordRepeat) {
@@ -68,16 +92,24 @@ class UserRequest {
 
     public function getLoginUsername() : string {
         $username = "";
-        if (isset($_POST["LoginView::UserName"])) {
-            $username = $_POST["LoginView::UserName"];
+        if (isset($_POST[
+            $this->loginView->getName()
+        ])) {
+            $username = $_POST[
+                $this->loginView->getName()
+            ];
         }
         return $username;
     }
 
     public function getLoginPassword() : string {
         $password = "";
-        if (isset($_POST["LoginView::Password"])) {
-            $password = $_POST["LoginView::Password"];
+        if (isset($_POST[
+            $this->loginView->getPassword()
+        ])) {
+            $password = $_POST[
+                $this->loginView->getPassword()
+            ];
         }
         return $password;
     }

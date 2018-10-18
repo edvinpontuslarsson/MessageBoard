@@ -1,6 +1,9 @@
 <?php
 
+require_once('view/RegisterView.php');
+
 class LoginView {
+	private $registerView;
 	private $login = 'LoginView::Login';
 	private $name = 'LoginView::UserName';
 	private $password = 'LoginView::Password';
@@ -8,6 +11,30 @@ class LoginView {
 	private $messageId = 'LoginView::Message';
 	private $message = "";
 	private $username = "";
+
+	public function __construct() {
+        $this->registerView = new RegisterView();
+    }
+
+	public function getLogin() : string {
+		return $this->login;
+	}
+
+	public function getName() : string {
+		return $this->name;
+	}
+
+	public function getPassword() : string {
+		return $this->password;
+	}
+
+	public function getKeep() : string {
+		return $this->keep;
+	}
+
+	public function getMessageId() : string {
+		return $this->messageId;
+	}
 
 	public function setViewMessage(string $message) {
 		$this->message = $message;
@@ -18,7 +45,7 @@ class LoginView {
 	}
 
 	public function getNavLink() {
-		return '<a href="?register">Register a new user</a>';
+		return '<a href="?'. $this->registerView->getRegisterQuery()  .'">Register a new user</a>';
 	}
 
 	public function response() {

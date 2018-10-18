@@ -13,9 +13,7 @@ class BlogView {
         $this->sessionModel = new SessionModel();
     }
 
-    // should also check session here,
-    // if same as who posted,
-    // can edit/delete
+    // TODO: perhaps split this function
     public function display() : string {
         $display = "";
         
@@ -28,6 +26,7 @@ class BlogView {
             ';
 
             if ($this->sessionModel->isUsernameInSession($username)) {
+                // unique id
                 $display .= '
                     <br><a href="?edit/TODO:blogID">Edit</a><br>
                     <a href="?delete/TODO:blogID">Delete</a>

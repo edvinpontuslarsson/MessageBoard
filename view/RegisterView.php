@@ -1,6 +1,7 @@
 <?php
 
 class RegisterView {
+	private $registerQuery = "register";
     private $regButton = 'DoRegistration';
     private $usernameField = 'RegisterView::UserName';
     private $passwordField = 'RegisterView::Password';
@@ -9,6 +10,26 @@ class RegisterView {
 
 	private $message = "";
 	private $username = "";
+
+	public function getRegisterQuery() : string {
+		return $this->registerQuery;
+	}
+
+	public function getRegButton() : string {
+		return $this->regButton;
+	}
+
+	public function getUsernameField() : string {
+		return $this->usernameField;
+	}
+
+	public function getPasswordField() : string {
+		return $this->passwordField;
+	}
+
+	public function getRepeatPasswordField() : string {
+		return $this->repeatPasswordField;
+	}
 
 	public function setViewMessage(string $message) {
 		$this->message = $message;
@@ -24,7 +45,7 @@ class RegisterView {
     
     public function response() {
         return $this->generateRegFormHTML();
-    }
+	}
 
     private function generateRegFormHTML() {
         return "			

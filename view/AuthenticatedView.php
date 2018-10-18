@@ -5,6 +5,10 @@ class AuthenticatedView {
     private $messageId = 'LoginView::Message';
     private $message = "";
 
+    public function getLogoutField() : string {
+        return $this->logout;
+    }
+
     public function setViewMessage(string $message) {
 		$this->message = $message;
     }
