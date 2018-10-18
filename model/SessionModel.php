@@ -18,10 +18,7 @@ class SessionModel {
         return isset($_SESSION[$this->usernameKey]);
     }
 
-    /**
-     *  Param1: Instantiated UserCredentials class
-     */
-    public function setSession($userCredentials) {
+    public function setSession(UserCredentials $userCredentials) {
         if (!$this->databaseModel->isPasswordCorrect(
             $userCredentials
         )) {

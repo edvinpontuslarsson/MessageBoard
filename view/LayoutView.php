@@ -1,9 +1,10 @@
 <?php
 
-
 class LayoutView {
+
+  // OK, send in blogView, login/loggedIn/regiser
   
-  public function render(bool $isLoggedIn, $contentView, DateTimeView $dtv) {
+  public function render(bool $isLoggedIn, $loginView, DateTimeView $dtv) {
     echo '
       <!DOCTYPE html>
       <html lang="en">
@@ -15,12 +16,12 @@ class LayoutView {
 
           <h1>Assignment 2</h1>
 
-          ' . $contentView->getNavLink() . '
+          ' . $loginView->getNavLink() . '
 
           ' . $this->renderIsLoggedIn($isLoggedIn) . '
           
           <div class="container">
-              ' . $contentView->response() . '
+              ' . $loginView->response() . '
               
               ' . $dtv->show() . '
           </div>

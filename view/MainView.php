@@ -86,7 +86,7 @@ class MainView {
     }
 
  
-    public function handleRegistrationFail($exception) {
+    public function handleRegistrationFail(Exception $exception) {
         $username = $this->userRequest->getRegisterUsername();
 
         if ($exception instanceof PasswordsDoNotMatchException) {
@@ -147,7 +147,7 @@ class MainView {
         $this->renderRegisterView();
     }
 
-    public function handleLoginFail($exception) {
+    public function handleLoginFail(Exception $exception) {
         $username = $this->userRequest->getLoginUsername();
 
         if ($exception instanceof MissingUsernameException) {

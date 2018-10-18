@@ -50,10 +50,7 @@ class DatabaseModel {
         return $validString;
     }
 
-    /**
-     * Param1: instantiated UserCredentials class
-     */
-    public function storeUser($userCredentials) {
+    public function storeUser(UserCredentials $userCredentials) {
         $connection = $this->getOpenConnection();
 
         $cleanUsername = $this->getMysqlEscapedString(
@@ -90,11 +87,8 @@ class DatabaseModel {
         $connection->close();
     }
 
-    /**
-     * Param1: instantiated UserCredentials class
-     */
     public function isPasswordCorrect(
-        $userCredentials,
+        UserCredentials $userCredentials,
         bool $isPasswordTemporary = false
     )  : bool {
         $cleanUsername = $this->getMysqlEscapedString(
@@ -119,7 +113,7 @@ class DatabaseModel {
     }
 
     private function isUsernameOccupied(
-        $connection, $cleanUsername
+        $connection, string $cleanUsername
     ) : bool {
         $userArray = $this->getFromDatabase(
             $this->usersTable, 
