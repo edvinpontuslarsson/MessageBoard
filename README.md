@@ -2,7 +2,7 @@
 
 To run this application locally, you need to have php 7.2 (or higher), apache2, MySql, php-mysql installed as well as a MySQL-database prepared with a database name as well as a table called "Users" that you can create by querying this command into the database:
 
-`create table Users (`
+`create table Users (`<br/>
 `id INT(7) UNSIGNED AUTO_INCREMENT PRIMARY KEY, `<br/>
 `username VARCHAR(25) NOT NULL,`<br/>
 `password VARCHAR(1000) NOT NULL,`<br/>
@@ -16,7 +16,7 @@ I have set the maximum password length to 1000 characters here (because a maximu
 
 You will also need a table called "Blogs" that you can create with this command:
 
-`create table Blogs (`
+`create table Blogs (`<br/>
 `id INT(7) UNSIGNED AUTO_INCREMENT PRIMARY KEY, `<br/>
 `username VARCHAR(25) NOT NULL,`<br/>
 `blogpost VARCHAR(10000) NOT NULL`<br/>

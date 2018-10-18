@@ -2,6 +2,7 @@
 
 require_once('Environment.php');
 require_once('model/CustomException.php');
+require_once('model/SessionModel.php');
 
 class DatabaseModel {
     private $environment;
@@ -87,12 +88,38 @@ class DatabaseModel {
         $connection->close();
     }
 
-    public function storeBlogPost(BlogPostModel $blogPost) {
+    public function storeBlogPost(BlogPostModel $blogPostModel) {
+        $sessionModel = new SessionModel();
+
+        if ($blogPostModel->getWhoPosted() !==
+            $sessionModel->getSessionUsername()) {
+                throw new ForbiddenException();
+            } 
+        
         $connection = $this->getOpenConnection();
 
         $statement = $connection->prepare(
-            $this->getUserInsertionStatement()
+            $this->getBlogInsertionStatement()
         );
+
+        $twoStrings = "ss";
+
+        $statement->bind_param(
+            $twoStrings,
+            $userName,
+            $blogPost
+        );
+        
+        $userName = $this->getMysqlEscapedString(
+            $blogPostModel->getWhoPosted()
+        );
+        $blogPost = $this->getMysqlEscapedString(
+            $blogPostModel->getBlogPost()
+        );
+
+        $statement->execute();
+        $statement->close();
+        $connection->close();
     }
 
     public function isPasswordCorrect(
