@@ -34,6 +34,7 @@ class SessionModel {
      * https://stackoverflow.com/questions/9001702/php-session-destroy-on-log-out-button
      */
     public function destroySession() {
-        session_destroy();
+        unset($_SESSION[$this->usernameKey]);
+        // session_destroy();
     }
 }
