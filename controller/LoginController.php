@@ -7,7 +7,9 @@ class LoginController {
     private $userRequest;
     private $mainView;
 
-    public function __construct($userRequest, $mainView) {
+    public function __construct(
+        UserRequest $userRequest, MainView $mainView
+    ) {
         $this->sessionModel = new SessionModel();
         $this->userRequest = $userRequest;
         $this->mainView = $mainView;

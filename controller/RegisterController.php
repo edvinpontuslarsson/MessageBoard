@@ -7,7 +7,9 @@ class RegisterController {
     private $mainView;
     private $databaseModel;
 
-    public function __construct($userRequest, $mainView) {
+    public function __construct(
+        UserRequest $userRequest, MainView $mainView
+    ) {
         $this->userRequest = $userRequest;
         $this->mainView = $mainView;
         $this->databaseModel = new DatabaseModel();

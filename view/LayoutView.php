@@ -1,10 +1,12 @@
 <?php
 
-class LayoutView {
-
-  // OK, send in blogView, login/loggedIn/regiser
-  
-  public function render(bool $isLoggedIn, $loginView, DateTimeView $dtv) {
+class LayoutView {  
+  public function render(
+    bool $isLoggedIn, 
+    $loginView, 
+    DateTimeView $dtv, 
+    BlogView $blogView
+  ) {
     echo '
       <!DOCTYPE html>
       <html lang="en">
@@ -25,6 +27,11 @@ class LayoutView {
               
               ' . $dtv->show() . '
           </div>
+
+          <div class="blog-posts">
+            ' . $blogView->display() . '
+          </div>
+
          </body>
       </html>
     ';

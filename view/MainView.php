@@ -7,6 +7,7 @@ require_once('view/RegisterView.php');
 require_once('view/LoginView.php');
 require_once('view/AuthenticatedView.php');
 require_once('view/DateTimeView.php');
+require_once('view/BlogView.php');
 
 class MainView {
     
@@ -15,6 +16,7 @@ class MainView {
     private $loginView;
     private $authenticatedView;
     private $dtv;
+    private $blogView;
     private $layoutView;
     private $userRequest;
 
@@ -24,12 +26,13 @@ class MainView {
         $this->loginView = new LoginView();
         $this->authenticatedView = new AuthenticatedView();
         $this->dtv = new DateTimeView();
+        $this->blogView = new BlogView();
         $this->layoutView = new LayoutView();
         $this->userRequest = new UserRequest();
     }
 
     public function renderRegisterView() {
-        $this->layoutView->render(false, $this->registerView, $this->dtv);
+        $this->layoutView->render(false, $this->registerView, $this->dtv, $this->blogView);
     }
 
     public function renderNotAuthenticatedView(bool $justLoggedOut = false) {
@@ -37,7 +40,7 @@ class MainView {
             $this->loginView->setViewMessage("Bye bye!");
         }
 
-        $this->layoutView->render(false, $this->loginView, $this->dtv);
+        $this->layoutView->render(false, $this->loginView, $this->dtv, $this->blogView);
     }
 
     public function renderAuthenticatedView(
@@ -47,7 +50,7 @@ class MainView {
             $this->authenticatedView->setViewMessage("Welcome");
         }
 
-        $this->layoutView->render(true, $this->authenticatedView, $this->dtv);
+        $this->layoutView->render(true, $this->authenticatedView, $this->dtv, $this->blogView);
     }
 
     /**

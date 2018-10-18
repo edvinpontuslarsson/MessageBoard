@@ -11,7 +11,9 @@ class MainController {
     private $registerController;
     private $loginController;
 
-    public function __construct($userRequest, $mainView) {
+    public function __construct(
+        UserRequest $userRequest, MainView $mainView
+    ) {
         $this->userRequest = $userRequest;
         $this->mainView = $mainView;
 
