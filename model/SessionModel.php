@@ -1,7 +1,14 @@
 <?php
 
+require_once('model/DatabaseModel.php');
+
 class SessionModel {
+    private $databaseModel;
     private $usernameKey = "username";
+
+    public function __construct() {
+        $this->databaseModel = new DatabaseModel();
+    }
 
     public function initializeSessionModel() {
         session_start();
@@ -15,8 +22,11 @@ class SessionModel {
      *  Param1: Instantiated UserCredentials class
      */
     public function setSession($userCredentials) {
-
-        // OK no, have to make sure password correct first
+        if (!$this->databaseModel->isPasswordCorrect(
+            $userCredentials
+        )) {
+            throw new WrongUsernameOrPasswordException();
+        }
 
         $_SESSION[$this->usernameKey] = 
             $userCredentials->getUsername();
