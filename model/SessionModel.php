@@ -25,6 +25,10 @@ class SessionModel {
             $_SESSION[$this->usernameKey] === $username;
     }
 
+    public function getSessionUsername() : string {
+        return $_SESSION[$this->usernameKey];
+    }
+
     public function setSession(UserCredentials $userCredentials) {
         if (!$this->databaseModel->isPasswordCorrect(
             $userCredentials
@@ -36,10 +40,6 @@ class SessionModel {
             $userCredentials->getUsername();
     }
 
-    /**
-     * Should be enough,
-     * https://stackoverflow.com/questions/9001702/php-session-destroy-on-log-out-button
-     */
     public function destroySession() {
         unset($_SESSION[$this->usernameKey]);
         // session_destroy();

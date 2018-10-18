@@ -3,6 +3,7 @@
 require_once('model/SessionModel.php');
 require_once('controller/RegisterController.php');
 require_once('controller/LoginController.php');
+require_once('controller/BlogController.php');
 
 class MainController {
     private $sessionModel;
@@ -10,6 +11,7 @@ class MainController {
     private $mainView;
     private $registerController;
     private $loginController;
+    private $blogController;
 
     public function __construct(
         UserRequest $userRequest, MainView $mainView
@@ -23,6 +25,9 @@ class MainController {
             $this->userRequest, $this->mainView
         );
         $this->loginController = new LoginController(
+            $this->userRequest, $this->mainView
+        );
+        $this->blogController = new BlogController(
             $this->userRequest, $this->mainView
         );
     }
@@ -49,6 +54,10 @@ class MainController {
         
         if ($this->userRequest->userWantsToStart()) {
             $this->loginController->prepareStart($isLoggedIn);
+        }
+
+        if ($this->userRequest->blogPost($isLoggedIn)) {
+            $this->blogController->handleBlogPost($isLoggedIn);
         }
     }
 }

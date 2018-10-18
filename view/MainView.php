@@ -1,7 +1,9 @@
 <?php
 
 require_once('model/UserCredentials.php');
+require_once('model/BlogPostModel.php');
 require_once('model/CustomException.php');
+require_once('model/SessionModel.php');
 require_once('view/LayoutView.php');
 require_once('view/RegisterView.php');
 require_once('view/LoginView.php');
@@ -79,6 +81,21 @@ class MainView {
         return $userCredentials;
     }
 
+    /**
+     * Returns instantiated BlogPostModel class
+     */
+    public function getBlogPostModel(bool $isLoggedIn) {
+        if (!$isLoggedIn) {
+            throw new ForbiddenException();
+        }
+
+        $sessionModel = new SessionModel();
+        $username = $sessionModel->getSessionUsername();
+        $blogPost = $this->userRequest->getBlogPost();
+        $blogPostModel = 
+            new BlogPostModel($username, $blogPost);
+    }
+
     public function handleSuccessfulRegistration() {
         $this->loginView->setViewMessage("Registered new user.");
         $this->loginView->setViewUsername(
@@ -88,6 +105,26 @@ class MainView {
         $this->renderNotAuthenticatedView();
     }
 
+    public function handleSuccessfullBlogPost() {
+        $this->authenticatedView->setViewMessage(
+            "Blogpost added succesfully!"
+        );
+        $this->renderAuthenticatedView();
+    }
+
+    public function handleSuccessfullEditBlog() {
+        $this->authenticatedView->setViewMessage(
+            "Blogpost edited succesfully!"
+        );
+        $this->renderAuthenticatedView();
+    }
+
+    public function handleSuccessfullDeleteBlog() {
+        $this->authenticatedView->setViewMessage(
+            "Blogpost deleted succesfully!"
+        );
+        $this->renderAuthenticatedView();
+    }
  
     public function handleRegistrationFail(Exception $exception) {
         $username = $this->userRequest->getRegisterUsername();
@@ -171,6 +208,20 @@ class MainView {
         $this->renderNotAuthenticatedView();
     }
 
+    public function handleBlogFail(Exception $exception) {
+        if ($exception instanceof ForbiddenException) {
+            $this->render403Error();
+        }
+        else {
+            throw new Exception500();
+        }
+    }
+
+    private function render403Error() {
+        echo "<h1>403</h1><p>Forbidden</p>";
+    }
+
+    // should be available for index.php
     public function render500Error() {
         echo "<h1>500</h1><p>Internal Server Error</p>";
     }

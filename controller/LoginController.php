@@ -26,7 +26,7 @@ class LoginController {
     public function handleLogin() {
         try {
             $userCredentials = 
-            $this->mainView->getUserCredentials();
+                $this->mainView->getUserCredentials();
             $this->sessionModel->setSession($userCredentials);
             $this->mainView->renderAuthenticatedView(true);
         }

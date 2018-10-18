@@ -19,3 +19,5 @@ class WrongUsernameOrPasswordException extends Exception {}
 class OccupiedUsernameException extends Exception {}
 
 class HtmlCharacterException extends Exception {}
+
+class ForbiddenException extends Exception {}

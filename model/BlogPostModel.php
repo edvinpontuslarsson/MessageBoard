@@ -2,8 +2,8 @@
 
 class BlogPostModel {
     // get username from session
-    private $postedBy = "test";
-    private $blogPost = "test";
+    private $postedBy;
+    private $blogPost;
 
     public function getWhoPosted() : string {
         return $this->postedBy;

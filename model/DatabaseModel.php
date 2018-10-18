@@ -87,6 +87,14 @@ class DatabaseModel {
         $connection->close();
     }
 
+    public function storeBlogPost(BlogPostModel $blogPost) {
+        $connection = $this->getOpenConnection();
+
+        $statement = $connection->prepare(
+            $this->getUserInsertionStatement()
+        );
+    }
+
     public function isPasswordCorrect(
         UserCredentials $userCredentials,
         bool $isPasswordTemporary = false
@@ -191,6 +199,15 @@ class DatabaseModel {
             permanentsecret
         ) 
         VALUES (?, ?, ?, ?)";
+    }
+
+    private function getBlogInsertionStatement() : string {
+        return "INSERT INTO Blogs (
+            username,
+            blogpost
+        )
+        VALUES (?, ?)
+        ";
     }
 
     private function getOpenConnection() {

@@ -22,7 +22,7 @@ class RegisterController {
     public function handleRegistration() {
         try {
             $userCredentials = 
-            $this->mainView->getUserCredentials();
+                $this->mainView->getUserCredentials();
             $this->databaseModel->storeUser($userCredentials);
 
             $this->mainView->handleSuccessfulRegistration();

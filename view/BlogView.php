@@ -7,6 +7,16 @@ class BlogView {
     // array with BlogPost instances
     private $blogPosts;
     private $sessionModel;
+    private $blogInputField = "blog-input";
+    private $blogPostBtn = "blog-post";
+
+    public function getBlogInputField() : string {
+        return $this->blogInputField;
+    }
+
+    public function getBlogPostBtn() : string {
+        return $this->blogPostBtn;
+    }
 
     public function __construct() {
         $this->blogPosts = $this->getBlogPosts();
@@ -16,6 +26,8 @@ class BlogView {
     // TODO: perhaps split this function
     public function display() : string {
         $display = "";
+
+        // TODO: have this foreach loop in a function called getBlogPosts
         
         foreach ($this->blogPosts as $blogPost) {
             $username = $blogPost->getWhoPosted();
@@ -26,7 +38,7 @@ class BlogView {
             ';
 
             if ($this->sessionModel->isUsernameInSession($username)) {
-                // unique id
+                // unique DB id, like with user
                 $display .= '
                     <br><a href="?edit/TODO:blogID">Edit</a><br>
                     <a href="?delete/TODO:blogID">Delete</a>
@@ -35,22 +47,26 @@ class BlogView {
 
             $display .= "</p>";
         }
-
+        
         if ($this->sessionModel->isLoggedIn()) {
-            $display .= '
-            <form method="post" > 
-                <fieldset>
-                    <legend>Make a blog post</legend>
-                    <input type="text" id="" name=""/>
-                    <p>
-                    <input type="submit" name="blog-post" value="Post" />
-                    </p>
-                </fieldset>
-            </form>
-            ';
+            $display .= $this->getBlogForm();
         }
 
         return $display;
+    }
+
+    private function getBlogForm() : string {
+        return '
+        <form method="post" > 
+            <fieldset>
+                <legend>Make a blog post</legend>
+                <input type="text" id="'. $this->blogInputField .'" name="'. $this->blogInputField .'"/>
+                <p>
+                <input type="submit" name="'. $this->blogPostBtn .'" value="Submit" />
+                </p>
+            </fieldset>
+        </form>
+        ';
     }
 
     private function getBlogPosts() : array {
