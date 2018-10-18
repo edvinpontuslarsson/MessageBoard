@@ -80,7 +80,7 @@ class MainView {
         $this->loginView->setViewUsername(
             $this->userRequest->getRegisterUsername()
         );
-        $this->renderAuthenticatedView();
+        $this->renderNotAuthenticatedView();
     }
 
  
