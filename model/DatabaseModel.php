@@ -94,7 +94,9 @@ class DatabaseModel {
             $userCredentials->getUsername()
         );
         $userArray = $this->getFromDatabase(
-            $usersTable, $usernameColumn, $cleanUsername
+            $this->usersTable, 
+            $this->usernameColumn, 
+            $cleanUsername
         );
 
         if (empty($userArray)) {
