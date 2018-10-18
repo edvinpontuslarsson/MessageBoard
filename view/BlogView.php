@@ -19,7 +19,7 @@ class BlogView {
         foreach ($this->blogPosts as $blogPost) {
             $display .= '
             <p>
-                <b>'. $blogPost->getWhoPosted() .' wrote:</b> </br>
+                <b>'. $blogPost->getWhoPosted() .' wrote:</b> <br>
                 '. $blogPost->getBlogPost() .'
             </p>
             ';
