@@ -31,19 +31,6 @@ class UserCredentials {
         $this->keepLoggedIn = $keepLoggedIn;
     }
 
-    public function getTemporaryPassword() : string {
-        // get from DB with username
-    }
-
-    /**
-     * For the session
-     */
-    public function getPermanentSecret() : string {
-        // get from DB with username
-
-        // throw wrongnameorpassword exception
-    }
-
     private function setCredentials(
         string $username, string $password
     ) {

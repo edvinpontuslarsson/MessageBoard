@@ -20,8 +20,8 @@ class AuthenticatedView {
 	private function generateLogoutButtonHTML() {
 		return '
 			<form  method="post" >
-				<p id="' . $this->$messageId . '">'. $this->message .'</p>
-				<input type="submit" name="' . $this->$logout . '" value="logout"/>
+				<p id="' . $this->messageId . '">'. $this->message .'</p>
+				<input type="submit" name="' . $this->logout . '" value="logout"/>
 			</form>
 		';
 	}

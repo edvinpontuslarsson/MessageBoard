@@ -1,25 +1,25 @@
 <?php
 
 class SessionModel {
-    private $username = "username";
-    private $userSecret = "userSecret";
+    private $usernameKey = "username";
 
     public function initializeSessionModel() {
         session_start();
     }
 
     public function isLoggedIn() : bool {
-        return isset($_SESSION[$this->userSecret]);
+        return isset($_SESSION[$this->usernameKey]);
     }
 
     /**
      *  Param1: Instantiated UserCredentials class
      */
     public function setSession($userCredentials) {
-        $_SESSION[$this->username] = 
+
+        // OK no, have to make sure password correct first
+
+        $_SESSION[$this->usernameKey] = 
             $userCredentials->getUsername();
-        $_SESSION[$this->userSecret] = 
-            $userCredentials->getPermanentSecret();
     }
 
     /**

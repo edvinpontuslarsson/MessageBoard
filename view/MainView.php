@@ -77,9 +77,11 @@ class MainView {
     }
 
     public function handleSuccessfulRegistration() {
+        $this->loginView->setViewMessage("Registered new user.");
         $this->loginView->setViewUsername(
             $this->userRequest->getRegisterUsername()
         );
+        
         $this->renderNotAuthenticatedView();
     }
 
