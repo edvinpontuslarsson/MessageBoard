@@ -99,21 +99,12 @@ class DatabaseModel {
             $cleanUsername
         );
 
-        if (empty($userArray)) {
+        if (empty($userArray) || 
+            $cleanUsername !== $userArray[$this->usernameColumn]) {
             throw new WrongUsernameOrPasswordException();
         }
 
-        $hashedPassword;
-        
-        if (!$isPasswordTemporary) {
-            $hashedPassword = $userArray[$this->passwordColumn];
-        } else {
-            // = temporary
-            // TODO: also generate new one and store
-
-            // how to update time stamp:
-            // https://stackoverflow.com/questions/5869392/how-to-update-mysql-timestamp-column-manually-to-current-timestamp-through-php
-        }        
+        $hashedPassword = $userArray[$this->passwordColumn];      
 
         return password_verify(
             $userCredentials->getPassword(), $hashedPassword
