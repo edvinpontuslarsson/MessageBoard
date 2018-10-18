@@ -55,6 +55,15 @@ class DatabaseModel {
      */
     public function storeUser($userCredentials) {
         $connection = $this->getOpenConnection();
+
+        $cleanUsername = $this->getMysqlEscapedString(
+            $userCredentials->getUsername()
+        );
+
+        if ($this->isUsernameOccupied($connection, $cleanUsername)) {
+            throw new OccupiedUsernameException();
+        }
+
         $statement = $connection->prepare(
             $this->getUserInsertionStatement()
         );
@@ -69,9 +78,7 @@ class DatabaseModel {
             $permanentSecret
         );
 
-        $userName = $this->getMysqlEscapedString(
-            $userCredentials->getUsername()
-        );
+        $userName = $cleanUsername;
         $password = password_hash(
             $userCredentials->getPassword(), PASSWORD_DEFAULT
         );
@@ -109,6 +116,19 @@ class DatabaseModel {
         return password_verify(
             $userCredentials->getPassword(), $hashedPassword
         );
+    }
+
+    private function isUsernameOccupied(
+        $connection, $cleanUsername
+    ) : bool {
+        $userArray = $this->getFromDatabase(
+            $this->usersTable, 
+            $this->usernameColumn, 
+            $cleanUsername
+        );
+
+        return !empty($userArray) && 
+            $cleanUsername === $userArray[$this->usernameColumn];
     }
 
     /**
