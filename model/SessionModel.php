@@ -18,6 +18,13 @@ class SessionModel {
         return isset($_SESSION[$this->usernameKey]);
     }
 
+    public function isUsernameInSession(
+        string $username
+    ) : bool {
+        return isset($_SESSION[$this->usernameKey]) &&
+            $_SESSION[$this->usernameKey] === $username;
+    }
+
     public function setSession(UserCredentials $userCredentials) {
         if (!$this->databaseModel->isPasswordCorrect(
             $userCredentials

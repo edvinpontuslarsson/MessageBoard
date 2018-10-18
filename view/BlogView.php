@@ -20,12 +20,21 @@ class BlogView {
         $display = "";
         
         foreach ($this->blogPosts as $blogPost) {
+            $username = $blogPost->getWhoPosted();
             $display .= '
             <p>
-                <b>'. $blogPost->getWhoPosted() .' wrote:</b> <br>
+                <b>'. $username .' wrote:</b> <br>
                 '. $blogPost->getBlogPost() .'
-            </p>
             ';
+
+            if ($this->sessionModel->isUsernameInSession($username)) {
+                $display .= '
+                    <br><a href="?edit/TODO:blogID">Edit</a><br>
+                    <a href="?delete/TODO:blogID">Delete</a>
+                ';
+            }
+
+            $display .= "</p>";
         }
 
         if ($this->sessionModel->isLoggedIn()) {
@@ -47,7 +56,7 @@ class BlogView {
 
     private function getBlogPosts() : array {
         $blogPostMock1 =
-            new BlogPostModel("Donald Duck", "Quack!");
+            new BlogPostModel("Admin", "Indeed");
 
         $blogPostMock2 =
             new BlogPostModel("Homer Simpson", "Wohoo!");
