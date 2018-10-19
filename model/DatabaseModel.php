@@ -3,6 +3,7 @@
 require_once('Environment.php');
 require_once('model/CustomException.php');
 require_once('model/SessionModel.php');
+require_once('model/BlogPostModel.php');
 
 class DatabaseModel {
     private $environment;
@@ -85,8 +86,26 @@ class DatabaseModel {
         $connection->close();
     }
 
-    public function getAllBlogPosts() {
-        return $this->getAllTableRowsFromDB();
+    // TODO: fix string dependencies
+    public function getAllBlogPosts() : array {
+        $rows = $this->getTableRowsFromDB(
+            "SELECT id,username,blogpost FROM Blogs ORDER BY id"
+        );
+
+        $blogPosts = [];
+
+        foreach ($rows as $row) {
+            $postedBy = $row["username"];
+            $blogPost = $row["blogpost"];
+
+            $blogPostModel = 
+                new BlogPostModel($postedBy, $blogPost);
+            $blogPostModel->setID($row["id"]);
+
+            array_push($blogPosts, $blogPostModel);
+        }
+
+        return $blogPosts;
     }
 
     public function isPasswordCorrect(
@@ -165,11 +184,9 @@ class DatabaseModel {
     }
 
     // Inspired by: https://www.w3schools.com/php/func_mysqli_fetch_all.asp
-    private function getAllTableRowsFromDB() {
+    private function getTableRowsFromDB(string $sqlQuery) {
         $connection = $this->getOpenConnection();
 
-        // TODO: paramaterize
-        $sqlQuery = "SELECT * FROM Blogs";
         $result = mysqli_query($connection, $sqlQuery);
 
         $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);

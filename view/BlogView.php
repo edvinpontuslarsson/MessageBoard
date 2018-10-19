@@ -2,6 +2,7 @@
 
 require_once('model/BlogPostModel.php');
 require_once('model/SessionModel.php');
+require_once('model/DatabaseModel.php');
 
 class BlogView {
     // array with BlogPost instances
@@ -19,7 +20,8 @@ class BlogView {
     }
 
     public function __construct() {
-        $this->blogPosts = $this->getBlogPosts();
+        $dbModel = new DatabaseModel();
+        $this->blogPosts = $dbModel->getAllBlogPosts();
         $this->sessionModel = new SessionModel();
     }
 
@@ -32,8 +34,9 @@ class BlogView {
         }
 
         // TODO: have this foreach loop in a function called getBlogPosts
-        
-        foreach ($this->blogPosts as $blogPost) {
+        $latestBlogPosts = array_reverse($this->blogPosts);
+
+        foreach ($latestBlogPosts as $blogPost) {
             $username = $blogPost->getWhoPosted();
             $display .= '
             <p>
@@ -44,8 +47,8 @@ class BlogView {
             if ($this->sessionModel->isUsernameInSession($username)) {
                 // unique DB id, like with user
                 $display .= '
-                    <br><a href="?edit_blog=TODO:blogID">Edit</a><br>
-                    <a href="?delete_blog=TODO:blogID">Delete</a>
+                    <br><a href="?edit_blog='. $blogPost->getID() .'">Edit</a><br>
+                    <a href="?delete_blog='. $blogPost->getID() .'">Delete</a>
                 ';
 
                 // later
@@ -72,21 +75,5 @@ class BlogView {
             </fieldset>
         </form>
         ';
-    }
-
-    // now get from db
-    private function getBlogPosts() : array {
-        $blogPostMock1 =
-            new BlogPostModel("Admin", "Indeed");
-
-        $blogPostMock2 =
-            new BlogPostModel("Homer Simpson", "Wohoo!");
-
-        $blogPosts = [];
-        array_push(
-            $blogPosts, $blogPostMock1, $blogPostMock2
-        );
-
-        return $blogPosts;
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
 class BlogPostModel {
-    // get username from session
     private $postedBy;
     private $blogPost;
+    private $id;
 
     public function getWhoPosted() : string {
         return $this->postedBy;
@@ -13,11 +13,18 @@ class BlogPostModel {
         return $this->blogPost;
     }
 
+    public function setID(int $id) {
+        $this->id = $id;
+    }
+
+    public function getID() : int {
+        return $this->id;
+    }
+
     public function __construct(
-        string $username, string $blogPost
+        string $postedBy, string $blogPost
     ) {
-        $this->postedBy = $username;
+        $this->postedBy = $postedBy;
         $this->blogPost = strip_tags($blogPost);
     }
-    
 }
