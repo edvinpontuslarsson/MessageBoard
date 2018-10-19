@@ -5,11 +5,15 @@ require_once('model/SessionModel.php');
 require_once('model/DatabaseModel.php');
 
 class BlogView {
-    // array with BlogPost instances
-    private $blogPosts;
     private $sessionModel;
     private $blogInputField = "blog-input";
     private $blogPostBtn = "blog-post";
+    private $editBlogQuery = "edit_blog";
+    private $deleteBlogQuery = "delete_blog";
+
+    // Note to self:
+    // $_GET["edit_blog"] // preferably w.o. string depencencies
+    // $_GET["delete_blog"] // preferably w.o. string depencencies
 
     public function getBlogInputField() : string {
         return $this->blogInputField;
@@ -19,13 +23,18 @@ class BlogView {
         return $this->blogPostBtn;
     }
 
+    public function getEditBlogQuery() : string {
+        return $this->editBlogQuery;
+    }
+
+    public function getDeleteBlogQuery() : string {
+        return $this->deleteBlogQuery;
+    }
+
     public function __construct() {
-        $dbModel = new DatabaseModel();
-        $this->blogPosts = $dbModel->getAllBlogPosts();
         $this->sessionModel = new SessionModel();
     }
 
-    // TODO: perhaps split this function
     public function display() : string {
         $display = "<h2>Message Board</h2>";
 
@@ -33,32 +42,7 @@ class BlogView {
             $display .= $this->getBlogForm();
         }
 
-        // TODO: have this foreach loop in a function called getBlogPosts
-        $latestBlogPosts = array_reverse($this->blogPosts);
-
-        foreach ($latestBlogPosts as $blogPost) {
-            $username = $blogPost->getWhoPosted();
-            $display .= '
-            <p>
-                <b>'. $username .' wrote:</b> <br>
-                '. $blogPost->getBlogPost() .'
-            ';
-
-            if ($this->sessionModel->isUsernameInSession($username)) {
-                // unique DB id, like with user
-                $display .= '
-                    <br><a href="?edit_blog='. $blogPost->getID() .'">Edit</a><br>
-                    <a href="?delete_blog='. $blogPost->getID() .'">Delete</a>
-                ';
-
-                // later
-
-                // $_GET["edit_blog"] // preferably w.o. string depencencies
-                // $_GET["delete_blog"] // preferably w.o. string depencencies
-            }
-
-            $display .= "</p>";
-        }
+        $display .= $this->getBlogPostsHtmlElements();
 
         return $display;
     }
@@ -75,5 +59,35 @@ class BlogView {
             </fieldset>
         </form>
         ';
+    }
+
+    private function getBlogPostsHtmlElements() : string {
+        $dbModel = new DatabaseModel();
+
+        // array with BlogPostModel instances
+        $blogPosts = $dbModel->getAllBlogPosts();
+        $latestBlogPosts = array_reverse($blogPosts);
+
+        $blogPostsHtmlElements = "";
+
+        foreach ($latestBlogPosts as $blogPost) {
+            $username = $blogPost->getWhoPosted();
+            $blogPostsHtmlElements .= '
+            <p>
+                <b>'. $username .' wrote:</b> <br>
+                '. $blogPost->getBlogPost() .'
+            ';
+
+            if ($this->sessionModel->isUsernameInSession($username)) {
+                $blogPostsHtmlElements .= '
+                    <br><a href="?'. $this->getEditBlogQuery() .'='. $blogPost->getID() .'">Edit</a><br>
+                    <a href="?'. $this->getDeleteBlogQuery() .'='. $blogPost->getID() .'">Delete</a>
+                ';
+            }
+
+            $blogPostsHtmlElements .= "</p>";
+        }
+
+        return $blogPostsHtmlElements;
     }
 }
