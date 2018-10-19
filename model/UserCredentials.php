@@ -63,8 +63,6 @@ class UserCredentials {
          * inspired by: https://stackoverflow.com/questions/5732758/detect-html-tags-in-a-string
          */
         elseif ($username !== strip_tags($username)) {
-            $this->username = strip_tags($username);
-
             throw new HtmlCharacterException();
         }
     }

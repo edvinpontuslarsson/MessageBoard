@@ -174,8 +174,7 @@ class MainView {
             );
         }
         elseif ($exception instanceof HtmlCharacterException) {
-            $cleanUsername = $this->databaseModel->
-                removeHTMLTags($username);
+            $cleanUsername = strip_tags($username);
             $this->registerView->setViewUsername($cleanUsername);
             
             $this->registerView->setViewMessage(
