@@ -25,7 +25,7 @@ class BlogView {
 
     // TODO: perhaps split this function
     public function display() : string {
-        $display = "";
+        $display = "<h2>Message Board</h2>";
 
         // TODO: have this foreach loop in a function called getBlogPosts
         
@@ -59,7 +59,7 @@ class BlogView {
         return '
         <form method="post" > 
             <fieldset>
-                <legend>Make a blog post</legend>
+                <legend>Write a message: </legend>
                 <input type="text" id="'. $this->blogInputField .'" name="'. $this->blogInputField .'"/>
                 <p>
                 <input type="submit" name="'. $this->blogPostBtn .'" value="Submit" />

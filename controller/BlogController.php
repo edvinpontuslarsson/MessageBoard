@@ -1,24 +1,27 @@
 <?php
 
 require_once('model/CustomException.php');
+require_once('model/DatabaseModel.php');
 
 class BlogController {
+    private $databaseModel;
     private $userRequest;
     private $mainView;
 
     public function __construct(
         UserRequest $userRequest, MainView $mainView
     ) {
+        $this->databaseModel = new DatabaseModel();
         $this->userRequest = $userRequest;
         $this->mainView = $mainView;
     }
 
     public function handleBlogPost(bool $isLoggedIn) {
         try {
-            $blogPost = 
+            $blogPostModel = 
                 $this->mainView->getBlogPostModel($isLoggedIn);
-            // 
-            // $this->mainView->handleSuccessfullBlogPost();
+            $this->databaseModel->storeBlogPost($blogPostModel);
+            $this->mainView->handleSuccessfullBlogPost();
         }
 
         catch (Exception $e) {

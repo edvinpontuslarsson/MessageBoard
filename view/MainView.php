@@ -94,6 +94,8 @@ class MainView {
         $blogPost = $this->userRequest->getBlogPost();
         $blogPostModel = 
             new BlogPostModel($username, $blogPost);
+        
+        return $blogPostModel;
     }
 
     public function handleSuccessfulRegistration() {
