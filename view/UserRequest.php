@@ -27,16 +27,16 @@ class UserRequest {
 
     public function userWantsToStart() : bool {
         return $_SERVER["REQUEST_METHOD"] === "GET" &&
-            !isset($_GET[
-                $this->registerView->getRegisterQuery()
-            ]);
+            !isset(
+                $_GET[$this->registerView->getRegisterQuery()]
+            );
     }
 
     public function registrationGET() : bool {
         return $_SERVER["REQUEST_METHOD"] === "GET" &&
-            isset($_GET[
-                $this->registerView->getRegisterQuery()
-            ]);
+            isset(
+                $_GET[$this->registerView->getRegisterQuery()]
+            );
     }
 
     public function wantsToLogIn() : bool {
@@ -44,52 +44,48 @@ class UserRequest {
     }
 
     public function wantsLogOut() : bool { 
-        return isset($_POST[
-            $this->authenticatedView->getLogout()
-        ]); 
+        return isset(
+            $_POST[$this->authenticatedView->getLogout()]
+        ); 
     }
 
     public function registrationPOST() : bool {
-        return isset($_GET[
-            $this->registerView->getRegisterQuery()
-        ]) && $_SERVER["REQUEST_METHOD"] === "POST";
+        return isset(
+            $_GET[$this->registerView->getRegisterQuery()]
+            ) && $_SERVER["REQUEST_METHOD"] === "POST";
     }
 
     public function blogPost() :bool {
-        return isset($_POST[
-            $this->blogView->getBlogPostBtn()
-        ]);
+        return isset(
+            $_POST[$this->blogView->getBlogPostBtn()]);
     }
 
     public function getRegisterUsername() : string {
         $username = "";
-        if (isset($_POST[
-            $this->registerView->getUsernameField()
-        ])) {
-            $username = $_POST[
-                $this->registerView->getUsernameField()
-            ];
+        if (isset(
+            $_POST[$this->registerView->getUsernameField()]
+            )) {
+            $username = 
+                $_POST[$this->registerView->getUsernameField()];
         }
         return $username;
     }
 
     public function getRegisterPassword() : string {
         $password = "";
-        if (isset($_POST[
-            $this->registerView->getPasswordField()
-        ])) {
-            $password = $_POST[
-                $this->registerView->getPasswordField()
-            ];
+        if (isset(
+            $_POST[$this->registerView->getPasswordField()]
+            )) {
+            $password = 
+                $_POST[$this->registerView->getPasswordField()];
         }
         
         $passwordRepeat = "";
-        if (isset($_POST[
-            $this->registerView->getRepeatPasswordField()
-        ])) {
-            $passwordRepeat = $_POST[
-                $this->registerView->getRepeatPasswordField()
-            ];
+        if (isset(
+            $_POST[$this->registerView->getRepeatPasswordField()]
+            )) {
+            $passwordRepeat = 
+                $_POST[$this->registerView->getRepeatPasswordField()];
         }
 
         if ($password !== $passwordRepeat) {
@@ -101,36 +97,32 @@ class UserRequest {
 
     public function getLoginUsername() : string {
         $username = "";
-        if (isset($_POST[
-            $this->loginView->getName()
-        ])) {
-            $username = $_POST[
-                $this->loginView->getName()
-            ];
+        if (isset(
+            $_POST[$this->loginView->getName()])) {
+            $username = 
+                $_POST[$this->loginView->getName()];
         }
         return $username;
     }
 
     public function getLoginPassword() : string {
         $password = "";
-        if (isset($_POST[
-            $this->loginView->getPassword()
-        ])) {
-            $password = $_POST[
-                $this->loginView->getPassword()
-            ];
+        if (isset(
+            $_POST[$this->loginView->getPassword()]
+            )) {
+            $password = 
+                $_POST[$this->loginView->getPassword()];
         }
         return $password;
     }
 
     public function getBlogPost() : string {
         $blogPost = "";
-        if (isset($_POST[
-            $this->blogView->getBlogInputField()
-        ])) {
-            $blogPost = $_POST[
-                $this->blogView->getBlogInputField()
-            ];   
+        if (isset(
+            $_POST[$this->blogView->getBlogInputField()]
+            )) {
+            $blogPost = 
+                $_POST[$this->blogView->getBlogInputField()];   
         }
         return $blogPost;
     }
