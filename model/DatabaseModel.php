@@ -122,8 +122,8 @@ class DatabaseModel {
         $connection->close();
     }
 
-    public function getAllBlogPosts() : array {
-
+    public function getAllBlogPosts() {
+        return $this->getAllTableRowsFromDB();
     }
 
     public function isPasswordCorrect(
@@ -133,7 +133,7 @@ class DatabaseModel {
         $cleanUsername = $this->getMysqlEscapedString(
             $userCredentials->getUsername()
         );
-        $userArray = $this->getRowFromDatabase(
+        $userArray = $this->getTableRowFromDatabase(
             $this->usersTable, 
             $this->usernameColumn, 
             $cleanUsername
@@ -154,7 +154,7 @@ class DatabaseModel {
     private function isUsernameOccupied(
         $connection, string $cleanUsername
     ) : bool {
-        $userArray = $this->getRowFromDatabase(
+        $userArray = $this->getTableRowFromDatabase(
             $this->usersTable, 
             $this->usernameColumn, 
             $cleanUsername
@@ -168,7 +168,7 @@ class DatabaseModel {
      * Function inspired by code on this page:
      * https://stackoverflow.com/questions/28803342/php-prepared-statements-mysql-check-if-user-exists
      */  
-    private function getRowFromDatabase(
+    private function getTableRowFromDatabase(
         string $sqlTable, 
         string $sqlColumn, 
         string $toSearchFor
@@ -177,7 +177,7 @@ class DatabaseModel {
 
         $statement = mysqli_prepare(
             $connection, 
-            $this->getPreparedSqlSelectOneStatement(
+            $this->getPreparedSqlSpecificColumnValueStatement(
                 $sqlTable, $sqlColumn
             )
         );
@@ -201,7 +201,24 @@ class DatabaseModel {
         }
     }
 
-    private function getPreparedSqlSelectOneStatement(
+    // Inspired by: https://www.w3schools.com/php/func_mysqli_fetch_all.asp
+    private function getAllTableRowsFromDB() {
+        $connection = $this->getOpenConnection();
+
+        // TODO: paramaterize
+        $sqlQuery = "SELECT * FROM Blogs";
+        $result = mysqli_query($connection, $sqlQuery);
+
+        $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        
+        // to free memory
+        mysqli_free_result($result);
+        $connection->close();
+
+        return $rows;
+    }
+
+    private function getPreparedSqlSpecificColumnValueStatement(
         $sqlTable, $sqlColumn
     ) : string {
         return 

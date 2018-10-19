@@ -220,7 +220,8 @@ class MainView {
     }
 
     private function render403Error() {
-        echo "<h1>403</h1><p>Forbidden</p>";
+        echo "<h1>403</h1><p>Forbidden</p>
+            <a href='?'>Go back to start</a>";
     }
 
     // should be available for index.php
