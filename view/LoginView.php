@@ -54,7 +54,7 @@ class LoginView {
 
 	private function generateLoginFormHTML() {
 			return '
-			<form method="post" > 
+			<form method="post" action="http://localhost/a2/"> 
 				<fieldset>
 					<legend>Login - enter Username and password</legend>
 					<p id="' . $this->messageId . '">' . $this->message . '</p>

@@ -40,9 +40,14 @@ class BlogView {
             if ($this->sessionModel->isUsernameInSession($username)) {
                 // unique DB id, like with user
                 $display .= '
-                    <br><a href="?edit/TODO:blogID">Edit</a><br>
-                    <a href="?delete/TODO:blogID">Delete</a>
+                    <br><a href="?edit_blog=TODO:blogID">Edit</a><br>
+                    <a href="?delete_blog=TODO:blogID">Delete</a>
                 ';
+
+                // later
+
+                // $_GET["edit_blog"] // preferably w.o. string depencencies
+                // $_GET["delete_blog"] // preferably w.o. string depencencies
             }
 
             $display .= "</p>";
