@@ -205,7 +205,7 @@ class DatabaseModel {
         $sqlTable, $sqlColumn
     ) : string {
         return 
-            "SELECT 1 FROM $sqlTable WHERE $sqlColumn = ?";
+            "SELECT * FROM $sqlTable WHERE $sqlColumn = ?";
     }
 
     private function getMysqlEscapedString(
