@@ -69,6 +69,7 @@ class BlogView {
         ';
     }
 
+    // now get from db
     private function getBlogPosts() : array {
         $blogPostMock1 =
             new BlogPostModel("Admin", "Indeed");

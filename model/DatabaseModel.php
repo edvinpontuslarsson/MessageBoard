@@ -122,6 +122,10 @@ class DatabaseModel {
         $connection->close();
     }
 
+    public function getAllBlogPosts() : array {
+
+    }
+
     public function isPasswordCorrect(
         UserCredentials $userCredentials,
         bool $isPasswordTemporary = false
@@ -129,7 +133,7 @@ class DatabaseModel {
         $cleanUsername = $this->getMysqlEscapedString(
             $userCredentials->getUsername()
         );
-        $userArray = $this->getFromDatabase(
+        $userArray = $this->getRowFromDatabase(
             $this->usersTable, 
             $this->usernameColumn, 
             $cleanUsername
@@ -150,7 +154,7 @@ class DatabaseModel {
     private function isUsernameOccupied(
         $connection, string $cleanUsername
     ) : bool {
-        $userArray = $this->getFromDatabase(
+        $userArray = $this->getRowFromDatabase(
             $this->usersTable, 
             $this->usernameColumn, 
             $cleanUsername
@@ -164,7 +168,7 @@ class DatabaseModel {
      * Function inspired by code on this page:
      * https://stackoverflow.com/questions/28803342/php-prepared-statements-mysql-check-if-user-exists
      */  
-    private function getFromDatabase(
+    private function getRowFromDatabase(
         string $sqlTable, 
         string $sqlColumn, 
         string $toSearchFor
@@ -173,7 +177,7 @@ class DatabaseModel {
 
         $statement = mysqli_prepare(
             $connection, 
-            $this->getPreparedSqlSelectStatement(
+            $this->getPreparedSqlSelectOneStatement(
                 $sqlTable, $sqlColumn
             )
         );
@@ -197,11 +201,11 @@ class DatabaseModel {
         }
     }
 
-    private function getPreparedSqlSelectStatement(
+    private function getPreparedSqlSelectOneStatement(
         $sqlTable, $sqlColumn
     ) : string {
         return 
-            "SELECT * FROM $sqlTable WHERE $sqlColumn = ?";
+            "SELECT 1 FROM $sqlTable WHERE $sqlColumn = ?";
     }
 
     private function getMysqlEscapedString(
