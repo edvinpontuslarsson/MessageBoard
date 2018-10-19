@@ -50,9 +50,7 @@ class MainView {
         );
     }
 
-    public function renderAuthenticatedView(
-        bool $justLoggedIn = false
-    ) {
+    public function renderAuthenticatedView(bool $justLoggedIn = false) {
         if ($justLoggedIn) {
             $this->authenticatedView->setViewMessage("Welcome");
         }
@@ -60,6 +58,20 @@ class MainView {
         $this->layoutView->render(
             true, $this->authenticatedView, $this->dtv, 
             $this->blogView->getShowBlogPostsDisplay()
+        );
+    }
+
+    public function renderEditBlogPostView(int $blogPostID) {
+        $this->layoutView->render(
+            true, $this->authenticatedView, $this->dtv,
+            $this->blogView->getEditBlogForm($blogPostID)
+        );
+    }
+
+    public function renderDeleteBlogPostView(int $blogPostID) {
+        $this->layoutView->render(
+            true, $this->authenticatedView, $this->dtv,
+            $this->blogView->getDeleteBlogForm($blogPostID)
         );
     }
 
@@ -136,6 +148,7 @@ class MainView {
         $this->renderAuthenticatedView();
     }
  
+    // perhaps send $exception on to RegisterView and handle there
     public function handleRegistrationFail(Exception $exception) {
         $username = $this->userRequest->getRegisterUsername();
 
@@ -145,13 +158,8 @@ class MainView {
                 "Passwords do not match."
             );
         }
-        elseif ($exception instanceof MissingUsernameException) {
-            $this->registerView->setViewMessage(
-                "Username has too few characters, at least 3 characters. 
-                Password has too few characters, at least 6 characters."
-            );
-        }
-        elseif ($exception instanceof MissingPasswordException) {
+        elseif ($exception instanceof MissingUsernameException || 
+                $exception instanceof MissingPasswordException) {
             $this->registerView->setViewUsername($username);
             $this->registerView->setViewMessage(
                 "Username has too few characters, at least 3 characters. 
@@ -226,14 +234,14 @@ class MainView {
         }
     }
 
-    private function render403Error() {
-        echo "<h1>403</h1><p>Forbidden</p>
-            <a href='?'>Go back to start</a>";
-    }
-
     // should be available for index.php
     public function render500Error() {
         echo "<h1>500</h1><p>Internal Server Error</p>
+            <a href='?'>Go back to start</a>";
+    }
+
+    private function render403Error() {
+        echo "<h1>403</h1><p>Forbidden</p>
             <a href='?'>Go back to start</a>";
     }
 }

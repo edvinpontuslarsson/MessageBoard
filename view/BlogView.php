@@ -39,7 +39,7 @@ class BlogView {
         $display = "<h2>Message Board</h2>";
 
         if ($this->sessionModel->isLoggedIn()) {
-            $display .= $this->getBlogForm();
+            $display .= $this->getCreateBlogForm();
         }
 
         $display .= $this->getBlogPostsHtmlElements();
@@ -47,7 +47,15 @@ class BlogView {
         return $display;
     }
 
-    private function getBlogForm() : string {
+    public function getEditBlogForm(int $blogPostID) : string {
+        // get blog post from db-model here
+    }
+
+    public function getDeleteBlogForm(int $blogPostID) : string {
+        
+    }
+
+    private function getCreateBlogForm() : string {
         return '
         <form method="post" > 
             <fieldset>
@@ -60,6 +68,8 @@ class BlogView {
         </form>
         ';
     }
+
+
 
     private function getBlogPostsHtmlElements() : string {
         $dbModel = new DatabaseModel();
