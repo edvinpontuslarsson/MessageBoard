@@ -17,7 +17,7 @@ class BlogPostModel {
         string $username, string $blogPost
     ) {
         $this->postedBy = $username;
-        $this->blogPost = $blogPost;
+        $this->blogPost = strip_tags($blogPost);
     }
     
 }

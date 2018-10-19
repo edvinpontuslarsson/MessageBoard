@@ -226,6 +226,7 @@ class MainView {
 
     // should be available for index.php
     public function render500Error() {
-        echo "<h1>500</h1><p>Internal Server Error</p>";
+        echo "<h1>500</h1><p>Internal Server Error</p>
+            <a href='?'>Go back to start</a>";
     }
 }

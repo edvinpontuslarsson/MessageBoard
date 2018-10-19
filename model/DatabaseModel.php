@@ -14,43 +14,6 @@ class DatabaseModel {
         $this->environment = new Environment();
     }
 
-    /**
-     * TODO: perhaps move this to a Helper model
-     */
-    public function doesContainHtmlCharacter(
-        string $string
-    ) : bool {
-        $characters = str_split($string);
-        foreach ($characters as $char) {
-            if ($char === "<") {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * TODO: perhaps move this to a Helper model
-     */
-    public function removeHTMLTags(string $string) : string {
-        $invalidCharacter;
-        $characters = str_split($string);
-        $validString = "";
-        for ($i = 0; $i < count($characters); $i++) {
-            $currentChar = $characters[$i];
-            if ($currentChar === "<") {
-                $invalidCharacter = true;
-            }
-            if (!$invalidCharacter) {
-                $validString .= $currentChar;
-            }
-            if ($currentChar === ">") {
-                $invalidCharacter = false;
-            }
-        }
-        return $validString;
-    }
-
     public function storeUser(UserCredentials $userCredentials) {
         $connection = $this->getOpenConnection();
 

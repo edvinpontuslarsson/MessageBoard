@@ -57,11 +57,13 @@ class UserCredentials {
         elseif (strlen($password) < 6) {
             throw new PasswordTooShortException();
         }
-        elseif ($this->databaseModel->
-            doesContainHtmlCharacter($username)) {
-            $cleanUsername = $this->databaseModel
-                ->removeHTMLTags($username);
-            $this->username = $cleanUsername;
+
+        /**
+         * Checks if username contains html characters,
+         * inspired by: https://stackoverflow.com/questions/5732758/detect-html-tags-in-a-string
+         */
+        elseif ($username !== strip_tags($username)) {
+            $this->username = strip_tags($username);
 
             throw new HtmlCharacterException();
         }
