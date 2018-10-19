@@ -5,7 +5,7 @@ class LayoutView {
     bool $isLoggedIn, 
     $loginView, 
     DateTimeView $dtv, 
-    BlogView $blogView
+    string $blogDisplay = "" // default === empty
   ) {
     echo '
       <!DOCTYPE html>
@@ -29,7 +29,7 @@ class LayoutView {
           </div>
 
           <div class="blog-posts">
-            ' . $blogView->display() . '
+            ' . $blogDisplay . '
           </div>
 
          </body>

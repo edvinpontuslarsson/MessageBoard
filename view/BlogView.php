@@ -35,7 +35,7 @@ class BlogView {
         $this->sessionModel = new SessionModel();
     }
 
-    public function display() : string {
+    public function getShowBlogPostsDisplay() : string {
         $display = "<h2>Message Board</h2>";
 
         if ($this->sessionModel->isLoggedIn()) {

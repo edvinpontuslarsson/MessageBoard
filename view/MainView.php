@@ -34,7 +34,9 @@ class MainView {
     }
 
     public function renderRegisterView() {
-        $this->layoutView->render(false, $this->registerView, $this->dtv, $this->blogView);
+        $this->layoutView->render(
+            false, $this->registerView, $this->dtv
+        );
     }
 
     public function renderNotAuthenticatedView(bool $justLoggedOut = false) {
@@ -42,7 +44,10 @@ class MainView {
             $this->loginView->setViewMessage("Bye bye!");
         }
 
-        $this->layoutView->render(false, $this->loginView, $this->dtv, $this->blogView);
+        $this->layoutView->render(
+            false, $this->loginView, $this->dtv, 
+            $this->blogView->getShowBlogPostsDisplay()
+        );
     }
 
     public function renderAuthenticatedView(
@@ -52,7 +57,10 @@ class MainView {
             $this->authenticatedView->setViewMessage("Welcome");
         }
 
-        $this->layoutView->render(true, $this->authenticatedView, $this->dtv, $this->blogView);
+        $this->layoutView->render(
+            true, $this->authenticatedView, $this->dtv, 
+            $this->blogView->getShowBlogPostsDisplay()
+        );
     }
 
     /**
