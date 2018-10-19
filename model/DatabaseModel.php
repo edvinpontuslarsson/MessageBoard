@@ -89,6 +89,8 @@ class DatabaseModel {
     }
 
     public function storeBlogPost(BlogPostModel $blogPostModel) {
+        echo "gets here?"; // OK, something broken before this
+        
         $sessionModel = new SessionModel();
 
         if ($blogPostModel->getWhoPosted() !==
@@ -233,8 +235,7 @@ class DatabaseModel {
             username,
             blogpost
         )
-        VALUES (?, ?)
-        ";
+        VALUES (?, ?)";
     }
 
     private function getOpenConnection() {
