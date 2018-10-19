@@ -7,12 +7,6 @@ require_once('controller/MainController.php');
 
 $environment = new Environment();
 
-// TODO: remove, just for test now
-require_once('model/DatabaseModel.php');
-$dbModel = new DatabaseModel();
-$blogPosts = $dbModel->getAllBlogPosts();
-var_dump($blogPosts);
-
 if (!$environment->isProduction()) {
     error_reporting(E_ALL);
     ini_set('display_errors', 'On');
