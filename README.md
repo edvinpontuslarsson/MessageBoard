@@ -32,13 +32,18 @@ You also need a file called Environment.php in the root folder with the followin
 
 `class Environment {`<br/>
 `    private $isProduction = <true/false>;`<br/>
-`    private $hostname = "<your host, e.g. localhost>";`<br/>
+`    private $indexUrl = "<index url, e.g. />";`<br/> 
+`    private $hostname = "<your host, e.g. localhost>"`<br/>
 `    private $mysqlUsername = "<your mysql username>";`<br/>
 `    private $mysqlPassword = "<your mysql password>";`<br/>
 `    private $databaseName = "<your database name>";`<br/>
 
 `    public function isProduction() : bool {`<br/>
 `        return $this->isProduction;`<br/>
+`    }`<br/>
+
+`   public function getIndexUrl() : string {`<br/>
+`        return $this->indexUrl;`<br/>
 `    }`<br/>
 
 `    public function getHostName() : string {`<br/>

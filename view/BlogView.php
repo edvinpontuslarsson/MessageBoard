@@ -27,6 +27,10 @@ class BlogView {
     public function display() : string {
         $display = "<h2>Message Board</h2>";
 
+        if ($this->sessionModel->isLoggedIn()) {
+            $display .= $this->getBlogForm();
+        }
+
         // TODO: have this foreach loop in a function called getBlogPosts
         
         foreach ($this->blogPosts as $blogPost) {
@@ -51,10 +55,6 @@ class BlogView {
             }
 
             $display .= "</p>";
-        }
-        
-        if ($this->sessionModel->isLoggedIn()) {
-            $display .= $this->getBlogForm();
         }
 
         return $display;

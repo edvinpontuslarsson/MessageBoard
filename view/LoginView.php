@@ -1,5 +1,6 @@
 <?php
 
+require_once('Environment.php');
 require_once('view/RegisterView.php');
 
 class LoginView {
@@ -53,8 +54,10 @@ class LoginView {
 	}
 
 	private function generateLoginFormHTML() {
+			$enviornment = new Environment();
+
 			return '
-			<form method="post" action="http://localhost/a2/"> 
+			<form method="post" action="'. $enviornment->getIndexUrl() .'"> 
 				<fieldset>
 					<legend>Login - enter Username and password</legend>
 					<p id="' . $this->messageId . '">' . $this->message . '</p>
