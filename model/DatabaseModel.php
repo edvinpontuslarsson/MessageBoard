@@ -33,7 +33,6 @@ class DatabaseModel {
         );
 
         $fourStrings = "ssss";
-
         $statement->bind_param(
             $fourStrings, 
             $userName, 
@@ -67,7 +66,6 @@ class DatabaseModel {
         );
 
         $twoStrings = "ss";
-
         $statement->bind_param(
             $twoStrings,
             $userName,
@@ -126,6 +124,10 @@ class DatabaseModel {
         return $blogPostModel;
     }
 
+    /**
+     * Function inspired by answer here:
+     * https://stackoverflow.com/questions/18316501/php-update-prepared-statement
+     */
     public function editBlogPost(int $blogID, string $newBlogText) {
         $blogPost = $this->getOneBlogPost($blogID);
         if (!$this->sessionModel->isUsernameInSession($blogPost->getWhoPosted())) {
@@ -134,11 +136,16 @@ class DatabaseModel {
 
         $cleanBlogPost = $this->getMysqlEscapedString($newBlogText);
 
-        $sqlQuery = 
-            "UPDATE Blogs SET blogpost='$cleanBlogPost' WHERE id = $blogID";
+        $preparedBlogEditStatement = 
+            "UPDATE Blogs SET blogpost = ? WHERE id = ?";
         
         $connection = $this->getOpenConnection();
-        mysqli_query($connection, $sqlQuery);
+        $statement = $connection->prepare($preparedBlogEditStatement);        
+        
+        $int = "si";
+        $statement->bind_param($int, $cleanBlogPost, $blogID);
+        
+        $statement->execute();
         $connection->close();
     }
 
