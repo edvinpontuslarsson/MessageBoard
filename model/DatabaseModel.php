@@ -128,7 +128,6 @@ class DatabaseModel {
 
     public function editBlogPost(int $blogID, string $newBlogText) {
         $blogPost = $this->getOneBlogPost($blogID);
-
         if (!$this->sessionModel->isUsernameInSession($blogPost->getWhoPosted())) {
             throw new ForbiddenException();
         }
@@ -143,12 +142,15 @@ class DatabaseModel {
 
     public function deleteBlogPost(int $blogID) {
         $blogPost = $this->getOneBlogPost($blogID);
-
         if (!$this->sessionModel->isUsernameInSession($blogPost->getWhoPosted())) {
             throw new ForbiddenException();
         }
 
+        $sqlQuery = "DELETE FROM Blogs WHERE id = $blogID";
+
         $connection = $this->getOpenConnection();
+        mysqli_query($connection, $sqlQuery);
+        $connection->close();
     }
 
     private function getInstantiateBlogPostModel(array $row) {
