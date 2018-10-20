@@ -132,8 +132,10 @@ class DatabaseModel {
             throw new ForbiddenException();
         }
 
+        $cleanBlogPost = $this->getMysqlEscapedString($newBlogText);
+
         $sqlQuery = 
-            "UPDATE Blogs SET blogpost='$newBlogText' WHERE id = $blogID";
+            "UPDATE Blogs SET blogpost='$cleanBlogPost' WHERE id = $blogID";
         
         $connection = $this->getOpenConnection();
         mysqli_query($connection, $sqlQuery);
