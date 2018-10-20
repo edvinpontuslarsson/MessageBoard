@@ -8,8 +8,10 @@ require_once('model/BlogPostModel.php');
 class BlogDAO {
     private $dbHelper;
     private $sessionModel;
-
-    // TODO: fix string dependencies
+    private $blogsTable = "Blogs";
+    private $idColumn = "id";
+    private $usernameColumn = "username";
+    private $blogPostColumn = "blogpost";
     
     public function __construct() {
         $this->sessionModel = new SessionModel();
@@ -53,7 +55,10 @@ class BlogDAO {
      */
     public function getAllBlogPosts() : array {
         $rows = $this->getTableRowsFromDB(
-            "SELECT id,username,blogpost FROM Blogs ORDER BY id"
+            'SELECT '. $this->idColumn .',
+            '. $this->usernameColumn .',
+            '. $this->blogPostColumn .'
+            FROM '. $this->blogsTable .' ORDER BY '. $this->idColumn .''
         );
 
         $blogPosts = [];
@@ -74,7 +79,8 @@ class BlogDAO {
         $connection = $this->dbHelper->getOpenConnection();
 
         $sqlQuery = 
-            "SELECT * FROM Blogs WHERE id = $blogID";
+            'SELECT * FROM '. $this->blogsTable .' 
+            WHERE '. $this->idColumn .' = '. $blogID .'';
         $result = mysqli_query($connection, $sqlQuery);      
         $row = mysqli_fetch_array($result);
         $connection->close();
@@ -98,7 +104,8 @@ class BlogDAO {
         $cleanBlogPost = $this->dbHelper->getMysqlEscapedString($newBlogText);
 
         $preparedBlogEditStatement = 
-            "UPDATE Blogs SET blogpost = ? WHERE id = ?";
+            'UPDATE '. $this->blogsTable .' SET '. $this->blogPostColumn .' = ?
+             WHERE '. $this->idColumn .' = ?';
         
         $connection = $this->dbHelper->getOpenConnection();
         $statement = $connection->prepare($preparedBlogEditStatement);        
@@ -116,7 +123,8 @@ class BlogDAO {
             throw new ForbiddenException();
         }
 
-        $sqlQuery = "DELETE FROM Blogs WHERE id = $blogID";
+        $sqlQuery = 
+            'DELETE FROM '. $this->blogsTable .' WHERE '. $this->idColumn .' = '. $blogID .'';
 
         $connection = $this->dbHelper->getOpenConnection();
         mysqli_query($connection, $sqlQuery);
@@ -124,12 +132,12 @@ class BlogDAO {
     }
 
     private function getInstantiateBlogPostModel(array $row) {
-        $postedBy = $row["username"];
-        $blogPost = $row["blogpost"];
+        $postedBy = $row[$this->usernameColumn];
+        $blogPost = $row[$this->blogPostColumn];
 
         $blogPostModel = 
             new BlogPostModel($postedBy, $blogPost);
-        $blogPostModel->setID($row["id"]);
+        $blogPostModel->setID($row[$this->idColumn]);
 
         return $blogPostModel;
     }
@@ -150,10 +158,12 @@ class BlogDAO {
     }
 
     private function getBlogInsertionStatement() : string {
-        return "INSERT INTO Blogs (
-            username,
-            blogpost
-        )
-        VALUES (?, ?)";
+        return '
+            INSERT INTO '. $this->blogsTable .' (
+                '. $this->usernameColumn .',
+                '. $this->blogPostColumn .'
+            )
+            VALUES (?, ?)
+        ';
     }
 }
