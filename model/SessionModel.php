@@ -32,9 +32,9 @@ class SessionModel {
     }
 
     public function setSession(UserCredentials $userCredentials) {
-        $databaseModel = new DatabaseModel();
+        $userDao = new UserDAO();
 
-        if (!$databaseModel->isPasswordCorrect(
+        if (!$userDao->isPasswordCorrect(
             $userCredentials
         )) {
             throw new WrongUsernameOrPasswordException();
