@@ -99,11 +99,12 @@ class UserRequest {
 
         if ($this->isPostToEditBlogPost()) {
             return
-                $_POST[$this->blogView->getEditBlogQuery()];
+                $_POST[$this->blogView->getEditBlogIDField()];
         }
 
         if ($this->isPostToDeleteBlogPost()) {
-                $_POST[$this->blogView->getDeleteBlogQuery()];
+            return
+                $_POST[$this->blogView->getDeleteBlogIDField()];
         }
     }
 

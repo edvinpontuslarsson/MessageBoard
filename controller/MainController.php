@@ -69,11 +69,11 @@ class MainController {
         }
 
         if ($this->userRequest->isPostToEditBlogPost()) {
-
+            $this->blogController->handleEditBlogPost();
         }
 
         if ($this->userRequest->isPostToDeleteBlogPost()) {
-            
+            $this->blogController->handleDeleteBlogPost();
         }
     }
 }

@@ -102,8 +102,8 @@ class BlogView {
 
                 <a href="'. $this->environment->getIndexUrl() .'">No, take me back home</a>
                 
-                <input type="hidden" id="'. $this->getEditBlogIDField() .'" 
-                    name="'. $this->getEditBlogIDField() .'" 
+                <input type="hidden" id="'. $this->getDeleteBlogIDField() .'" 
+                    name="'. $this->getDeleteBlogIDField() .'" 
                     value="'. $blogPost->getID() .'"/>
 
                 <p>
@@ -112,7 +112,8 @@ class BlogView {
                     value="Yes delete it" />
                 </p>
             </fieldset>
-        </form>';
+        </form>
+        ';
     }
 
     private function getCreateBlogForm() : string {
