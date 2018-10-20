@@ -29,7 +29,16 @@ class BlogController {
         }
     }
 
-    // handleEditBlog()
+    public function handleEditBlog() {
+        $blogID = $this->userRequest->getBlogID();
+        $blogPost = 
+            $this->databaseModel->getOneBlogPost(
+                $blogID
+            );
+        var_dump($blogPost);
+    }
 
-    // handleDeleteBlog()
+    public function handleDeleteBlog() {
+        $blogID = $this->userRequest->getBlogID();
+    }
 }

@@ -60,6 +60,30 @@ class UserRequest {
             $_POST[$this->blogView->getBlogPostBtn()]);
     }
 
+    public function wantsToEditBlogPost() : bool {
+        return isset(
+            $_GET[$this->blogView->getEditBlogQuery()]
+        );
+    }
+
+    public function wantsToDeleteBlogPost() : bool {
+        return isset(
+            $_GET[$this->blogView->getDeleteBlogQuery()]
+        );
+    }
+
+    public function getBlogID() : int {
+        if ($this->wantsToEditBlogPost()) {
+            return
+                $_GET[$this->blogView->getEditBlogQuery()];
+        }
+
+        if ($this->wantsToDeleteBlogPost()) {
+            return
+                $_GET[$this->blogView->getDeleteBlogQuery()];
+        } 
+    }
+
     public function getRegisterUsername() : string {
         $username = "";
         if (isset(

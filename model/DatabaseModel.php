@@ -87,6 +87,11 @@ class DatabaseModel {
     }
 
     // TODO: fix string dependencies
+
+    /**
+     * Returns array with instantiated 
+     * BlogPostModel classes
+     */
     public function getAllBlogPosts() : array {
         $rows = $this->getTableRowsFromDB(
             "SELECT id,username,blogpost FROM Blogs ORDER BY id"
@@ -106,6 +111,22 @@ class DatabaseModel {
         }
 
         return $blogPosts;
+    }
+
+    /**
+     * Returns instantiated BlogPostModel class
+     */
+    public function getOneBlogPost(int $blogID) {
+        $connection = $this->getOpenConnection();
+
+        $sqlQuery = 
+            "SELECT * FROM Blogs WHERE id = $blogID";
+        $result = mysqli_query($connection, $sqlQuery);      
+        $row = mysqli_fetch_array($result);
+
+        $connection->close();
+
+        return $row;
     }
 
     public function isPasswordCorrect(

@@ -59,5 +59,13 @@ class MainController {
         if ($this->userRequest->blogPost($isLoggedIn)) {
             $this->blogController->handleBlogPost($isLoggedIn);
         }
+
+        if ($this->userRequest->wantsToEditBlogPost()) {
+            $this->blogController->handleEditBlog();
+        }
+
+        if ($this->userRequest->wantsToDeleteBlogPost()) {
+            $this->blogController->handleDeleteBlog();
+        }
     }
 }

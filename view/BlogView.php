@@ -11,10 +11,6 @@ class BlogView {
     private $editBlogQuery = "edit_blog";
     private $deleteBlogQuery = "delete_blog";
 
-    // Note to self:
-    // $_GET["edit_blog"] // preferably w.o. string depencencies
-    // $_GET["delete_blog"] // preferably w.o. string depencencies
-
     public function getBlogInputField() : string {
         return $this->blogInputField;
     }
@@ -47,11 +43,11 @@ class BlogView {
         return $display;
     }
 
-    public function getEditBlogForm(int $blogPostID) : string {
-        // get blog post from db-model here
+    public function getEditBlogForm(BlogPostModel $blogPost) : string {
+        
     }
 
-    public function getDeleteBlogForm(int $blogPostID) : string {
+    public function getDeleteBlogForm(BlogPostModel $blogPost) : string {
         
     }
 
@@ -68,8 +64,6 @@ class BlogView {
         </form>
         ';
     }
-
-
 
     private function getBlogPostsHtmlElements() : string {
         $dbModel = new DatabaseModel();
