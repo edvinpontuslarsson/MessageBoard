@@ -65,6 +65,12 @@ class MainView {
     }
 
     public function renderEditBlogPostView(BlogPostModel $blogPost) {
+        $sessionModel = new SessionModel();
+
+        if (!$sessionModel->isUsernameInSession($blogPost->getWhoPosted())) {
+            throw new ForbiddenException();
+        }
+        
         $this->layoutView->render(
             true, $this->authenticatedView, $this->dtv,
             $this->blogView->getEditBlogForm($blogPost)
@@ -72,6 +78,12 @@ class MainView {
     }
 
     public function renderDeleteBlogPostView(BlogPostModel $blogPost) {
+        $sessionModel = new SessionModel();
+
+        if (!$sessionModel->isUsernameInSession($blogPost->getWhoPosted())) {
+            throw new ForbiddenException();
+        }
+
         $this->layoutView->render(
             true, $this->authenticatedView, $this->dtv,
             $this->blogView->getDeleteBlogForm($blogPost)
@@ -151,7 +163,6 @@ class MainView {
         $this->renderAuthenticatedView();
     }
  
-    // perhaps send $exception on to RegisterView and handle there
     public function handleRegistrationFail(Exception $exception) {
         $username = $this->userRequest->getRegisterUsername();
 

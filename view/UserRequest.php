@@ -108,6 +108,10 @@ class UserRequest {
         }
     }
 
+    public function getNewBlogText() : string {
+        return $_POST[$this->blogView->getBlogInputField()];
+    }
+
     public function getRegisterUsername() : string {
         $username = "";
         if (isset(

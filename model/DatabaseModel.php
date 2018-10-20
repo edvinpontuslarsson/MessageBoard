@@ -55,10 +55,8 @@ class DatabaseModel {
     }
 
     public function storeBlogPost(BlogPostModel $blogPostModel) {
-        $sessionModel = new SessionModel();
-
         if ($blogPostModel->getWhoPosted() !==
-            $sessionModel->getSessionUsername()) {
+            $this->sessionModel->getSessionUsername()) {
                 throw new ForbiddenException();
             } 
         
@@ -111,9 +109,7 @@ class DatabaseModel {
     }
 
     /**
-     * Returns one instantiated BlogPostModel class,
-     * throws ForbiddenException if the username in session 
-     * is not the same as the blog post creator
+     * Returns one instantiated BlogPostModel class
      */
     public function getOneBlogPost(int $blogID) {
         $connection = $this->getOpenConnection();
@@ -127,20 +123,32 @@ class DatabaseModel {
         $blogPostModel =
             $this->getInstantiateBlogPostModel($row);
 
-        if ($blogPostModel->getWhoPosted() !==
-            $this->sessionModel->getSessionUsername()) {
-                throw new ForbiddenException();
-            }
-
         return $blogPostModel;
     }
 
-    public function editBlogPost(int $blogID) {
+    public function editBlogPost(int $blogID, string $newBlogText) {
+        $blogPost = $this->getOneBlogPost($blogID);
 
+        if (!$this->sessionModel->isUsernameInSession($blogPost->getWhoPosted())) {
+            throw new ForbiddenException();
+        }
+
+        $sqlQuery = 
+            "UPDATE Blogs SET blogpost='$newBlogText' WHERE id = $blogID";
+        
+        $connection = $this->getOpenConnection();
+        mysqli_query($connection, $sqlQuery);
+        $connection->close();
     }
 
     public function deleteBlogPost(int $blogID) {
+        $blogPost = $this->getOneBlogPost($blogID);
 
+        if (!$this->sessionModel->isUsernameInSession($blogPost->getWhoPosted())) {
+            throw new ForbiddenException();
+        }
+
+        $connection = $this->getOpenConnection();
     }
 
     private function getInstantiateBlogPostModel(array $row) {

@@ -58,7 +58,8 @@ class BlogController {
     public function handleEditBlogPost() {
         try {
             $blogID = $this->userRequest->getBlogID();
-            $this->databaseModel->editBlogPost($blogID);
+            $newBlogText = $this->userRequest->getNewBlogText();
+            $this->databaseModel->editBlogPost($blogID, $newBlogText);
             $this->mainView->handleSuccessfullEditBlog();
         }
 
