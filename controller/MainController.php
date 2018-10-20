@@ -60,12 +60,12 @@ class MainController {
             $this->blogController->handleBlogPost($isLoggedIn);
         }
 
-        if ($this->userRequest->wantsToEditBlogPost()) {
-            $this->blogController->handleEditBlog();
+        if ($this->userRequest->wantsToPrepareEditBlogPost()) {
+            $this->blogController->prepareEditBlog();
         }
 
-        if ($this->userRequest->wantsToDeleteBlogPost()) {
-            $this->blogController->handleDeleteBlog();
+        if ($this->userRequest->wantsToPrepareDeleteBlogPost()) {
+            $this->blogController->prepareDeleteBlog();
         }
     }
 }

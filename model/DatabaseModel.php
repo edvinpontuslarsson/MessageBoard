@@ -100,13 +100,8 @@ class DatabaseModel {
         $blogPosts = [];
 
         foreach ($rows as $row) {
-            $postedBy = $row["username"];
-            $blogPost = $row["blogpost"];
-
-            $blogPostModel = 
-                new BlogPostModel($postedBy, $blogPost);
-            $blogPostModel->setID($row["id"]);
-
+            $blogPostModel =
+                $this->getInstantiateBlogPostModel($row);
             array_push($blogPosts, $blogPostModel);
         }
 
@@ -114,7 +109,9 @@ class DatabaseModel {
     }
 
     /**
-     * Returns instantiated BlogPostModel class
+     * Returns one instantiated BlogPostModel class,
+     * throws ForbiddenException if the username in session 
+     * is not the same as the blog post creator
      */
     public function getOneBlogPost(int $blogID) {
         $connection = $this->getOpenConnection();
@@ -123,10 +120,30 @@ class DatabaseModel {
             "SELECT * FROM Blogs WHERE id = $blogID";
         $result = mysqli_query($connection, $sqlQuery);      
         $row = mysqli_fetch_array($result);
-
         $connection->close();
 
-        return $row;
+        $blogPostModel =
+            $this->getInstantiateBlogPostModel($row);
+
+        $sessionModel = new SessionModel();
+
+        if ($blogPostModel->getWhoPosted() !==
+            $sessionModel->getSessionUsername()) {
+                throw new ForbiddenException();
+            }
+
+        return $blogPostModel;
+    }
+
+    private function getInstantiateBlogPostModel(array $row) {
+        $postedBy = $row["username"];
+            $blogPost = $row["blogpost"];
+
+        $blogPostModel = 
+            new BlogPostModel($postedBy, $blogPost);
+        $blogPostModel->setID($row["id"]);
+
+        return $blogPostModel;
     }
 
     public function isPasswordCorrect(

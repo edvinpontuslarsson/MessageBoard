@@ -55,23 +55,26 @@ class MainView {
             $this->authenticatedView->setViewMessage("Welcome");
         }
 
+        if (!$this->userRequest->wantsToPrepareEditBlogPost() ||
+            !$this->userRequest->wantsToPrepareDeleteBlogPost()) {
+                $this->layoutView->render(
+                    true, $this->authenticatedView, $this->dtv, 
+                    $this->blogView->getShowBlogPostsDisplay()
+                );
+            }
+    }
+
+    public function renderEditBlogPostView(BlogPostModel $blogPost) {
         $this->layoutView->render(
-            true, $this->authenticatedView, $this->dtv, 
-            $this->blogView->getShowBlogPostsDisplay()
+            true, $this->authenticatedView, $this->dtv,
+            $this->blogView->getEditBlogForm($blogPost)
         );
     }
 
-    public function renderEditBlogPostView(int $blogPostID) {
+    public function renderDeleteBlogPostView(BlogPostModel $blogPost) {
         $this->layoutView->render(
             true, $this->authenticatedView, $this->dtv,
-            $this->blogView->getEditBlogForm($blogPostID)
-        );
-    }
-
-    public function renderDeleteBlogPostView(int $blogPostID) {
-        $this->layoutView->render(
-            true, $this->authenticatedView, $this->dtv,
-            $this->blogView->getDeleteBlogForm($blogPostID)
+            $this->blogView->getDeleteBlogForm($blogPost)
         );
     }
 

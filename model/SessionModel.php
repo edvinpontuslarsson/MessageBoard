@@ -25,7 +25,14 @@ class SessionModel {
             $_SESSION[$this->usernameKey] === $username;
     }
 
+    /**
+     * Throws ForbiddenException if there is no session
+     */
     public function getSessionUsername() : string {
+        if (!$this->isLoggedIn()) {
+            throw new ForbiddenException();
+        }
+
         return $_SESSION[$this->usernameKey];
     }
 

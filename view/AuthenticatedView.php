@@ -1,5 +1,7 @@
 <?php
 
+require_once('Environment.php');
+
 class AuthenticatedView {
     private $logout = 'LoginView::Logout';
     private $messageId = 'LoginView::Message';
@@ -22,8 +24,10 @@ class AuthenticatedView {
     }
     
 	private function generateLogoutButtonHTML() {
-		return '
-			<form  method="post" >
+        $enviornment = new Environment();
+        
+        return '
+			<form  method="post" action="'. $enviornment->getIndexUrl() .'">
 				<p id="' . $this->messageId . '">'. $this->message .'</p>
 				<input type="submit" name="' . $this->logout . '" value="logout"/>
 			</form>

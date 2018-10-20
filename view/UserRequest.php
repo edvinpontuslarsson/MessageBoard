@@ -60,25 +60,25 @@ class UserRequest {
             $_POST[$this->blogView->getBlogPostBtn()]);
     }
 
-    public function wantsToEditBlogPost() : bool {
+    public function wantsToPrepareEditBlogPost() : bool {
         return isset(
             $_GET[$this->blogView->getEditBlogQuery()]
         );
     }
 
-    public function wantsToDeleteBlogPost() : bool {
+    public function wantsToPrepareDeleteBlogPost() : bool {
         return isset(
             $_GET[$this->blogView->getDeleteBlogQuery()]
         );
     }
 
     public function getBlogID() : int {
-        if ($this->wantsToEditBlogPost()) {
+        if ($this->wantsToPrepareEditBlogPost()) {
             return
                 $_GET[$this->blogView->getEditBlogQuery()];
         }
 
-        if ($this->wantsToDeleteBlogPost()) {
+        if ($this->wantsToPrepareDeleteBlogPost()) {
             return
                 $_GET[$this->blogView->getDeleteBlogQuery()];
         } 

@@ -29,16 +29,29 @@ class BlogController {
         }
     }
 
-    public function handleEditBlog() {
-        $blogID = $this->userRequest->getBlogID();
-        $blogPost = 
-            $this->databaseModel->getOneBlogPost(
-                $blogID
-            );
-        var_dump($blogPost);
+    public function prepareEditBlog() {
+        try {
+            $blogID = $this->userRequest->getBlogID();
+            $blogPost = 
+                $this->databaseModel->getOneBlogPost($blogID);
+            $this->mainView->renderEditBlogPostView($blogPost);
+        }
+
+        catch (Exception $e) {
+            $this->mainView->handleBlogFail($e);
+        }
     }
 
-    public function handleDeleteBlog() {
-        $blogID = $this->userRequest->getBlogID();
+    public function prepareDeleteBlog() {
+        try {
+            $blogID = $this->userRequest->getBlogID();
+            $blogPost = 
+                $this->databaseModel->getOneBlogPost($blogID);
+            $this->mainView->renderDeleteBlogPostView($blogPost);
+        }
+
+        catch (Exception $e) {
+            $this->mainView->handleBlogFail($e);
+        }
     }
 }

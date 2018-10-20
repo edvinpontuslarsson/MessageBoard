@@ -1,13 +1,17 @@
 <?php
 
+require_once('Environment.php');
 require_once('model/BlogPostModel.php');
 require_once('model/SessionModel.php');
 require_once('model/DatabaseModel.php');
 
 class BlogView {
+    private $environment;
     private $sessionModel;
     private $blogInputField = "blog-input";
     private $blogPostBtn = "blog-post";
+    private $blogEditButton = "blog-edit-post";
+    private $blogDeleteButton = "blog-delete-post";
     private $editBlogQuery = "edit_blog";
     private $deleteBlogQuery = "delete_blog";
 
@@ -27,7 +31,16 @@ class BlogView {
         return $this->deleteBlogQuery;
     }
 
+    public function getEditBlogButton() : string {
+        return $this->blogEditButton;
+    }
+
+    public function getDeleteBlogButton() : string {
+        return $this->blogDeleteButton;
+    }
+
     public function __construct() {
+        $this->environment = new Environment();
         $this->sessionModel = new SessionModel();
     }
 
@@ -44,21 +57,53 @@ class BlogView {
     }
 
     public function getEditBlogForm(BlogPostModel $blogPost) : string {
-        
+        return '
+        <form method="post" action="'. $this->environment->getIndexUrl() .'"> 
+            <fieldset>
+                <legend>Edit message: </legend>
+                <input type="text" id="'. $this->getBlogInputField() .'" 
+                    name="'. $this->getBlogInputField() .'" 
+                    value="'. $blogPost->getBlogPost() .'"/>
+                <p>
+                <input type="submit" 
+                    name="'. $this->getEditBlogButton() .'" 
+                    value="Update" />
+                </p>
+                <a href="'. $this->environment->getIndexUrl() .'">Go back to start</a>
+            </fieldset>
+        </form>
+        ';
     }
 
     public function getDeleteBlogForm(BlogPostModel $blogPost) : string {
-        
+        return '
+        <form method="post" action="'. $this->environment->getIndexUrl() .'"> 
+            <fieldset>
+                <legend>Are you really sure you want to delete this message? </legend>
+                <p>
+                    '. $blogPost->getBlogPost() .'
+                </p>
+                <a href="'. $this->environment->getIndexUrl() .'">No, take me back home</a>
+                <p>
+                <input type="submit" 
+                    name="'. $this->getEditBlogButton() .'" 
+                    value="Yes delete it" />
+                </p>
+            </fieldset>
+        </form>';
     }
 
     private function getCreateBlogForm() : string {
         return '
-        <form method="post" > 
+        <form method="post" action="'. $this->environment->getIndexUrl() .'"> 
             <fieldset>
                 <legend>Write a message: </legend>
-                <input type="text" id="'. $this->blogInputField .'" name="'. $this->blogInputField .'"/>
+                <input type="text" id="'. $this->getBlogInputField() .'" 
+                    name="'. $this->getBlogInputField() .'"/>
                 <p>
-                <input type="submit" name="'. $this->blogPostBtn .'" value="Submit" />
+                <input type="submit" 
+                    name="'. $this->getBlogPostBtn() .'" 
+                    value="Submit" />
                 </p>
             </fieldset>
         </form>
