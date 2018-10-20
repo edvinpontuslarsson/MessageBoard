@@ -55,7 +55,7 @@ class MainView {
             $this->authenticatedView->setViewMessage("Welcome");
         }
 
-        if (!$this->userRequest->wantsToPrepareEditBlogPost() ||
+        if (!$this->userRequest->wantsToPrepareEditBlogPost() &&
             !$this->userRequest->wantsToPrepareDeleteBlogPost()) {
                 $this->layoutView->render(
                     true, $this->authenticatedView, $this->dtv, 
