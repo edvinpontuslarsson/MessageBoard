@@ -67,5 +67,13 @@ class MainController {
         if ($this->userRequest->wantsToPrepareDeleteBlogPost()) {
             $this->blogController->prepareDeleteBlog();
         }
+
+        if ($this->userRequest->isPostToEditBlogPost()) {
+
+        }
+
+        if ($this->userRequest->isPostToDeleteBlogPost()) {
+            
+        }
     }
 }

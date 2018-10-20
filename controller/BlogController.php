@@ -54,4 +54,24 @@ class BlogController {
             $this->mainView->handleBlogFail($e);
         }
     }
+
+    public function handleEditBlogPost() {
+        try {
+            echo 'ID: '. $this->userRequest->getBlogID() .'';
+        }
+
+        catch (Exception $e) {
+            $this->mainView->handleBlogFail($e);
+        }
+    }
+
+    public function handleDeleteBlogPost() {
+        try {
+            echo 'ID: '. $this->userRequest->getBlogID() .'';
+        }
+
+        catch (Exception $e) {
+            $this->mainView->handleBlogFail($e);
+        }
+    }
 }

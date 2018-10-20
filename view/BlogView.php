@@ -10,10 +10,12 @@ class BlogView {
     private $sessionModel;
     private $blogInputField = "blog-input";
     private $blogPostBtn = "blog-post";
-    private $blogEditButton = "blog-edit-post";
-    private $blogDeleteButton = "blog-delete-post";
     private $editBlogQuery = "edit_blog";
     private $deleteBlogQuery = "delete_blog";
+    private $editBlogID = "edit-blog-ID";
+    private $deleteBlogID = "delete-blog-ID";
+    private $blogEditButton = "blog-edit-post";
+    private $blogDeleteButton = "blog-delete-post";
 
     public function getBlogInputField() : string {
         return $this->blogInputField;
@@ -29,6 +31,14 @@ class BlogView {
 
     public function getDeleteBlogQuery() : string {
         return $this->deleteBlogQuery;
+    }
+
+    public function getEditBlogIDField() : string {
+        return $this->editBlogID;
+    }
+
+    public function getDeleteBlogIDField() : string {
+        return $this->deleteBlogID;
     }
 
     public function getEditBlogButton() : string {
@@ -64,11 +74,17 @@ class BlogView {
                 <input type="text" id="'. $this->getBlogInputField() .'" 
                     name="'. $this->getBlogInputField() .'" 
                     value="'. $blogPost->getBlogPost() .'"/>
+
+                <input type="hidden" id="'. $this->getEditBlogIDField() .'" 
+                    name="'. $this->getEditBlogIDField() .'" 
+                    value="'. $blogPost->getID() .'"/>
+                
                 <p>
                 <input type="submit" 
                     name="'. $this->getEditBlogButton() .'" 
                     value="Update" />
                 </p>
+
                 <a href="'. $this->environment->getIndexUrl() .'">Go back to start</a>
             </fieldset>
         </form>
@@ -83,10 +99,16 @@ class BlogView {
                 <p>
                     '. $blogPost->getBlogPost() .'
                 </p>
+
                 <a href="'. $this->environment->getIndexUrl() .'">No, take me back home</a>
+                
+                <input type="hidden" id="'. $this->getEditBlogIDField() .'" 
+                    name="'. $this->getEditBlogIDField() .'" 
+                    value="'. $blogPost->getID() .'"/>
+
                 <p>
                 <input type="submit" 
-                    name="'. $this->getEditBlogButton() .'" 
+                    name="'. $this->getDeleteBlogButton() .'" 
                     value="Yes delete it" />
                 </p>
             </fieldset>
@@ -100,6 +122,7 @@ class BlogView {
                 <legend>Write a message: </legend>
                 <input type="text" id="'. $this->getBlogInputField() .'" 
                     name="'. $this->getBlogInputField() .'"/>
+                
                 <p>
                 <input type="submit" 
                     name="'. $this->getBlogPostBtn() .'" 

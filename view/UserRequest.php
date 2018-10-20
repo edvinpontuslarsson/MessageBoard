@@ -61,19 +61,29 @@ class UserRequest {
     }
 
     public function wantsToPrepareEditBlogPost() : bool {
-        return isset(
-            $_GET[$this->blogView->getEditBlogQuery()]
-        );
+        return $_SERVER["REQUEST_METHOD"] === "GET" &&
+            isset(
+                $_GET[$this->blogView->getEditBlogQuery()]
+            );
     }
 
     public function wantsToPrepareDeleteBlogPost() : bool {
-        return isset(
-            $_GET[$this->blogView->getDeleteBlogQuery()]
-        );
+        return $_SERVER["REQUEST_METHOD"] === "GET" && 
+            isset(
+                $_GET[$this->blogView->getDeleteBlogQuery()]
+            );
     }
 
     public function isPostToEditBlogPost() : bool {
-        
+        return isset(
+            $_POST[$this->blogView->getEditBlogButton()]
+        );
+    }
+
+    public function isPostToDeleteBlogPost() : bool {
+        return isset(
+            $_POST[$this->blogView->getDeleteBlogButton()]
+        );
     }
 
     public function getBlogID() : int {
@@ -85,7 +95,16 @@ class UserRequest {
         if ($this->wantsToPrepareDeleteBlogPost()) {
             return
                 $_GET[$this->blogView->getDeleteBlogQuery()];
-        } 
+        }
+
+        if ($this->isPostToEditBlogPost()) {
+            return
+                $_POST[$this->blogView->getEditBlogQuery()];
+        }
+
+        if ($this->isPostToDeleteBlogPost()) {
+                $_POST[$this->blogView->getDeleteBlogQuery()];
+        }
     }
 
     public function getRegisterUsername() : string {
