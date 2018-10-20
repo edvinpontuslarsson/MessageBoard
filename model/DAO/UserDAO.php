@@ -7,6 +7,8 @@ class UserDAO {
     private $usersTable = "Users";
     private $usernameColumn = "username";
     private $passwordColumn = "password";
+    private $tempPassColumn = "temporarypassword";
+    private $permSecretColumn = "permanentsecret";
 
     public function __construct() {
         $this->dbHelper = new DatabaseHelper();
@@ -131,11 +133,11 @@ class UserDAO {
     }
 
     private function getUserInsertionStatement() : string {
-        return "INSERT INTO Users (
-            username, 
-            password, 
-            temporarypassword, 
-            permanentsecret
+        return "INSERT INTO $this->usersTable (
+            $this->$usernameColumn, 
+            $this->passwordColumn, 
+            $this->tempPassColumn, 
+            $this->permSecretColumn
         ) 
         VALUES (?, ?, ?, ?)";
     }
