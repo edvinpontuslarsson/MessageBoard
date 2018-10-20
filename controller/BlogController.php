@@ -1,17 +1,17 @@
 <?php
 
+require_once('model/DAO/BlogDAO.php');
 require_once('model/CustomException.php');
-require_once('model/DatabaseModel.php');
 
 class BlogController {
-    private $databaseModel;
+    private $blogDAO;
     private $userRequest;
     private $mainView;
 
     public function __construct(
         UserRequest $userRequest, MainView $mainView
     ) {
-        $this->databaseModel = new DatabaseModel();
+        $this->blogDAO = new BlogDAO();
         $this->userRequest = $userRequest;
         $this->mainView = $mainView;
     }
@@ -20,7 +20,7 @@ class BlogController {
         try {
             $blogPostModel = 
                 $this->mainView->getBlogPostModel($isLoggedIn);
-            $this->databaseModel->storeBlogPost($blogPostModel);
+            $this->blogDAO->storeBlogPost($blogPostModel);
             $this->mainView->handleSuccessfullBlogPost();
         }
 
@@ -33,7 +33,7 @@ class BlogController {
         try {
             $blogID = $this->userRequest->getBlogID();
             $blogPost = 
-                $this->databaseModel->getOneBlogPost($blogID);
+                $this->blogDAO->getOneBlogPost($blogID);
             $this->mainView->renderEditBlogPostView($blogPost);
         }
 
@@ -46,7 +46,7 @@ class BlogController {
         try {
             $blogID = $this->userRequest->getBlogID();
             $blogPost = 
-                $this->databaseModel->getOneBlogPost($blogID);
+                $this->blogDAO->getOneBlogPost($blogID);
             $this->mainView->renderDeleteBlogPostView($blogPost);
         }
 
@@ -59,7 +59,7 @@ class BlogController {
         try {
             $blogID = $this->userRequest->getBlogID();
             $newBlogText = $this->userRequest->getNewBlogText();
-            $this->databaseModel->editBlogPost($blogID, $newBlogText);
+            $this->blogDAO->editBlogPost($blogID, $newBlogText);
             $this->mainView->handleSuccessfullEditBlog();
         }
 
@@ -71,7 +71,7 @@ class BlogController {
     public function handleDeleteBlogPost() {
         try {
             $blogID = $this->userRequest->getBlogID();
-            $this->databaseModel->deleteBlogPost($blogID);
+            $this->blogDAO->deleteBlogPost($blogID);
             $this->mainView->handleSuccessfullDeleteBlog();
         }
 

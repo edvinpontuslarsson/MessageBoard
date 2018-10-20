@@ -13,7 +13,6 @@ require_once('view/BlogView.php');
 
 class MainView {
     
-    private $databaseModel;
     private $registerView;
     private $loginView;
     private $authenticatedView;
@@ -23,7 +22,6 @@ class MainView {
     private $userRequest;
 
     public function __construct() {
-        $this->databaseModel = new DatabaseModel();
         $this->registerView = new RegisterView();
         $this->loginView = new LoginView();
         $this->authenticatedView = new AuthenticatedView();

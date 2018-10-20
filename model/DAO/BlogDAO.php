@@ -1,5 +1,159 @@
 <?php
 
-class BlogDao {
+require_once('model/DAO/DatabaseHelper.php');
+require_once('model/CustomException.php');
+require_once('model/SessionModel.php');
+require_once('model/BlogPostModel.php');
+
+class BlogDAO {
+    private $dbHelper;
+    private $sessionModel;
+
+    // TODO: fix string dependencies
     
+    public function __construct() {
+        $this->sessionModel = new SessionModel();
+        $this->dbHelper = new DatabaseHelper();
+    }
+
+    public function storeBlogPost(BlogPostModel $blogPostModel) {
+        if ($blogPostModel->getWhoPosted() !==
+            $this->sessionModel->getSessionUsername()) {
+                throw new ForbiddenException();
+            } 
+        
+        $connection = $this->dbHelper->getOpenConnection();
+
+        $statement = $connection->prepare(
+            $this->getBlogInsertionStatement()
+        );
+
+        $twoStrings = "ss";
+        $statement->bind_param(
+            $twoStrings,
+            $userName,
+            $blogPost
+        );
+        
+        $userName = $this->dbHelper->getMysqlEscapedString(
+            $blogPostModel->getWhoPosted()
+        );
+        $blogPost = $this->dbHelper->getMysqlEscapedString(
+            $blogPostModel->getBlogPost()
+        );
+
+        $statement->execute();
+        $statement->close();
+        $connection->close();
+    }
+
+    /**
+     * Returns array with instantiated 
+     * BlogPostModel classes
+     */
+    public function getAllBlogPosts() : array {
+        $rows = $this->getTableRowsFromDB(
+            "SELECT id,username,blogpost FROM Blogs ORDER BY id"
+        );
+
+        $blogPosts = [];
+
+        foreach ($rows as $row) {
+            $blogPostModel =
+                $this->getInstantiateBlogPostModel($row);
+            array_push($blogPosts, $blogPostModel);
+        }
+
+        return $blogPosts;
+    }
+
+    /**
+     * Returns one instantiated BlogPostModel class
+     */
+    public function getOneBlogPost(int $blogID) {
+        $connection = $this->dbHelper->getOpenConnection();
+
+        $sqlQuery = 
+            "SELECT * FROM Blogs WHERE id = $blogID";
+        $result = mysqli_query($connection, $sqlQuery);      
+        $row = mysqli_fetch_array($result);
+        $connection->close();
+
+        $blogPostModel =
+            $this->getInstantiateBlogPostModel($row);
+
+        return $blogPostModel;
+    }
+
+    /**
+     * Function inspired by answer here:
+     * https://stackoverflow.com/questions/18316501/php-update-prepared-statement
+     */
+    public function editBlogPost(int $blogID, string $newBlogText) {
+        $blogPost = $this->getOneBlogPost($blogID);
+        if (!$this->sessionModel->isUsernameInSession($blogPost->getWhoPosted())) {
+            throw new ForbiddenException();
+        }
+
+        $cleanBlogPost = $this->dbHelper->getMysqlEscapedString($newBlogText);
+
+        $preparedBlogEditStatement = 
+            "UPDATE Blogs SET blogpost = ? WHERE id = ?";
+        
+        $connection = $this->dbHelper->getOpenConnection();
+        $statement = $connection->prepare($preparedBlogEditStatement);        
+        
+        $int = "si";
+        $statement->bind_param($int, $cleanBlogPost, $blogID);
+        
+        $statement->execute();
+        $connection->close();
+    }
+
+    public function deleteBlogPost(int $blogID) {
+        $blogPost = $this->getOneBlogPost($blogID);
+        if (!$this->sessionModel->isUsernameInSession($blogPost->getWhoPosted())) {
+            throw new ForbiddenException();
+        }
+
+        $sqlQuery = "DELETE FROM Blogs WHERE id = $blogID";
+
+        $connection = $this->dbHelper->getOpenConnection();
+        mysqli_query($connection, $sqlQuery);
+        $connection->close();
+    }
+
+    private function getInstantiateBlogPostModel(array $row) {
+        $postedBy = $row["username"];
+        $blogPost = $row["blogpost"];
+
+        $blogPostModel = 
+            new BlogPostModel($postedBy, $blogPost);
+        $blogPostModel->setID($row["id"]);
+
+        return $blogPostModel;
+    }
+
+    // Inspired by: https://www.w3schools.com/php/func_mysqli_fetch_all.asp
+    private function getTableRowsFromDB(string $sqlQuery) {
+        $connection = $this->dbHelper->getOpenConnection();
+
+        $result = mysqli_query($connection, $sqlQuery);
+
+        $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        
+        // to free memory
+        mysqli_free_result($result);
+        $connection->close();
+
+        return $rows;
+    }
+
+    private function getBlogInsertionStatement() : string {
+        return "INSERT INTO Blogs (
+            username,
+            blogpost
+        )
+        VALUES (?, ?)";
+    }
 }

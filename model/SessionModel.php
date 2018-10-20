@@ -1,6 +1,6 @@
 <?php
 
-require_once('model/DatabaseModel.php');
+require_once('model/DAO/UserDAO.php');
 
 class SessionModel {
     private $usernameKey = "username";

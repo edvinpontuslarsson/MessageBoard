@@ -1,18 +1,16 @@
 <?php
 
-require_once('model/DatabaseModel.php');
+require_once('model/DAO/UserDAO.php');
 
 class RegisterController {
     private $userRequest;
     private $mainView;
-    private $databaseModel;
 
     public function __construct(
         UserRequest $userRequest, MainView $mainView
     ) {
         $this->userRequest = $userRequest;
         $this->mainView = $mainView;
-        $this->databaseModel = new DatabaseModel();
     }
 
     public function prepareRegistration() {
@@ -23,7 +21,9 @@ class RegisterController {
         try {
             $userCredentials = 
                 $this->mainView->getUserCredentials();
-            $this->databaseModel->storeUser($userCredentials);
+            
+            $userDAO = new UserDAO();
+            $userDAO->storeUser($userCredentials);
 
             $this->mainView->handleSuccessfulRegistration();
         }

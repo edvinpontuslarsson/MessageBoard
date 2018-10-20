@@ -3,7 +3,7 @@
 require_once('Environment.php');
 require_once('model/BlogPostModel.php');
 require_once('model/SessionModel.php');
-require_once('model/DatabaseModel.php');
+require_once('model/DAO/BlogDAO.php');
 
 class BlogView {
     private $environment;
@@ -135,10 +135,10 @@ class BlogView {
     }
 
     private function getBlogPostsHtmlElements() : string {
-        $dbModel = new DatabaseModel();
+        $blogDAO = new BlogDAO();
 
         // array with BlogPostModel instances
-        $blogPosts = $dbModel->getAllBlogPosts();
+        $blogPosts = $blogDAO->getAllBlogPosts();
         $latestBlogPosts = array_reverse($blogPosts);
 
         $blogPostsHtmlElements = "";
