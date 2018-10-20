@@ -57,7 +57,9 @@ class BlogController {
 
     public function handleEditBlogPost() {
         try {
-            echo 'ID: '. $this->userRequest->getBlogID() .'';
+            $blogID = $this->userRequest->getBlogID();
+            $this->databaseModel->editBlogPost($blogID);
+            $this->mainView->handleSuccessfullEditBlog();
         }
 
         catch (Exception $e) {
@@ -67,7 +69,9 @@ class BlogController {
 
     public function handleDeleteBlogPost() {
         try {
-            echo 'ID: '. $this->userRequest->getBlogID() .'';
+            $blogID = $this->userRequest->getBlogID();
+            $this->databaseModel->deleteBlogPost($blogID);
+            $this->mainView->handleSuccessfullDeleteBlog();
         }
 
         catch (Exception $e) {

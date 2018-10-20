@@ -7,12 +7,14 @@ require_once('model/BlogPostModel.php');
 
 class DatabaseModel {
     private $environment;
+    private $sessionModel;
     private $usersTable = "Users";
     private $usernameColumn = "username";
     private $passwordColumn = "password";
     
     public function __construct() {
         $this->environment = new Environment();
+        $this->sessionModel = new SessionModel();
     }
 
     public function storeUser(UserCredentials $userCredentials) {
@@ -125,19 +127,25 @@ class DatabaseModel {
         $blogPostModel =
             $this->getInstantiateBlogPostModel($row);
 
-        $sessionModel = new SessionModel();
-
         if ($blogPostModel->getWhoPosted() !==
-            $sessionModel->getSessionUsername()) {
+            $this->sessionModel->getSessionUsername()) {
                 throw new ForbiddenException();
             }
 
         return $blogPostModel;
     }
 
+    public function editBlogPost(int $blogID) {
+
+    }
+
+    public function deleteBlogPost(int $blogID) {
+
+    }
+
     private function getInstantiateBlogPostModel(array $row) {
         $postedBy = $row["username"];
-            $blogPost = $row["blogpost"];
+        $blogPost = $row["blogpost"];
 
         $blogPostModel = 
             new BlogPostModel($postedBy, $blogPost);

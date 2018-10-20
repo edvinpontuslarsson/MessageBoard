@@ -3,12 +3,7 @@
 require_once('model/DatabaseModel.php');
 
 class SessionModel {
-    private $databaseModel;
     private $usernameKey = "username";
-
-    public function __construct() {
-        $this->databaseModel = new DatabaseModel();
-    }
 
     public function initializeSessionModel() {
         session_start();
@@ -37,7 +32,9 @@ class SessionModel {
     }
 
     public function setSession(UserCredentials $userCredentials) {
-        if (!$this->databaseModel->isPasswordCorrect(
+        $databaseModel = new DatabaseModel();
+
+        if (!$databaseModel->isPasswordCorrect(
             $userCredentials
         )) {
             throw new WrongUsernameOrPasswordException();
