@@ -72,6 +72,10 @@ class UserRequest {
         );
     }
 
+    public function isPostToEditBlogPost() : bool {
+        
+    }
+
     public function getBlogID() : int {
         if ($this->wantsToPrepareEditBlogPost()) {
             return
