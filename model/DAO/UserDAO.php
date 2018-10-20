@@ -133,12 +133,14 @@ class UserDAO {
     }
 
     private function getUserInsertionStatement() : string {
-        return "INSERT INTO $this->usersTable (
-            $this->$usernameColumn, 
-            $this->passwordColumn, 
-            $this->tempPassColumn, 
-            $this->permSecretColumn
-        ) 
-        VALUES (?, ?, ?, ?)";
+        return '
+            INSERT INTO '. $this->usersTable .' (
+                '. $this->usernameColumn .', 
+                '. $this->passwordColumn .', 
+                '. $this->tempPassColumn .', 
+                '. $this->permSecretColumn .'
+            ) 
+            VALUES (?, ?, ?, ?)
+        ';
     }
 }
