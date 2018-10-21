@@ -136,27 +136,78 @@ blogpost VARCHAR(10000) NOT NULL
 
 You can test the rest of the message board application with for example postman. See the table below for instructions on how you can test the application with postman:
 
-**Scenario**|**Postman Set-Up**|**Expected Result**
-:-----:|:-----:|:-----:
-Register a test user | Send a post request to the register page (e.g. http://youedvin.com/?register) with the following 4 keys and values in the Body form-data (but you can replace the `examples`): _Key1_: RegisterView::UserName _Value1_: `myExampleUsr1` _Key2_: RegisterView::Password _Value2_: `myExamplePass` _Key3_: RegisterView::PasswordRepeat _Value3_: `myExamplePass` _Key4_: DoRegistration _Value4_: Register | Response with the login form with the message "Registered new user" and the username prefilled in the form
-Log in as that test user | Send a post request to the start page (e.g. http://youedvin.com/) with the following 3 keys and values in the Body form-data: _Key1_: LoginView::UserName _Value1_: `myExampleUsr1` _Key2_: LoginView::Password _Value2_: `myExamplePass` _Key3_: LoginView::Login _Value3_: login| You should now be logged in with a session
-Post message as that test user | Make a new request. Copy the value of the php session from the Cookies from the previous post request, in the Headers of new request, put PHPSESSID as key and paste the copied value as value. (For now, but I'm sure there are ways of automating this process). Put the following 2 keys and values in the Body form-data: _Key1_: blog-input _Value1_: `Hello World!` _Key2_: blog-post _Value2_: Submit| You should see the posted message at the top of the messages in the response body
-Edit message |  Make a new request. Put the session key and value of new post request like we did with the previous request. Copy the link to edit the message from the response body html in the previous request (this could be automated with JavaScript but we will do it manually for now). Write the start page url followed by pasting the copied link in the field for the request URL in postman (e.g. `http://youedvin.com/?edit_blog=4`) but replace the 4 with the correct number. Put the following 3 keys and values in the Body form-data: _Key1_: blog-input _Value1_: `Hello Mars!` | ...
+#### Test case 1 - Register a test user
+Send a post request to the register page (e.g. http://youedvin.com/?register) with the following 4 keys and values in the Body form-data (but you can replace the `examples`): 
+_Key1_: RegisterView::UserName _Value1_: `myExampleUsr1` 
+_Key2_: RegisterView::Password _Value2_: `myExamplePass` 
+_Key3_: RegisterView::PasswordRepeat _Value3_: `myExamplePass` 
+_Key4_: DoRegistration _Value4_: Register 
 
-Delete message | ... | ...
+#### Expected Result test case 1
+Response with the login form with the message "Registered new user" and the username prefilled in the form
 
-Post another message and save id values to edit and delete | edit_blog, delete_blog | ...
+#### Test case 2 - Log in as that test user
+Send a post request to the start page (e.g. http://youedvin.com/) with the following 3 keys and values in the Body form-data: 
+_Key1_: LoginView::UserName _Value1_: `myExampleUsr1` 
+_Key2_: LoginView::Password _Value2_: `myExamplePass` 
+_Key3_: LoginView::Login _Value3_: login
 
-Log out | ... | ...
+#### Expected Result test case 2
+You should now be logged in with a session
 
-Register a second test user | tester2, banana | Log in form rendered with username prefilled
+#### Test case 3 - Post message as that test user
+Make a new request. Copy the value of the php session from the Cookies from the previous post request, in the Headers of new request, put PHPSESSID as key and paste the copied value as value. (For now, but I'm sure there are ways of automating this process). Put the following 2 keys and values in the Body form-data: 
+_Key1_: blog-input _Value1_: `Hello World!` 
+_Key2_: blog-post _Value2_: Submit 
 
-Log in as second test user | ... | logged in, session cookie
+#### Expected Result test case 3
+You should see the posted message at the top of the messages in the response body
 
-Get Another user's Edit message page | ... + saved id variable | ...
+#### Test case 4 - Edit message
+Make a new request. Put the session key and value of new post request like we did with the previous request. Copy the link to edit the message from the response body html in the previous request (this could be automated with JavaScript but we will do it manually for now). Write the start page url followed by pasting the copied link in the field for the request URL in postman (e.g. `http://youedvin.com/?edit_blog=4`) but replace the 4 with the correct number. Put the following 3 keys and values in the Body form-data: 
+_Key1_: blog-input _Value1_: `Hello Mars!`
+_Key2_: edit-blog-ID _Value2_: `4` // but probably not 4, the correct number in your case
+_Key3_: blog-edit-post _Value3_: Update
 
-Get Another user's Delete message page | ... + saved id variable | ...
+#### Expected Result test case 4
+The message should now have been edited (see the response Body html)
 
-Post to Another user's Edit message | ... + saved id variable | ...
+#### Test case 5 - Delete message
 
-Post to Another user's Delete message | ... + saved id variable | ...
+Make a new request and do like previously with the session. Write the start page url followed by pasting the copied link in the field for the request URL in postman (e.g. `http://youedvin.com/?delete_blog=4`) but replace the 4 with the correct number. Put the following 2 keys and values in the Body form-data:
+_Key1_: delete-blog-ID _Value1_: `4` // but probably not 4, the correct number in your case
+_Key2_: blog-delete-post _Value2_: Yes delete it
+
+#### Expected Result test case 5
+The message should now have been deleted (see the response Body html)
+
+#### Test case 7 - Post another message
+Repeat test case 3, post message. Save the urls to edit and delete post. 
+
+#### Test case 8 - Log out
+Make a new request and do like previously with the session. Write the start page url in the field for the request URL in postman (e.g. http://youedvin.com/). Post with the following key and value in the Body form-data:
+_Key1_: LoginView::Logout _Value1_: logout
+
+#### Test case 9 - Register a second test user
+Repeat test case 1, register user, but with a different username.
+
+#### Test case 10 - Login with the second test user
+Repeat test case 2, login user, but with the new username.
+
+#### Test case 11 - make a get request to another user's edit message page
+Make a new request and do like previously with the session but with the new session. Make a get request to the saved url for editing the message by the previous user. E.g. `http://youedvin.com/?edit_blog=6` but replace the 6 with the correct number.
+
+#### Expected Result test case 11
+A 403 forbidden response. 
+
+#### Test case 12 - make a get request to another user's delete message page
+Just like with test case 11 but for delete.
+
+#### Test case 13 - try to edit another user's message
+Do like in test case 4, edit message, but with a url for a message by another user.
+
+#### Expected Result test case 13
+A 403 forbidden response. 
+
+#### Test case 14 - try to delete another user's message
+Just like with test case 14 but for delete.

@@ -46,6 +46,5 @@ class SessionModel {
 
     public function destroySession() {
         unset($_SESSION[$this->usernameKey]);
-        // session_destroy();
     }
 }
