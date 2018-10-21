@@ -1,12 +1,24 @@
 # MessageBoard
 
+## Table of contents
+
+* [Description](#description)
+* [Features](#features)
+    * [Implemented](#implemented)
+    * [Not Implemented](#not-implemented)
+    * [Present Bugs](#present-bugs)
+* [Set-Up Instructions](#set-up-instructions)
+    * [Necessary Installations](#necessary-installations)
+    * [Secret Environment.php File Set-Up](#secret-environmentphp-file-set-up)
+    * [MySQL Set-Up](#mysql-set-up)
+* [Testing](#testing)
+    * [Latest test status](#latest-test-status)
+
 ## Description
 
 [Message Board Website](http://youedvin.com/ "Youedvin")
 
 An open source message board single page web application with full CRUD functionality developed with PHP and MySQL. 
-
-[Testing Testing](#testing)
 
 ## Features
 
