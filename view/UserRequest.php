@@ -11,6 +11,9 @@ class UserRequest {
     private $loginView;
     private $authenticatedView;
     private $blogView;
+    private $requestMethodString = "REQUEST_METHOD";
+    private $getRequestString = "GET";
+    private $postRequestString = "POST";
 
     public function __construct() {
         $this->registerView = new RegisterView();
@@ -26,14 +29,16 @@ class UserRequest {
     }
 
     public function userWantsToStart() : bool {
-        return $_SERVER["REQUEST_METHOD"] === "GET" &&
+        return $_SERVER[$this->requestMethodString] === 
+            $this->getRequestString &&
             !isset(
                 $_GET[$this->registerView->getRegisterQuery()]
             );
     }
 
     public function registrationGET() : bool {
-        return $_SERVER["REQUEST_METHOD"] === "GET" &&
+        return $_SERVER[$this->requestMethodString] === 
+            $this->getRequestString &&
             isset(
                 $_GET[$this->registerView->getRegisterQuery()]
             );
@@ -52,7 +57,8 @@ class UserRequest {
     public function registrationPOST() : bool {
         return isset(
             $_GET[$this->registerView->getRegisterQuery()]
-            ) && $_SERVER["REQUEST_METHOD"] === "POST";
+            ) && $_SERVER[$this->requestMethodString] === 
+                $this->postRequestString;
     }
 
     public function blogPost() :bool {
@@ -61,14 +67,16 @@ class UserRequest {
     }
 
     public function wantsToPrepareEditBlogPost() : bool {
-        return $_SERVER["REQUEST_METHOD"] === "GET" &&
+        return $_SERVER[$this->requestMethodString] === 
+            $this->getRequestString &&
             isset(
                 $_GET[$this->blogView->getEditBlogQuery()]
             );
     }
 
     public function wantsToPrepareDeleteBlogPost() : bool {
-        return $_SERVER["REQUEST_METHOD"] === "GET" && 
+        return $_SERVER[$this->requestMethodString] === 
+            $this->getRequestString && 
             isset(
                 $_GET[$this->blogView->getDeleteBlogQuery()]
             );
