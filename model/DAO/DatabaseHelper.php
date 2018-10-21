@@ -26,7 +26,7 @@ class DatabaseHelper {
         );
 
         if ($connection->connect_error) {
-            throw new Exception500();
+            throw new InternalServerException();
         }
 
         return $connection;

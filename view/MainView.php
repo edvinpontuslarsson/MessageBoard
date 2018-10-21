@@ -201,7 +201,7 @@ class MainView {
                 "User exists, pick another username."
             );
         }
-        elseif ($exception instanceof HtmlCharacterException) {
+        elseif ($exception instanceof InvalidCharacterException) {
             $cleanUsername = strip_tags($username);
             $this->registerView->setViewUsername($cleanUsername);
             
@@ -210,7 +210,7 @@ class MainView {
             );
         }
         else {
-            throw new Exception500();
+            throw new InternalServerException();
         }
 
         $this->renderRegisterView();
@@ -231,7 +231,7 @@ class MainView {
             $this->loginView->setViewMessage("Wrong name or password");
         }
         else {
-            throw new Exception500();
+            throw new InternalServerException();
         }
 
         $this->renderNotAuthenticatedView();
@@ -242,7 +242,7 @@ class MainView {
             $this->render403Error();
         }
         else {
-            throw new Exception500();
+            throw new InternalServerException();
         }
     }
 

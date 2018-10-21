@@ -59,11 +59,11 @@ class UserCredentials {
         }
 
         /**
-         * Checks if username contains html characters,
+         * Checks if username contains invalid characters,
          * inspired by: https://stackoverflow.com/questions/5732758/detect-html-tags-in-a-string
          */
         elseif ($username !== strip_tags($username)) {
-            throw new HtmlCharacterException();
+            throw new InvalidCharacterException();
         }
     }
 }

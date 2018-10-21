@@ -1,6 +1,6 @@
 <?php
 
-class Exception500 extends Exception {}
+class InternalServerException extends Exception {}
 
 class PasswordsDoNotMatchException extends Exception {}
 
@@ -18,6 +18,6 @@ class WrongUsernameOrPasswordException extends Exception {}
 
 class OccupiedUsernameException extends Exception {}
 
-class HtmlCharacterException extends Exception {}
+class InvalidCharacterException extends Exception {}
 
 class ForbiddenException extends Exception {}
