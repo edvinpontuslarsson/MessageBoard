@@ -22,12 +22,6 @@ class UserRequest {
         $this->blogView = new BlogView();
     }
 
-    public function userHasCookie() : bool {
-        /**
-         * TODO: implement this
-         */
-    }
-
     public function userWantsToStart() : bool {
         return $_SERVER[$this->requestMethodString] === 
             $this->getRequestString &&
@@ -46,6 +40,10 @@ class UserRequest {
 
     public function wantsToLogIn() : bool {
         return isset($_POST[$this->loginView->getLogin()]);
+    }
+
+    public function wantsToStayLoggedIn() : bool {
+        return isset($_POST[$this->loginView->getKeep()]);
     }
 
     public function wantsLogOut() : bool { 

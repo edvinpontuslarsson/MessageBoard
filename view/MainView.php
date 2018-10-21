@@ -10,6 +10,7 @@ require_once('view/LoginView.php');
 require_once('view/AuthenticatedView.php');
 require_once('view/DateTimeView.php');
 require_once('view/BlogView.php');
+require_once('view/CookieHandler.php');
 
 class MainView {
     
@@ -50,7 +51,7 @@ class MainView {
 
     public function renderAuthenticatedView(bool $justLoggedIn = false) {
         if ($justLoggedIn) {
-            $this->authenticatedView->setViewMessage("Welcome");
+            $this->handleJustLoggedIn();
         }
 
         if (!$this->userRequest->wantsToPrepareEditBlogPost() &&
@@ -255,5 +256,17 @@ class MainView {
     private function render403Error() {
         echo "<h1>403</h1><p>Forbidden</p>
             <a href='?'>Go back to start</a>";
+    }
+
+    private function handleJustLoggedIn() {
+        $this->authenticatedView->setViewMessage("Welcome");
+
+        $keepLoggedIn = $this->userRequest->wantsToStayLoggedIn();
+            
+        if ($keepLoggedIn) {
+            $userCredentials = $this->getUserCredentials();
+            $cookieHandler = new CookieHandler();
+            $cookieHandler->serveCookie($userCredentials);
+        }
     }
 }

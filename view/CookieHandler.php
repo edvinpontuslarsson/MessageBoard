@@ -1,14 +1,17 @@
 <?php
 
-class Cookie {
+class CookieHandler {
     private $cookieName = 'LoginView::CookieName';
     private $cookiePassword = 'LoginView::CookiePassword';
 
-    public function serveCookie() {
+    public function serveCookie(
+        UserCredentials $userCredentials
+    ) {
         $day = time() + (86400 * 30);
 
         $usernameCookie = $this->cookieName;
-        $usernameCookieValue = "Admin"; // TODO: get username
+        $usernameCookieValue = 
+            $userCredentials->getUsername();
 
         setcookie(
             $usernameCookie,
