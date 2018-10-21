@@ -228,4 +228,6 @@ Just like with test case 14 but for delete.
 
 ### Latest test status
 
+77 % on the [Automated testing of the login system](http://csquiz.lnu.se:25083/index.php "1dv610 Assignment check")
+
 All 14 postman message board tests passed.
