@@ -23,7 +23,7 @@ class BlogDAO {
     public function storeBlogPost(BlogPostModel $blogPostModel) {
         if ($blogPostModel->getWhoPosted() !==
             $this->sessionModel->getSessionUsername()) {
-                throw new \model\ForbiddenException();
+                throw new ForbiddenException();
             } 
         
         $connection = $this->dbHelper->getOpenConnection();
@@ -97,7 +97,7 @@ class BlogDAO {
     public function editBlogPost(int $blogID, string $newBlogText) {
         $blogPost = $this->getOneBlogPost($blogID);
         if (!$this->sessionModel->isUsernameInSession($blogPost->getWhoPosted())) {
-            throw new \model\ForbiddenException();
+            throw new ForbiddenException();
         }
 
         $cleanBlogPost = $this->dbHelper->getMysqlEscapedString($newBlogText);
@@ -119,7 +119,7 @@ class BlogDAO {
     public function deleteBlogPost(int $blogID) {
         $blogPost = $this->getOneBlogPost($blogID);
         if (!$this->sessionModel->isUsernameInSession($blogPost->getWhoPosted())) {
-            throw new \model\ForbiddenException();
+            throw new ForbiddenException();
         }
 
         $sqlQuery = 

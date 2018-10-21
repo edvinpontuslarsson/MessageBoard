@@ -68,7 +68,7 @@ class MainView {
         $sessionModel = new \model\SessionModel();
 
         if (!$sessionModel->isUsernameInSession($blogPost->getWhoPosted())) {
-            throw new \model\ForbiddenException();
+            throw new ForbiddenException();
         }
         
         $this->layoutView->render(
@@ -81,7 +81,7 @@ class MainView {
         $sessionModel = new \model\SessionModel();
 
         if (!$sessionModel->isUsernameInSession($blogPost->getWhoPosted())) {
-            throw new \model\ForbiddenException();
+            throw new ForbiddenException();
         }
 
         $this->layoutView->render(
@@ -115,7 +115,7 @@ class MainView {
 
     public function getBlogPostModel(bool $isLoggedIn) : \model\BlogPostModel {
         if (!$isLoggedIn) {
-            throw new \model\ForbiddenException();
+            throw new ForbiddenException();
         }
 
         $sessionModel = new \model\SessionModel();
@@ -206,7 +206,7 @@ class MainView {
             );
         }
         else {
-            throw new \model\InternalServerException();
+            throw new InternalServerException();
         }
 
         $this->renderRegisterView();
@@ -227,7 +227,7 @@ class MainView {
             $this->loginView->setViewMessage("Wrong name or password");
         }
         else {
-            throw new \model\InternalServerException();
+            throw new InternalServerException();
         }
 
         $this->renderNotAuthenticatedView();
@@ -238,7 +238,7 @@ class MainView {
             $this->render403Error();
         }
         else {
-            throw new \model\InternalServerException();
+            throw new InternalServerException();
         }
     }
 

@@ -27,7 +27,7 @@ class SessionModel {
      */
     public function getSessionUsername() : string {
         if (!$this->isLoggedIn()) {
-            throw new \model\ForbiddenException();
+            throw new ForbiddenException();
         }
 
         return $_SESSION[$this->usernameKey];
@@ -39,7 +39,7 @@ class SessionModel {
         if (!$userDao->isPasswordCorrect(
             $userCredentials
         )) {
-            throw new \model\WrongUsernameOrPasswordException();
+            throw new WrongUsernameOrPasswordException();
         }
 
         $_SESSION[$this->usernameKey] = 

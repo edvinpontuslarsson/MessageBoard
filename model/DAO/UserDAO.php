@@ -24,7 +24,7 @@ class UserDAO {
         );
 
         if ($this->isUsernameOccupied($connection, $cleanUsername)) {
-            throw new \model\OccupiedUsernameException();
+            throw new OccupiedUsernameException();
         }
 
         $statement = $connection->prepare(
@@ -67,7 +67,7 @@ class UserDAO {
 
         if (empty($userArray) || 
             $cleanUsername !== $userArray[$this->usernameColumn]) {
-            throw new \model\WrongUsernameOrPasswordException();
+            throw new WrongUsernameOrPasswordException();
         }
 
         $hashedPassword = $userArray[$this->passwordColumn];      

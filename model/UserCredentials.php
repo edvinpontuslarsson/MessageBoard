@@ -45,19 +45,19 @@ class UserCredentials {
         string $username, string $password
     ) {
         if (strlen($username) === 0) {
-            throw new \model\MissingUsernameException();
+            throw new MissingUsernameException();
         } 
         elseif (strlen($password) === 0) {
-            throw new \model\MissingPasswordException();
+            throw new MissingPasswordException();
         }
         elseif (strlen($username) < 3) {
-            throw new \model\UsernameTooShortException();
+            throw new UsernameTooShortException();
         } 
         elseif (strlen($username) > 25) {
-            throw new \model\UsernameTooLongException();
+            throw new UsernameTooLongException();
         } 
         elseif (strlen($password) < 6) {
-            throw new \model\PasswordTooShortException();
+            throw new PasswordTooShortException();
         }
 
         /**
@@ -65,7 +65,7 @@ class UserCredentials {
          * inspired by: https://stackoverflow.com/questions/5732758/detect-html-tags-in-a-string
          */
         elseif ($username !== strip_tags($username)) {
-            throw new \model\InvalidCharacterException();
+            throw new InvalidCharacterException();
         }
     }
 }

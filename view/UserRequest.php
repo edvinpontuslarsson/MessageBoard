@@ -151,7 +151,7 @@ class UserRequest {
         }
 
         if ($password !== $passwordRepeat) {
-            throw new \model\PasswordsDoNotMatchException();
+            throw new PasswordsDoNotMatchException();
         }
 
         return $password;
