@@ -153,8 +153,10 @@ class BlogView {
 
             if ($this->sessionModel->isUsernameInSession($username)) {
                 $blogPostsHtmlElements .= '
-                    <br><a href="?'. $this->getEditBlogQuery() .'='. $blogPost->getID() .'">Edit</a><br>
-                    <a href="?'. $this->getDeleteBlogQuery() .'='. $blogPost->getID() .'">Delete</a>
+                    <br><a href="?'. $this->getEditBlogQuery() .'='. $blogPost->getID() .'"
+                        class="'. $this->getEditBlogQuery() .'">Edit</a><br>
+                    <a href="?'. $this->getDeleteBlogQuery() .'='. $blogPost->getID() .'"
+                        class="'. $this->getDeleteBlogQuery() .'">Delete</a>
                 ';
             }
 
