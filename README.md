@@ -6,7 +6,7 @@
 
 An open source message board single page web application with full CRUD functionality developed with PHP and MySQL. 
 
-[Testing testing] (## Testing)
+[Testing testing](## Testing)
 
 ## Features
 
