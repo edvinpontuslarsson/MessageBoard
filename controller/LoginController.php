@@ -1,7 +1,5 @@
 <?php
 
-namespace controller;
-
 require_once('model/SessionModel.php');
 
 class LoginController {
@@ -10,9 +8,9 @@ class LoginController {
     private $mainView;
 
     public function __construct(
-        \view\UserRequest $userRequest, \view\MainView $mainView
+        UserRequest $userRequest, MainView $mainView
     ) {
-        $this->sessionModel = new \model\SessionModel();
+        $this->sessionModel = new SessionModel();
         $this->userRequest = $userRequest;
         $this->mainView = $mainView;
     }

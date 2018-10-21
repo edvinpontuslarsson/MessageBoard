@@ -1,7 +1,5 @@
 <?php
 
-namespace model;
-
 require_once('model/DAO/DatabaseHelper.php');
 require_once('model/CustomException.php');
 
@@ -13,7 +11,7 @@ class UserDAO {
     private $permSecretColumn = "permanentsecret";
 
     public function __construct() {
-        $this->dbHelper = new \model\DatabaseHelper();
+        $this->dbHelper = new DatabaseHelper();
     }
 
     public function storeUser(UserCredentials $userCredentials) {

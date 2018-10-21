@@ -1,7 +1,5 @@
 <?php
 
-namespace model;
-
 require_once('model/DAO/DatabaseHelper.php');
 require_once('model/CustomException.php');
 require_once('model/SessionModel.php');
@@ -16,8 +14,8 @@ class BlogDAO {
     private $blogPostColumn = "blogpost";
     
     public function __construct() {
-        $this->sessionModel = new \model\SessionModel();
-        $this->dbHelper = new \model\DatabaseHelper();
+        $this->sessionModel = new SessionModel();
+        $this->dbHelper = new DatabaseHelper();
     }
 
     public function storeBlogPost(BlogPostModel $blogPostModel) {
@@ -74,7 +72,10 @@ class BlogDAO {
         return $blogPosts;
     }
 
-    public function getOneBlogPost(int $blogID) : \model\BlogPostModel {
+    /**
+     * Returns one instantiated BlogPostModel class
+     */
+    public function getOneBlogPost(int $blogID) {
         $connection = $this->dbHelper->getOpenConnection();
 
         $sqlQuery = 
@@ -136,7 +137,7 @@ class BlogDAO {
         $blogPost = $row[$this->blogPostColumn];
 
         $blogPostModel = 
-            new \model\BlogPostModel($postedBy, $blogPost);
+            new BlogPostModel($postedBy, $blogPost);
         $blogPostModel->setID($row[$this->idColumn]);
 
         return $blogPostModel;

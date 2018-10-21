@@ -1,7 +1,5 @@
 <?php
 
-namespace view;
-
 require_once('model/UserCredentials.php');
 require_once('model/BlogPostModel.php');
 require_once('model/CustomException.php');
@@ -24,13 +22,13 @@ class MainView {
     private $userRequest;
 
     public function __construct() {
-        $this->registerView = new \view\RegisterView();
-        $this->loginView = new \view\LoginView();
-        $this->authenticatedView = new \view\AuthenticatedView();
-        $this->dtv = new \view\DateTimeView();
-        $this->blogView = new \view\BlogView();
-        $this->layoutView = new \view\LayoutView();
-        $this->userRequest = new \view\UserRequest();
+        $this->registerView = new RegisterView();
+        $this->loginView = new LoginView();
+        $this->authenticatedView = new AuthenticatedView();
+        $this->dtv = new DateTimeView();
+        $this->blogView = new BlogView();
+        $this->layoutView = new LayoutView();
+        $this->userRequest = new UserRequest();
     }
 
     public function renderRegisterView() {
@@ -64,8 +62,8 @@ class MainView {
             }
     }
 
-    public function renderEditBlogPostView(\model\BlogPostModel $blogPost) {
-        $sessionModel = new \model\SessionModel();
+    public function renderEditBlogPostView(BlogPostModel $blogPost) {
+        $sessionModel = new SessionModel();
 
         if (!$sessionModel->isUsernameInSession($blogPost->getWhoPosted())) {
             throw new ForbiddenException();
@@ -77,8 +75,8 @@ class MainView {
         );
     }
 
-    public function renderDeleteBlogPostView(\model\BlogPostModel $blogPost) {
-        $sessionModel = new \model\SessionModel();
+    public function renderDeleteBlogPostView(BlogPostModel $blogPost) {
+        $sessionModel = new SessionModel();
 
         if (!$sessionModel->isUsernameInSession($blogPost->getWhoPosted())) {
             throw new ForbiddenException();
@@ -90,7 +88,10 @@ class MainView {
         );
     }
 
-    public function getUserCredentials() : \model\UserCredentials {
+    /**
+     * Returns instantiated UserCredentials class
+     */
+    public function getUserCredentials() {
         $rawUsername;
         $rawPassword;
 
@@ -108,21 +109,24 @@ class MainView {
                 $this->userRequest->getLoginPassword();
         }
 
-        $userCredentials = new \model\UserCredentials($rawUsername, $rawPassword);
+        $userCredentials = new UserCredentials($rawUsername, $rawPassword);
 
         return $userCredentials;
     }
 
-    public function getBlogPostModel(bool $isLoggedIn) : \model\BlogPostModel {
+    /**
+     * Returns instantiated BlogPostModel class
+     */
+    public function getBlogPostModel(bool $isLoggedIn) {
         if (!$isLoggedIn) {
             throw new ForbiddenException();
         }
 
-        $sessionModel = new \model\SessionModel();
+        $sessionModel = new SessionModel();
         $username = $sessionModel->getSessionUsername();
         $blogPost = $this->userRequest->getBlogPost();
         $blogPostModel = 
-            new \model\BlogPostModel($username, $blogPost);
+            new BlogPostModel($username, $blogPost);
         
         return $blogPostModel;
     }

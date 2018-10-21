@@ -1,7 +1,5 @@
 <?php
 
-namespace model;
-
 require_once('model/DAO/UserDAO.php');
 
 class SessionModel {
@@ -34,7 +32,7 @@ class SessionModel {
     }
 
     public function setSession(UserCredentials $userCredentials) {
-        $userDao = new \model\UserDAO();
+        $userDao = new UserDAO();
 
         if (!$userDao->isPasswordCorrect(
             $userCredentials

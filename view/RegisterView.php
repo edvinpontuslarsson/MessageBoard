@@ -1,7 +1,5 @@
 <?php
 
-namespace view;
-
 class RegisterView {
 	private $registerQuery = "register";
     private $regButton = 'DoRegistration';

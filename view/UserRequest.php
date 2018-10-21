@@ -1,7 +1,5 @@
 <?php
 
-namespace view;
-
 require_once('model/CustomException.php');
 require_once('view/RegisterView.php');
 require_once('view/LoginView.php');
@@ -18,10 +16,10 @@ class UserRequest {
     private $postRequestString = "POST";
 
     public function __construct() {
-        $this->registerView = new \view\RegisterView();
-        $this->loginView = new \view\LoginView();
-        $this->authenticatedView = new \view\AuthenticatedView();
-        $this->blogView = new \view\BlogView();
+        $this->registerView = new RegisterView();
+        $this->loginView = new LoginView();
+        $this->authenticatedView = new AuthenticatedView();
+        $this->blogView = new BlogView();
     }
 
     public function userHasCookie() : bool {

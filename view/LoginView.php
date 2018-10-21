@@ -1,7 +1,5 @@
 <?php
 
-namespace view;
-
 require_once('Environment.php');
 require_once('view/RegisterView.php');
 
@@ -16,7 +14,7 @@ class LoginView {
 	private $username = "";
 
 	public function __construct() {
-        $this->registerView = new \view\RegisterView();
+        $this->registerView = new RegisterView();
     }
 
 	public function getLogin() : string {
@@ -56,7 +54,7 @@ class LoginView {
 	}
 
 	private function generateLoginFormHTML() {
-			$enviornment = new \config\Environment();
+			$enviornment = new Environment();
 
 			return '
 			<form method="post" action="'. $enviornment->getIndexUrl() .'"> 

@@ -1,7 +1,5 @@
 <?php
 
-namespace controller;
-
 require_once('model/DAO/UserDAO.php');
 
 class RegisterController {
@@ -9,7 +7,7 @@ class RegisterController {
     private $mainView;
 
     public function __construct(
-        \view\UserRequest $userRequest, \view\MainView $mainView
+        UserRequest $userRequest, MainView $mainView
     ) {
         $this->userRequest = $userRequest;
         $this->mainView = $mainView;
@@ -24,7 +22,7 @@ class RegisterController {
             $userCredentials = 
                 $this->mainView->getUserCredentials();
             
-            $userDAO = new \model\UserDAO();
+            $userDAO = new UserDAO();
             $userDAO->storeUser($userCredentials);
 
             $this->mainView->handleSuccessfulRegistration();

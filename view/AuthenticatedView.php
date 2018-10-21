@@ -1,7 +1,5 @@
 <?php
 
-namespace view;
-
 require_once('Environment.php');
 
 class AuthenticatedView {
@@ -26,7 +24,7 @@ class AuthenticatedView {
     }
     
 	private function generateLogoutButtonHTML() {
-        $enviornment = new \config\Environment();
+        $enviornment = new Environment();
         
         return '
 			<form  method="post" action="'. $enviornment->getIndexUrl() .'">

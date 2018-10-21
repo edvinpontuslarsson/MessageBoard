@@ -1,7 +1,5 @@
 <?php
 
-namespace model;
-
 class BlogPostModel {
     private $postedBy;
     private $blogPost;

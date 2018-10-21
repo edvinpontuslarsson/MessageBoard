@@ -1,7 +1,5 @@
 <?php
 
-namespace model;
-
 require_once('model/DAO/UserDAO.php');
 require_once('model/CustomException.php');
 
@@ -28,7 +26,7 @@ class UserCredentials {
         string $password,
         bool $keepLoggedIn = false
     ) {
-        $this->userDAO = new \model\UserDAO();
+        $this->userDAO = new UserDAO();
         $this->setCredentials($username, $password);
         $this->keepLoggedIn = $keepLoggedIn;
     }

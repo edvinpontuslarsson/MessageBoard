@@ -1,7 +1,5 @@
 <?php
 
-namespace controller;
-
 require_once('model/SessionModel.php');
 require_once('controller/RegisterController.php');
 require_once('controller/LoginController.php');
@@ -16,20 +14,20 @@ class MainController {
     private $blogController;
 
     public function __construct(
-        \view\UserRequest $userRequest, \view\MainView $mainView
+        UserRequest $userRequest, MainView $mainView
     ) {
         $this->userRequest = $userRequest;
         $this->mainView = $mainView;
 
-        $this->sessionModel = new \model\SessionModel();
+        $this->sessionModel = new SessionModel();
 
-        $this->registerController = new \controller\RegisterController(
+        $this->registerController = new RegisterController(
             $this->userRequest, $this->mainView
         );
-        $this->loginController = new \controller\LoginController(
+        $this->loginController = new LoginController(
             $this->userRequest, $this->mainView
         );
-        $this->blogController = new \controller\BlogController(
+        $this->blogController = new BlogController(
             $this->userRequest, $this->mainView
         );
     }
