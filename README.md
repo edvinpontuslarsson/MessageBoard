@@ -2,13 +2,15 @@
 
 To run this application locally, you need to have php 7.2 (or higher), apache2, MySql, php-mysql installed as well as a MySQL-database prepared with a database name as well as a table called "Users" that you can create by querying this command into the database:
 
-`create table Users (`<br/>
-`id INT(7) UNSIGNED AUTO_INCREMENT PRIMARY KEY, `<br/>
-`username VARCHAR(25) NOT NULL,`<br/>
-`password VARCHAR(1000) NOT NULL,`<br/>
-`temporarypassword VARCHAR(1000) NOT NULL,`<br/>
-`permanentsecret VARCHAR(1000) NOT NULL`<br/>
-`);`
+```sql
+create table Users (
+id INT(7) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+username VARCHAR(25) NOT NULL,
+password VARCHAR(1000) NOT NULL,
+temporarypassword VARCHAR(1000) NOT NULL,
+permanentsecret VARCHAR(1000) NOT NULL
+);
+```
 
 https://www.digitalocean.com/community/tutorials/a-basic-mysql-tutorial
 
@@ -16,51 +18,55 @@ I have set the maximum password length to 1000 characters here (because a maximu
 
 You will also need a table called "Blogs" that you can create with this command:
 
-`create table Blogs (`<br/>
-`id INT(7) UNSIGNED AUTO_INCREMENT PRIMARY KEY, `<br/>
-`username VARCHAR(25) NOT NULL,`<br/>
-`blogpost VARCHAR(10000) NOT NULL`<br/>
-`);`
+```sql
+create table Blogs (
+id INT(7) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
+username VARCHAR(25) NOT NULL,
+blogpost VARCHAR(10000) NOT NULL
+);
+```
 
 You also need to have the following line uncommented (beginning semicolon removed) from the php.ini file:
-`extension=mysqli`<br/>
+extension=mysqli
 Restart server after making that change. 
 
 You also need a file called Environment.php in the root folder with the following code (but replace the `<examples>`):
 
-`<?php`
+```php
+<?php
 
-`class Environment {`<br/>
-`    private $isProduction = <true/false>;`<br/>
-`    private $indexUrl = "<index url, e.g. />";`<br/> 
-`    private $hostname = "<your host, e.g. localhost>"`<br/>
-`    private $mysqlUsername = "<your mysql username>";`<br/>
-`    private $mysqlPassword = "<your mysql password>";`<br/>
-`    private $databaseName = "<your database name>";`<br/>
+class Environment {
+    private $isProduction = <true/false>;
+    private $indexUrl = "<index url, e.g. />"; 
+    private $hostname = "<your host, e.g. localhost>"
+    private $mysqlUsername = "<your mysql username>";
+    private $mysqlPassword = "<your mysql password>";
+    private $databaseName = "<your database name>";
 
-`    public function isProduction() : bool {`<br/>
-`        return $this->isProduction;`<br/>
-`    }`<br/>
+    public function isProduction() : bool {
+        return $this->isProduction;
+    }
 
-`   public function getIndexUrl() : string {`<br/>
-`        return $this->indexUrl;`<br/>
-`    }`<br/>
+   public function getIndexUrl() : string {
+        return $this->indexUrl;
+    }
 
-`    public function getHostName() : string {`<br/>
-`        return $this->hostname;`<br/>
-`    }`<br/>
+    public function getHostName() : string {
+        return $this->hostname;
+    }
 
-`    public function getMysqlUsername() : string {`<br/>
-`        return $this->mysqlUsername;`<br/>
-`    }`<br/>
+    public function getMysqlUsername() : string {
+        return $this->mysqlUsername;
+    }
 
-`    public function getMysqlPassword() : string {`<br/>
-`        return $this->mysqlPassword;`<br/>
-`    }`<br/>
+    public function getMysqlPassword() : string {
+        return $this->mysqlPassword;
+    }
 
-`    public function getDatabaseName() : string {`<br/>
-`        return $this->databaseName;`<br/>
-`    }`<br/>
-`}`<br/>
+    public function getDatabaseName() : string {
+        return $this->databaseName;
+    }
+}
+```
 
 This file should be kept secret, make sure to have it in .gitignore

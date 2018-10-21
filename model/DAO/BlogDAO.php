@@ -124,7 +124,8 @@ class BlogDAO {
         }
 
         $sqlQuery = 
-            'DELETE FROM '. $this->blogsTable .' WHERE '. $this->idColumn .' = '. $blogID .'';
+            'DELETE FROM '. $this->blogsTable .' 
+            WHERE '. $this->idColumn .' = '. $blogID .'';
 
         $connection = $this->dbHelper->getOpenConnection();
         mysqli_query($connection, $sqlQuery);
