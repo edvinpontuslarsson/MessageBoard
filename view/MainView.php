@@ -258,6 +258,10 @@ class MainView {
             <a href='?'>Go back to start</a>";
     }
 
+    /**
+     * Sets view message and calls cookiehandler to serve cookie,
+     * if user wants to stay logged in
+     */
     private function handleJustLoggedIn() {
         $this->authenticatedView->setViewMessage("Welcome");
 

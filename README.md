@@ -30,9 +30,9 @@ The message board also contains a login and registration system that fulfill mos
 
 ### Not Implemented
 
-Out of [these test cases](https://github.com/dntoll/1dv610/blob/master/assignments/A2_resources/TestCases.md "Test Cases") related to login with cookies, 3.3, 3.4, 3.5, 3.7 and 3.8 are not yet implemented.
+Out of [these test cases](https://github.com/dntoll/1dv610/blob/master/assignments/A2_resources/TestCases.md "Test Cases") related to login with cookies, 3.3, 3.4 and 3.5 are not yet implemented.
 
-So that means it is currently not possible for users to remain logged in after closing the browser. There is a column for temporary passwords in the Users MySQL-table that could be used for login with cookies. But that is a feature that is not yet implemented. 
+So that means it is currently not possible for users to remain logged in after closing the browser. Users get a cookie with randomly generated string as password if they want to stay logged in, but those cookies are currently not being handled to enable the users to stay logged in. There is a column for temporary passwords in the Users MySQL-table that could be used for login with cookies.
 
 Test Cases 1.8.1 and 3.6 are also not implemented, see more about that in the “Bugs” section.
 
@@ -228,6 +228,6 @@ Just like with test case 14 but for delete.
 
 ### Latest test status
 
-77 % on the [Automated testing of the login system](http://csquiz.lnu.se:25083/index.php "1dv610 Assignment check")
+85 % on the [Automated testing of the login system](http://csquiz.lnu.se:25083/index.php "1dv610 Assignment check")
 
 All 14 postman message board tests passed.
