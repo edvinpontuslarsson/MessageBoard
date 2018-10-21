@@ -138,16 +138,28 @@ You can test the rest of the message board application with for example postman.
 
 **Scenario**|**Postman Set-Up**|**Expected Result**
 :-----:|:-----:|:-----:
-Register a test user | Send a post request to the register page (e.g. http://youedvin.com/?register) with the following 4 keys and values (but you can replace the `examples`): Key1: RegisterView::UserName Value1: `myExampleUsr1` Key2: RegisterView::Password Value2: `myExamplePass` Key3: RegisterView::PasswordRepeat Value3: `myExamplePass` Key4: DoRegistration Value4: Register | The login form with the message "Registered new user" and the username prefilled in the form
-Log in as test user | ... | logged in, session cookie
+Register a test user | Send a post request to the register page (e.g. http://youedvin.com/?register) with the following 4 keys and values in the Body (but you can replace the `examples`): _Key1_: RegisterView::UserName _Value1_: `myExampleUsr1` _Key2_: RegisterView::Password _Value2_: `myExamplePass` _Key3_: RegisterView::PasswordRepeat _Value3_: `myExamplePass` _Key4_: DoRegistration _Value4_: Register | Response with the login form with the message "Registered new user" and the username prefilled in the form
+
+Log in as that test user | Send a post request to the start page (e.g. http://youedvin.com/) with the following 3 keys and values: _Key1_: LoginView::UserName _Value1_: `myExampleUsr1` _Key2_: LoginView::Password _Value2_: `myExamplePass` _Key3_: LoginView::Login _Value3_: login| You should now be logged in with a session
+
 Post message | ... | ...
+
 Edit message | ... | ...
+
 Delete message | ... | ...
+
 Post another message and save id values to edit and delete | edit_blog, delete_blog | ...
+
 Log out | ... | ...
+
 Register a second test user | tester2, banana | Log in form rendered with username prefilled
+
 Log in as second test user | ... | logged in, session cookie
+
 Get Another user's Edit message page | ... + saved id variable | ...
+
 Get Another user's Delete message page | ... + saved id variable | ...
+
 Post to Another user's Edit message | ... + saved id variable | ...
+
 Post to Another user's Delete message | ... + saved id variable | ...
