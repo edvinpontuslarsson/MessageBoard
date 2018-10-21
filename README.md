@@ -6,6 +6,8 @@
 
 An open source message board single page web application with full CRUD functionality developed with PHP and MySQL. 
 
+[Testing testing] (## Testing)
+
 ## Features
 
 ### Implemented
@@ -211,3 +213,7 @@ A 403 forbidden response.
 
 #### Test case 14 - try to delete another user's message
 Just like with test case 14 but for delete.
+
+### Latest test status
+
+All 14 postman message board tests passed.
