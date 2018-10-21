@@ -1,4 +1,4 @@
-# Login_1DV610
+# MessageBoard
 
 To run this application locally, you need to have php 7.2 (or higher), apache2, MySql, php-mysql installed as well as a MySQL-database prepared with a database name as well as a table called "Users" that you can create by querying this command into the database:
 
