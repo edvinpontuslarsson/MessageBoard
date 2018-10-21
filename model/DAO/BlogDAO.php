@@ -1,5 +1,7 @@
 <?php
 
+namespace model;
+
 require_once('model/DAO/DatabaseHelper.php');
 require_once('model/CustomException.php');
 require_once('model/SessionModel.php');
@@ -14,14 +16,14 @@ class BlogDAO {
     private $blogPostColumn = "blogpost";
     
     public function __construct() {
-        $this->sessionModel = new SessionModel();
-        $this->dbHelper = new DatabaseHelper();
+        $this->sessionModel = new \model\SessionModel();
+        $this->dbHelper = new \model\DatabaseHelper();
     }
 
     public function storeBlogPost(BlogPostModel $blogPostModel) {
         if ($blogPostModel->getWhoPosted() !==
             $this->sessionModel->getSessionUsername()) {
-                throw new ForbiddenException();
+                throw new \model\ForbiddenException();
             } 
         
         $connection = $this->dbHelper->getOpenConnection();
@@ -72,10 +74,7 @@ class BlogDAO {
         return $blogPosts;
     }
 
-    /**
-     * Returns one instantiated BlogPostModel class
-     */
-    public function getOneBlogPost(int $blogID) {
+    public function getOneBlogPost(int $blogID) : \model\BlogPostModel {
         $connection = $this->dbHelper->getOpenConnection();
 
         $sqlQuery = 
@@ -98,7 +97,7 @@ class BlogDAO {
     public function editBlogPost(int $blogID, string $newBlogText) {
         $blogPost = $this->getOneBlogPost($blogID);
         if (!$this->sessionModel->isUsernameInSession($blogPost->getWhoPosted())) {
-            throw new ForbiddenException();
+            throw new \model\ForbiddenException();
         }
 
         $cleanBlogPost = $this->dbHelper->getMysqlEscapedString($newBlogText);
@@ -120,7 +119,7 @@ class BlogDAO {
     public function deleteBlogPost(int $blogID) {
         $blogPost = $this->getOneBlogPost($blogID);
         if (!$this->sessionModel->isUsernameInSession($blogPost->getWhoPosted())) {
-            throw new ForbiddenException();
+            throw new \model\ForbiddenException();
         }
 
         $sqlQuery = 
@@ -137,7 +136,7 @@ class BlogDAO {
         $blogPost = $row[$this->blogPostColumn];
 
         $blogPostModel = 
-            new BlogPostModel($postedBy, $blogPost);
+            new \model\BlogPostModel($postedBy, $blogPost);
         $blogPostModel->setID($row[$this->idColumn]);
 
         return $blogPostModel;

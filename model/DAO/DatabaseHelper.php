@@ -1,5 +1,7 @@
 <?php
 
+namespace model;
+
 require_once('Environment.php');
 
 class DatabaseHelper {
@@ -16,7 +18,7 @@ class DatabaseHelper {
     }
 
     public function getOpenConnection() {
-        $environment = new Environment();
+        $environment = new \config\Environment();
 
         $connection = mysqli_connect(
             $environment->getHostName(),

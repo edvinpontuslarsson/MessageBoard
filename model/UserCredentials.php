@@ -1,5 +1,7 @@
 <?php
 
+namespace model;
+
 require_once('model/DAO/UserDAO.php');
 require_once('model/CustomException.php');
 
@@ -26,7 +28,7 @@ class UserCredentials {
         string $password,
         bool $keepLoggedIn = false
     ) {
-        $this->userDAO = new UserDAO();
+        $this->userDAO = new \model\UserDAO();
         $this->setCredentials($username, $password);
         $this->keepLoggedIn = $keepLoggedIn;
     }
@@ -43,19 +45,19 @@ class UserCredentials {
         string $username, string $password
     ) {
         if (strlen($username) === 0) {
-            throw new MissingUsernameException();
+            throw new \model\MissingUsernameException();
         } 
         elseif (strlen($password) === 0) {
-            throw new MissingPasswordException();
+            throw new \model\MissingPasswordException();
         }
         elseif (strlen($username) < 3) {
-            throw new UsernameTooShortException();
+            throw new \model\UsernameTooShortException();
         } 
         elseif (strlen($username) > 25) {
-            throw new UsernameTooLongException();
+            throw new \model\UsernameTooLongException();
         } 
         elseif (strlen($password) < 6) {
-            throw new PasswordTooShortException();
+            throw new \model\PasswordTooShortException();
         }
 
         /**
@@ -63,7 +65,7 @@ class UserCredentials {
          * inspired by: https://stackoverflow.com/questions/5732758/detect-html-tags-in-a-string
          */
         elseif ($username !== strip_tags($username)) {
-            throw new InvalidCharacterException();
+            throw new \model\InvalidCharacterException();
         }
     }
 }

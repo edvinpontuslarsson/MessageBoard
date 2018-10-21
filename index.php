@@ -5,7 +5,7 @@ require_once('view/MainView.php');
 require_once('view/UserRequest.php');
 require_once('controller/MainController.php');
 
-$environment = new Environment();
+$environment = new \config\Environment();
 
 if (!$environment->isProduction()) {
     error_reporting(E_ALL);
@@ -13,10 +13,10 @@ if (!$environment->isProduction()) {
     mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 }
 
-$userRequest = new UserRequest();
-$mainView = new MainView();
+$userRequest = new \view\UserRequest();
+$mainView = new \view\MainView();
 
-$mainController = new MainController($userRequest, $mainView);
+$mainController = new \controller\MainController($userRequest, $mainView);
 
 try {
     $mainController->initialize();

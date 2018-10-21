@@ -1,5 +1,7 @@
 <?php
 
+namespace view;
+
 require_once('model/UserCredentials.php');
 require_once('model/BlogPostModel.php');
 require_once('model/CustomException.php');
@@ -22,13 +24,13 @@ class MainView {
     private $userRequest;
 
     public function __construct() {
-        $this->registerView = new RegisterView();
-        $this->loginView = new LoginView();
-        $this->authenticatedView = new AuthenticatedView();
-        $this->dtv = new DateTimeView();
-        $this->blogView = new BlogView();
-        $this->layoutView = new LayoutView();
-        $this->userRequest = new UserRequest();
+        $this->registerView = new \view\RegisterView();
+        $this->loginView = new \view\LoginView();
+        $this->authenticatedView = new \view\AuthenticatedView();
+        $this->dtv = new \view\DateTimeView();
+        $this->blogView = new \view\BlogView();
+        $this->layoutView = new \view\LayoutView();
+        $this->userRequest = new \view\UserRequest();
     }
 
     public function renderRegisterView() {
@@ -62,11 +64,11 @@ class MainView {
             }
     }
 
-    public function renderEditBlogPostView(BlogPostModel $blogPost) {
-        $sessionModel = new SessionModel();
+    public function renderEditBlogPostView(\model\BlogPostModel $blogPost) {
+        $sessionModel = new \model\SessionModel();
 
         if (!$sessionModel->isUsernameInSession($blogPost->getWhoPosted())) {
-            throw new ForbiddenException();
+            throw new \model\ForbiddenException();
         }
         
         $this->layoutView->render(
@@ -75,11 +77,11 @@ class MainView {
         );
     }
 
-    public function renderDeleteBlogPostView(BlogPostModel $blogPost) {
-        $sessionModel = new SessionModel();
+    public function renderDeleteBlogPostView(\model\BlogPostModel $blogPost) {
+        $sessionModel = new \model\SessionModel();
 
         if (!$sessionModel->isUsernameInSession($blogPost->getWhoPosted())) {
-            throw new ForbiddenException();
+            throw new \model\ForbiddenException();
         }
 
         $this->layoutView->render(
@@ -88,10 +90,7 @@ class MainView {
         );
     }
 
-    /**
-     * Returns instantiated UserCredentials class
-     */
-    public function getUserCredentials() {
+    public function getUserCredentials() : \model\UserCredentials {
         $rawUsername;
         $rawPassword;
 
@@ -109,24 +108,21 @@ class MainView {
                 $this->userRequest->getLoginPassword();
         }
 
-        $userCredentials = new UserCredentials($rawUsername, $rawPassword);
+        $userCredentials = new \model\UserCredentials($rawUsername, $rawPassword);
 
         return $userCredentials;
     }
 
-    /**
-     * Returns instantiated BlogPostModel class
-     */
-    public function getBlogPostModel(bool $isLoggedIn) {
+    public function getBlogPostModel(bool $isLoggedIn) : \model\BlogPostModel {
         if (!$isLoggedIn) {
-            throw new ForbiddenException();
+            throw new \model\ForbiddenException();
         }
 
-        $sessionModel = new SessionModel();
+        $sessionModel = new \model\SessionModel();
         $username = $sessionModel->getSessionUsername();
         $blogPost = $this->userRequest->getBlogPost();
         $blogPostModel = 
-            new BlogPostModel($username, $blogPost);
+            new \model\BlogPostModel($username, $blogPost);
         
         return $blogPostModel;
     }
@@ -210,7 +206,7 @@ class MainView {
             );
         }
         else {
-            throw new InternalServerException();
+            throw new \model\InternalServerException();
         }
 
         $this->renderRegisterView();
@@ -231,7 +227,7 @@ class MainView {
             $this->loginView->setViewMessage("Wrong name or password");
         }
         else {
-            throw new InternalServerException();
+            throw new \model\InternalServerException();
         }
 
         $this->renderNotAuthenticatedView();
@@ -242,7 +238,7 @@ class MainView {
             $this->render403Error();
         }
         else {
-            throw new InternalServerException();
+            throw new \model\InternalServerException();
         }
     }
 

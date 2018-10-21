@@ -1,5 +1,7 @@
 <?php
 
+namespace model;
+
 require_once('model/DAO/UserDAO.php');
 
 class SessionModel {
@@ -25,19 +27,19 @@ class SessionModel {
      */
     public function getSessionUsername() : string {
         if (!$this->isLoggedIn()) {
-            throw new ForbiddenException();
+            throw new \model\ForbiddenException();
         }
 
         return $_SESSION[$this->usernameKey];
     }
 
     public function setSession(UserCredentials $userCredentials) {
-        $userDao = new UserDAO();
+        $userDao = new \model\UserDAO();
 
         if (!$userDao->isPasswordCorrect(
             $userCredentials
         )) {
-            throw new WrongUsernameOrPasswordException();
+            throw new \model\WrongUsernameOrPasswordException();
         }
 
         $_SESSION[$this->usernameKey] = 

@@ -1,5 +1,7 @@
 <?php
 
+namespace model;
+
 require_once('model/DAO/DatabaseHelper.php');
 require_once('model/CustomException.php');
 
@@ -11,7 +13,7 @@ class UserDAO {
     private $permSecretColumn = "permanentsecret";
 
     public function __construct() {
-        $this->dbHelper = new DatabaseHelper();
+        $this->dbHelper = new \model\DatabaseHelper();
     }
 
     public function storeUser(UserCredentials $userCredentials) {
@@ -22,7 +24,7 @@ class UserDAO {
         );
 
         if ($this->isUsernameOccupied($connection, $cleanUsername)) {
-            throw new OccupiedUsernameException();
+            throw new \model\OccupiedUsernameException();
         }
 
         $statement = $connection->prepare(
@@ -65,7 +67,7 @@ class UserDAO {
 
         if (empty($userArray) || 
             $cleanUsername !== $userArray[$this->usernameColumn]) {
-            throw new WrongUsernameOrPasswordException();
+            throw new \model\WrongUsernameOrPasswordException();
         }
 
         $hashedPassword = $userArray[$this->passwordColumn];      

@@ -1,7 +1,8 @@
 <?php
 
+namespace view;
+
 require_once('Environment.php');
-require_once('model/BlogPostModel.php');
 require_once('model/SessionModel.php');
 require_once('model/DAO/BlogDAO.php');
 
@@ -50,8 +51,8 @@ class BlogView {
     }
 
     public function __construct() {
-        $this->environment = new Environment();
-        $this->sessionModel = new SessionModel();
+        $this->environment = new \config\Environment();
+        $this->sessionModel = new \model\SessionModel();
     }
 
     public function getShowBlogPostsDisplay() : string {
@@ -66,7 +67,7 @@ class BlogView {
         return $display;
     }
 
-    public function getEditBlogForm(BlogPostModel $blogPost) : string {
+    public function getEditBlogForm(\model\BlogPostModel $blogPost) : string {
         return '
         <form method="post" action="'. $this->environment->getIndexUrl() .'"> 
             <fieldset>
@@ -91,7 +92,7 @@ class BlogView {
         ';
     }
 
-    public function getDeleteBlogForm(BlogPostModel $blogPost) : string {
+    public function getDeleteBlogForm(\model\BlogPostModel $blogPost) : string {
         return '
         <form method="post" action="'. $this->environment->getIndexUrl() .'"> 
             <fieldset>
@@ -135,7 +136,7 @@ class BlogView {
     }
 
     private function getBlogPostsHtmlElements() : string {
-        $blogDAO = new BlogDAO();
+        $blogDAO = new \model\BlogDAO();
 
         // array with BlogPostModel instances
         $blogPosts = $blogDAO->getAllBlogPosts();

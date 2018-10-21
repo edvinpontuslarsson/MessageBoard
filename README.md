@@ -170,7 +170,7 @@ _Key3_: LoginView::Login _Value3_: login <br>
 You should now be logged in with a session
 
 #### Test case 3 - Post message as that test user
-Make a new request. Copy the value of the php session from the Cookies from the previous post request, in the Headers of new request, put PHPSESSID as key and paste the copied value as value. (For now, but I'm sure there are ways of automating this process). Put the following 2 keys and values in the Body form-data: <br>
+Make a new request. Copy the value of the php session from the Cookies from the previous post request, in the Headers of new request, put PHPSESSID as key and paste the copied value as value. Put the following 2 keys and values in the Body form-data: <br>
 _Key1_: blog-input _Value1_: `Hello World!` <br>
 _Key2_: blog-post _Value2_: Submit <br>
 
@@ -178,7 +178,7 @@ _Key2_: blog-post _Value2_: Submit <br>
 You should see the posted message at the top of the messages in the response body
 
 #### Test case 4 - Edit message
-Make a new request. Put the session key and value of new post request like we did with the previous request. Copy the link to edit the message from the response body html in the previous request (this could be automated with JavaScript but we will do it manually for now). Write the start page url followed by pasting the copied link in the field for the request URL in postman (e.g. `http://youedvin.com/?edit_blog=4`) but replace the 4 with the correct number. Put the following 3 keys and values in the Body form-data: <br>
+Make a new request. Put the session key and value of new post request like we did with the previous request. Copy the link to edit the message from the response body html in the previous request. Write the start page url followed by pasting the copied link in the field for the request URL in postman (e.g. `http://youedvin.com/?edit_blog=4`) but replace the 4 with the correct number. Put the following 3 keys and values in the Body form-data: <br>
 _Key1_: blog-input _Value1_: `Hello Mars!`<br>
 _Key2_: edit-blog-ID _Value2_: `4` // but probably not 4, the correct number in your case<br>
 _Key3_: blog-edit-post _Value3_: Update<br>

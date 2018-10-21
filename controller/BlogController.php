@@ -1,5 +1,7 @@
 <?php
 
+namespace controller;
+
 require_once('model/DAO/BlogDAO.php');
 require_once('model/CustomException.php');
 
@@ -9,9 +11,9 @@ class BlogController {
     private $mainView;
 
     public function __construct(
-        UserRequest $userRequest, MainView $mainView
+        \view\UserRequest $userRequest, \view\MainView $mainView
     ) {
-        $this->blogDAO = new BlogDAO();
+        $this->blogDAO = new \model\BlogDAO();
         $this->userRequest = $userRequest;
         $this->mainView = $mainView;
     }
