@@ -6,7 +6,7 @@
 
 An open source message board single page web application with full CRUD functionality developed with PHP and MySQL. 
 
-[Testing Testing](# Testing)
+[Testing Testing](#Testing)
 
 ## Features
 
@@ -132,7 +132,7 @@ blogpost VARCHAR(10000) NOT NULL
 );
 ```
 
-# Testing
+#Testing
 
 [Automated testing of the login system](http://csquiz.lnu.se:25083/index.php "1dv610 Assignment check")
 
