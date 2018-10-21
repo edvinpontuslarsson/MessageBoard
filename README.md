@@ -138,13 +138,10 @@ You can test the rest of the message board application with for example postman.
 
 **Scenario**|**Postman Set-Up**|**Expected Result**
 :-----:|:-----:|:-----:
-Register a test user | Send a post request to the register page (e.g. http://youedvin.com/?register) with the following 4 keys and values in the Body (but you can replace the `examples`): _Key1_: RegisterView::UserName _Value1_: `myExampleUsr1` _Key2_: RegisterView::Password _Value2_: `myExamplePass` _Key3_: RegisterView::PasswordRepeat _Value3_: `myExamplePass` _Key4_: DoRegistration _Value4_: Register | Response with the login form with the message "Registered new user" and the username prefilled in the form
-
-Log in as that test user | Send a post request to the start page (e.g. http://youedvin.com/) with the following 3 keys and values: _Key1_: LoginView::UserName _Value1_: `myExampleUsr1` _Key2_: LoginView::Password _Value2_: `myExamplePass` _Key3_: LoginView::Login _Value3_: login| You should now be logged in with a session
-
-Post message | ... | ...
-
-Edit message | ... | ...
+Register a test user | Send a post request to the register page (e.g. http://youedvin.com/?register) with the following 4 keys and values in the Body form-data (but you can replace the `examples`): _Key1_: RegisterView::UserName _Value1_: `myExampleUsr1` _Key2_: RegisterView::Password _Value2_: `myExamplePass` _Key3_: RegisterView::PasswordRepeat _Value3_: `myExamplePass` _Key4_: DoRegistration _Value4_: Register | Response with the login form with the message "Registered new user" and the username prefilled in the form
+Log in as that test user | Send a post request to the start page (e.g. http://youedvin.com/) with the following 3 keys and values in the Body form-data: _Key1_: LoginView::UserName _Value1_: `myExampleUsr1` _Key2_: LoginView::Password _Value2_: `myExamplePass` _Key3_: LoginView::Login _Value3_: login| You should now be logged in with a session
+Post message as that test user | Make a new request. Copy the value of the php session from the Cookies from the previous post request, in the Headers of new request, put PHPSESSID as key and paste the copied value as value. (For now, but I'm sure there are ways of automating this process). Put the following 2 keys and values in the Body form-data: _Key1_: blog-input _Value1_: `Hello World!` _Key2_: blog-post _Value2_: Submit| You should see the posted message at the top of the messages in the response body
+Edit message |  Make a new request. Put the session key and value of new post request like we did with the previous request. Copy the link to edit the message from the response body html in the previous request (this could be automated with JavaScript but we will do it manually for now). Write the start page url followed by pasting the copied link in the field for the request URL in postman (e.g. `http://youedvin.com/?edit_blog=4`) but replace the 4 with the correct number. Put the following 3 keys and values in the Body form-data: _Key1_: blog-input _Value1_: `Hello Mars!` | ...
 
 Delete message | ... | ...
 
