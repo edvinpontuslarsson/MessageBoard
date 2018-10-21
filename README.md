@@ -132,3 +132,11 @@ blogpost VARCHAR(10000) NOT NULL
 
 ## Testing
 
+[Automated testing of the login system](http://csquiz.lnu.se:25083/index.php "1dv610 Assignment check")
+
+You can test the rest of the message board application with for example postman. See the table below for suggestions on how to test with postman:
+
+**Scenario**|**Postman Set-Up**|**Expected Result**
+:-----:|:-----:|:-----:
+Register a test user | tester, banana | Log in form rendered with username prefilled
+Log in as test user tester | ... | logged in, session cookie
