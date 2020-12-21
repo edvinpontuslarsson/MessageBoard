@@ -81,7 +81,7 @@ You need a file called Environment.php in the root folder containing the followi
 class Environment {
     private $isProduction = <true/false>;
     private $indexUrl = "<index url, e.g. />"; 
-    private $hostname = "<your host, e.g. localhost>"
+    private $hostname = "<your host, e.g. localhost>";
     private $mysqlUsername = "<your mysql username>";
     private $mysqlPassword = "<your mysql password>";
     private $databaseName = "<your database name>";
