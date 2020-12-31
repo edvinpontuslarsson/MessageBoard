@@ -16,8 +16,6 @@
 
 ## Description
 
-[Message Board Website](http://youedvin.com/ "Youedvin")
-
 An open source message board single page web application with full CRUD functionality developed with PHP and MySQL. 
 
 ## Features
